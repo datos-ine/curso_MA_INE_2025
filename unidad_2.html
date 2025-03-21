@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -150,8 +170,29 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contenidos</h2>
+   
+  <ul>
+  <li><a href="#qué-es-un-meta-análisis" id="toc-qué-es-un-meta-análisis" class="nav-link active" data-scroll-target="#qué-es-un-meta-análisis">¿Qué es un meta-análisis?</a></li>
+  <li><a href="#estimadores-de-efecto" id="toc-estimadores-de-efecto" class="nav-link" data-scroll-target="#estimadores-de-efecto">Estimadores de efecto</a>
+  <ul class="collapse">
+  <li><a href="#correlaciones" id="toc-correlaciones" class="nav-link" data-scroll-target="#correlaciones">Correlaciones</a></li>
+  <li><a href="#medias" id="toc-medias" class="nav-link" data-scroll-target="#medias">Medias</a></li>
+  <li><a href="#proporciones" id="toc-proporciones" class="nav-link" data-scroll-target="#proporciones">Proporciones</a></li>
+  <li><a href="#odds-ratio" id="toc-odds-ratio" class="nav-link" data-scroll-target="#odds-ratio">Odds-ratio</a></li>
+  <li><a href="#riesgo-relativo" id="toc-riesgo-relativo" class="nav-link" data-scroll-target="#riesgo-relativo">Riesgo relativo</a></li>
+  <li><a href="#tiempo-hasta-el-evento" id="toc-tiempo-hasta-el-evento" class="nav-link" data-scroll-target="#tiempo-hasta-el-evento">Tiempo hasta el evento</a></li>
+  </ul></li>
+  <li><a href="#modelos-de-efectos-fijos" id="toc-modelos-de-efectos-fijos" class="nav-link" data-scroll-target="#modelos-de-efectos-fijos">Modelos de efectos fijos</a></li>
+  <li><a href="#modelos-de-efectos-aleatorios" id="toc-modelos-de-efectos-aleatorios" class="nav-link" data-scroll-target="#modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</a></li>
+  <li><a href="#heterogeneidad-estadística" id="toc-heterogeneidad-estadística" class="nav-link" data-scroll-target="#heterogeneidad-estadística">Heterogeneidad estadística</a></li>
+  <li><a href="#sesgo-de-publicación" id="toc-sesgo-de-publicación" class="nav-link" data-scroll-target="#sesgo-de-publicación">Sesgo de publicación</a></li>
+  <li><a href="#ejemplo-práctico-en-r" id="toc-ejemplo-práctico-en-r" class="nav-link" data-scroll-target="#ejemplo-práctico-en-r">Ejemplo práctico en R</a></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+<div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -173,13 +214,115 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-
-
 <center>
 Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis <br> © 2025 Instituto Nacional de Epidemiología “Dr.&nbsp;Juan H. Jara” (ANLIS) - <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"> CC BY-NC 4.0 </a> <img src="images/cc01.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc02.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc03.svg" class="img-fluid" style="width:3.0%"> <br> <br>
 </center>
+<section id="qué-es-un-meta-análisis" class="level2">
+<h2 class="anchored" data-anchor-id="qué-es-un-meta-análisis">¿Qué es un meta-análisis?</h2>
+<p>Un meta-análisis es una herramienta estadística definida como un “análisis de análisis” <span class="citation" data-cites="glass1976">(<a href="#ref-glass1976" role="doc-biblioref">Glass 1976</a>)</span>, ya que su unidad de análisis no son individuos o poblaciones, sino investigaciones independientes.</p>
+<p>El objetivo principal del meta-análisis es obtener una síntesis cuantitativa de la evidencia científica disponible sobre un problema de investigación específico. A través de estos modelos, se obtiene un estimador numérico que resume los resultados individuales de los estudios incluidos <span class="citation" data-cites="Harrer2021">(<a href="#ref-Harrer2021" role="doc-biblioref">Harrer et&nbsp;al. 2021</a>)</span>.</p>
+<p>Es importante destacar que los meta-análisis son adecuados únicamente para investigaciones cuantitativas y, en general, requieren que los estudios analizados compartan el mismo diseño y estimen medidas de asociación iguales o similares.</p>
+<p>A continuación se presentan algunas de las ventajas y desventajas de los modelos de meta-análisis:</p>
+<table class="tg caption-top table" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #ccc; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Ventajas</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #ccc; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Sintetizan cuantitativamente la evidencia disponible</td>
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Dependen de la calidad de los estudios incluidos</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Aumentan la potencia estadística</td>
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Pueden existir sesgos de publicación</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Mejoran la precisión de los estimadores</td>
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">La heterogeneidad estadística dificulta la interpretación de los resultados</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Detectan patrones no evidentes en estudios individuales</td>
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Requieren una metodología rigurosa y criterios estrictos de selección de estudios</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">Evalúan consistencia de resultados en diferentes poblaciones y contextos</td>
+<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">No corrigen defectos metodológicos de los estudios primarios</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="estimadores-de-efecto" class="level2">
+<h2 class="anchored" data-anchor-id="estimadores-de-efecto">Estimadores de efecto</h2>
+<p>En estudios individuales, se asume que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de análisis exploratorio y estadística descriptiva para caracterizar la muestra y evaluar relaciones entre variables.</p>
+<p>Sin embargo, en los meta-análisis esta suposición no siempre se cumple. Aunque los criterios de inclusión sean estrictos, los estudios pueden diferir en diseño, población, medición de variables o definición de resultados. Por ello, no es posible sintetizar la evidencia utilizando exclusivamente herramientas de estadística tradicional.</p>
+<p>Para integrar los resultados de diferentes estudios, los meta-análisis utilizan <strong>estimadores de efecto</strong> (<em>effect size</em>). En algunos casos, estos valores se extraen directamente de los artículos, pero a menudo deben calcularse a partir de los datos reportados. Un buen estimador de efecto debe cumplir con las siguientes condiciones</p>
+<ul>
+<li><p><strong>Comparable:</strong> Debe ser consistente entre los estudios incluidos.</p></li>
+<li><p><strong>Computable:</strong> Debe poder calcularse a partir de la información disponible.</p></li>
+<li><p><strong>Confiable:</strong> Debe permitir estimar su error estándar.</p></li>
+<li><p><strong>Interpretable:</strong> Debe responder adecuadamente a la pregunta de investigación.</p></li>
+</ul>
+<p>Desde una perspectiva estadística, los estimadores de efecto (<em>effect size</em>) son equivalentes a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la <strong>fuerza y dirección</strong> de la relación entre dos variables. Algunos estimadores de efecto comúnmente utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis incluyen: correlación, diferencia de medias, diferencia de proporciones, <em>odds-ratio</em>, riesgo relativo y <em>hazard-ratio.</em> A continuación veremos en mayor detalle cada estimador y su aplicación en modelos de meta-análisis.</p>
+<section id="correlaciones" class="level3">
+<h3 class="anchored" data-anchor-id="correlaciones">Correlaciones</h3>
+</section>
+<section id="medias" class="level3">
+<h3 class="anchored" data-anchor-id="medias">Medias</h3>
+</section>
+<section id="proporciones" class="level3">
+<h3 class="anchored" data-anchor-id="proporciones">Proporciones</h3>
+</section>
+<section id="odds-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="odds-ratio">Odds-ratio</h3>
+</section>
+<section id="riesgo-relativo" class="level3">
+<h3 class="anchored" data-anchor-id="riesgo-relativo">Riesgo relativo</h3>
+</section>
+<section id="tiempo-hasta-el-evento" class="level3">
+<h3 class="anchored" data-anchor-id="tiempo-hasta-el-evento">Tiempo hasta el evento</h3>
+</section>
+</section>
+<section id="modelos-de-efectos-fijos" class="level2">
+<h2 class="anchored" data-anchor-id="modelos-de-efectos-fijos">Modelos de efectos fijos</h2>
+<p>Asume que todos los estudios comparten un único efecto verdadero, y las diferencias entre ellos se deben solo al error muestral. Se usa cuando los estudios son homogéneos.</p>
+</section>
+<section id="modelos-de-efectos-aleatorios" class="level2">
+<h2 class="anchored" data-anchor-id="modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</h2>
+<p>Permite que los estudios tengan diferentes efectos verdaderos, considerando variabilidad entre ellos. Es más adecuado cuando existe heterogeneidad significativa.</p>
+</section>
+<section id="heterogeneidad-estadística" class="level2">
+<h2 class="anchored" data-anchor-id="heterogeneidad-estadística">Heterogeneidad estadística</h2>
+<p>La heterogeneidad estadística se refiere a la variabilidad entre los resultados de los estudios incluidos. Puede evaluarse mediante:</p>
+<ul>
+<li><p><strong>Estadístico Q de Cochran:</strong> Prueba si la variabilidad observada es mayor a la esperada por azar.</p></li>
+<li><p><strong>Índice I²:</strong> Cuantifica el porcentaje de variabilidad atribuible a diferencias entre estudios y no al azar. Valores altos (≥50%) indican heterogeneidad sustancial.</p></li>
+</ul>
+</section>
+<section id="sesgo-de-publicación" class="level2">
+<h2 class="anchored" data-anchor-id="sesgo-de-publicación">Sesgo de publicación</h2>
+<p>El sesgo de publicación ocurre cuando los estudios con resultados significativos tienen mayor probabilidad de publicarse que aquellos con resultados nulos o negativos. Esto puede distorsionar las conclusiones del meta-análisis. Métodos como el gráfico en embudo (<em>funnel plot</em>) y la prueba de Egger ayudan a detectarlo.</p>
+</section>
+<section id="ejemplo-práctico-en-r" class="level2">
+<h2 class="anchored" data-anchor-id="ejemplo-práctico-en-r">Ejemplo práctico en R</h2>
+</section>
+<section id="referencias" class="level2">
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-glass1976" class="csl-entry" role="listitem">
+Glass, Gene V. 1976. <span>«Primary, Secondary, and Meta-Analysis of Research»</span>. <em>Educational Researcher</em> 5 (10): 3-8. <a href="https://doi.org/10.2307/1174772">https://doi.org/10.2307/1174772</a>.
+</div>
+<div id="ref-Harrer2021" class="csl-entry" role="listitem">
+Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Boca Raton, FL; London: Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

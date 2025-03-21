@@ -44,7 +44,77 @@
     "href": "unidad_2.html",
     "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
     "section": "",
-    "text": "Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis  © 2025 Instituto Nacional de Epidemiología “Dr. Juan H. Jara” (ANLIS) -  CC BY-NC 4.0      \n\n\n Volver arriba",
+    "text": "Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis  © 2025 Instituto Nacional de Epidemiología “Dr. Juan H. Jara” (ANLIS) -  CC BY-NC 4.0",
+    "crumbs": [
+      "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
+    ]
+  },
+  {
+    "objectID": "unidad_2.html#qué-es-un-meta-análisis",
+    "href": "unidad_2.html#qué-es-un-meta-análisis",
+    "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
+    "section": "¿Qué es un meta-análisis?",
+    "text": "¿Qué es un meta-análisis?\nUn meta-análisis es una herramienta estadística definida como un “análisis de análisis” (Glass 1976), ya que su unidad de análisis no son individuos o poblaciones, sino investigaciones independientes.\nEl objetivo principal del meta-análisis es obtener una síntesis cuantitativa de la evidencia científica disponible sobre un problema de investigación específico. A través de estos modelos, se obtiene un estimador numérico que resume los resultados individuales de los estudios incluidos (Harrer et al. 2021).\nEs importante destacar que los meta-análisis son adecuados únicamente para investigaciones cuantitativas y, en general, requieren que los estudios analizados compartan el mismo diseño y estimen medidas de asociación iguales o similares.\nA continuación se presentan algunas de las ventajas y desventajas de los modelos de meta-análisis:\n\n\n\nVentajas\nDesventajas\n\n\n\n\nSintetizan cuantitativamente la evidencia disponible\nDependen de la calidad de los estudios incluidos\n\n\nAumentan la potencia estadística\nPueden existir sesgos de publicación\n\n\nMejoran la precisión de los estimadores\nLa heterogeneidad estadística dificulta la interpretación de los resultados\n\n\nDetectan patrones no evidentes en estudios individuales\nRequieren una metodología rigurosa y criterios estrictos de selección de estudios\n\n\nEvalúan consistencia de resultados en diferentes poblaciones y contextos\nNo corrigen defectos metodológicos de los estudios primarios",
+    "crumbs": [
+      "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
+    ]
+  },
+  {
+    "objectID": "unidad_2.html#estimadores-de-efecto",
+    "href": "unidad_2.html#estimadores-de-efecto",
+    "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
+    "section": "Estimadores de efecto",
+    "text": "Estimadores de efecto\nEn estudios individuales, se asume que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de análisis exploratorio y estadística descriptiva para caracterizar la muestra y evaluar relaciones entre variables.\nSin embargo, en los meta-análisis esta suposición no siempre se cumple. Aunque los criterios de inclusión sean estrictos, los estudios pueden diferir en diseño, población, medición de variables o definición de resultados. Por ello, no es posible sintetizar la evidencia utilizando exclusivamente herramientas de estadística tradicional.\nPara integrar los resultados de diferentes estudios, los meta-análisis utilizan estimadores de efecto (effect size). En algunos casos, estos valores se extraen directamente de los artículos, pero a menudo deben calcularse a partir de los datos reportados. Un buen estimador de efecto debe cumplir con las siguientes condiciones\n\nComparable: Debe ser consistente entre los estudios incluidos.\nComputable: Debe poder calcularse a partir de la información disponible.\nConfiable: Debe permitir estimar su error estándar.\nInterpretable: Debe responder adecuadamente a la pregunta de investigación.\n\nDesde una perspectiva estadística, los estimadores de efecto (effect size) son equivalentes a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la fuerza y dirección de la relación entre dos variables. Algunos estimadores de efecto comúnmente utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis incluyen: correlación, diferencia de medias, diferencia de proporciones, odds-ratio, riesgo relativo y hazard-ratio. A continuación veremos en mayor detalle cada estimador y su aplicación en modelos de meta-análisis.\n\nCorrelaciones\n\n\nMedias\n\n\nProporciones\n\n\nOdds-ratio\n\n\nRiesgo relativo\n\n\nTiempo hasta el evento",
+    "crumbs": [
+      "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
+    ]
+  },
+  {
+    "objectID": "unidad_2.html#modelos-de-efectos-fijos",
+    "href": "unidad_2.html#modelos-de-efectos-fijos",
+    "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
+    "section": "Modelos de efectos fijos",
+    "text": "Modelos de efectos fijos\nAsume que todos los estudios comparten un único efecto verdadero, y las diferencias entre ellos se deben solo al error muestral. Se usa cuando los estudios son homogéneos.",
+    "crumbs": [
+      "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
+    ]
+  },
+  {
+    "objectID": "unidad_2.html#modelos-de-efectos-aleatorios",
+    "href": "unidad_2.html#modelos-de-efectos-aleatorios",
+    "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
+    "section": "Modelos de efectos aleatorios",
+    "text": "Modelos de efectos aleatorios\nPermite que los estudios tengan diferentes efectos verdaderos, considerando variabilidad entre ellos. Es más adecuado cuando existe heterogeneidad significativa.",
+    "crumbs": [
+      "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
+    ]
+  },
+  {
+    "objectID": "unidad_2.html#heterogeneidad-estadística",
+    "href": "unidad_2.html#heterogeneidad-estadística",
+    "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
+    "section": "Heterogeneidad estadística",
+    "text": "Heterogeneidad estadística\nLa heterogeneidad estadística se refiere a la variabilidad entre los resultados de los estudios incluidos. Puede evaluarse mediante:\n\nEstadístico Q de Cochran: Prueba si la variabilidad observada es mayor a la esperada por azar.\nÍndice I²: Cuantifica el porcentaje de variabilidad atribuible a diferencias entre estudios y no al azar. Valores altos (≥50%) indican heterogeneidad sustancial.",
+    "crumbs": [
+      "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
+    ]
+  },
+  {
+    "objectID": "unidad_2.html#sesgo-de-publicación",
+    "href": "unidad_2.html#sesgo-de-publicación",
+    "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
+    "section": "Sesgo de publicación",
+    "text": "Sesgo de publicación\nEl sesgo de publicación ocurre cuando los estudios con resultados significativos tienen mayor probabilidad de publicarse que aquellos con resultados nulos o negativos. Esto puede distorsionar las conclusiones del meta-análisis. Métodos como el gráfico en embudo (funnel plot) y la prueba de Egger ayudan a detectarlo.",
+    "crumbs": [
+      "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
+    ]
+  },
+  {
+    "objectID": "unidad_2.html#ejemplo-práctico-en-r",
+    "href": "unidad_2.html#ejemplo-práctico-en-r",
+    "title": "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios",
+    "section": "Ejemplo práctico en R",
+    "text": "Ejemplo práctico en R",
     "crumbs": [
       "Unidad 2: Meta-Análisis de Efectos Fijos y Efectos Aleatorios"
     ]
