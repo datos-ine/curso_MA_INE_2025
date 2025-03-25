@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -99,6 +133,35 @@ div.csl-indent {
 }
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -175,20 +238,24 @@ div.csl-indent {
    
   <ul>
   <li><a href="#qué-es-un-meta-análisis" id="toc-qué-es-un-meta-análisis" class="nav-link active" data-scroll-target="#qué-es-un-meta-análisis">¿Qué es un meta-análisis?</a></li>
-  <li><a href="#estimadores-de-efecto" id="toc-estimadores-de-efecto" class="nav-link" data-scroll-target="#estimadores-de-efecto">Estimadores de efecto</a>
+  <li><a href="#estimadores-de-efecto" id="toc-estimadores-de-efecto" class="nav-link" data-scroll-target="#estimadores-de-efecto">Estimadores de efecto</a></li>
+  <li><a href="#modelos-de-efectos-fijos" id="toc-modelos-de-efectos-fijos" class="nav-link" data-scroll-target="#modelos-de-efectos-fijos">Modelos de efectos fijos</a></li>
+  <li><a href="#heterogeneidad-estadística" id="toc-heterogeneidad-estadística" class="nav-link" data-scroll-target="#heterogeneidad-estadística">Heterogeneidad estadística</a></li>
+  <li><a href="#modelos-de-efectos-aleatorios" id="toc-modelos-de-efectos-aleatorios" class="nav-link" data-scroll-target="#modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</a></li>
+  <li><a href="#meta-análisis-para-estudios-descriptivos" id="toc-meta-análisis-para-estudios-descriptivos" class="nav-link" data-scroll-target="#meta-análisis-para-estudios-descriptivos">Meta-análisis para estudios descriptivos</a>
   <ul class="collapse">
+  <li><a href="#meta-análisis-de-proporciones" id="toc-meta-análisis-de-proporciones" class="nav-link" data-scroll-target="#meta-análisis-de-proporciones">Meta-análisis de proporciones</a></li>
   <li><a href="#correlaciones" id="toc-correlaciones" class="nav-link" data-scroll-target="#correlaciones">Correlaciones</a></li>
-  <li><a href="#medias" id="toc-medias" class="nav-link" data-scroll-target="#medias">Medias</a></li>
-  <li><a href="#proporciones" id="toc-proporciones" class="nav-link" data-scroll-target="#proporciones">Proporciones</a></li>
+  </ul></li>
+  <li><a href="#meta-análisis-de-estudios-analíticos" id="toc-meta-análisis-de-estudios-analíticos" class="nav-link" data-scroll-target="#meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</a>
+  <ul class="collapse">
+  <li><a href="#diferencia-de-medias" id="toc-diferencia-de-medias" class="nav-link" data-scroll-target="#diferencia-de-medias">Diferencia de medias</a></li>
   <li><a href="#odds-ratio" id="toc-odds-ratio" class="nav-link" data-scroll-target="#odds-ratio">Odds-ratio</a></li>
   <li><a href="#riesgo-relativo" id="toc-riesgo-relativo" class="nav-link" data-scroll-target="#riesgo-relativo">Riesgo relativo</a></li>
+  <li><a href="#tasa-de-incidencia" id="toc-tasa-de-incidencia" class="nav-link" data-scroll-target="#tasa-de-incidencia">Tasa de incidencia</a></li>
   <li><a href="#tiempo-hasta-el-evento" id="toc-tiempo-hasta-el-evento" class="nav-link" data-scroll-target="#tiempo-hasta-el-evento">Tiempo hasta el evento</a></li>
   </ul></li>
-  <li><a href="#modelos-de-efectos-fijos" id="toc-modelos-de-efectos-fijos" class="nav-link" data-scroll-target="#modelos-de-efectos-fijos">Modelos de efectos fijos</a></li>
-  <li><a href="#modelos-de-efectos-aleatorios" id="toc-modelos-de-efectos-aleatorios" class="nav-link" data-scroll-target="#modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</a></li>
-  <li><a href="#heterogeneidad-estadística" id="toc-heterogeneidad-estadística" class="nav-link" data-scroll-target="#heterogeneidad-estadística">Heterogeneidad estadística</a></li>
   <li><a href="#sesgo-de-publicación" id="toc-sesgo-de-publicación" class="nav-link" data-scroll-target="#sesgo-de-publicación">Sesgo de publicación</a></li>
-  <li><a href="#ejemplo-práctico-en-r" id="toc-ejemplo-práctico-en-r" class="nav-link" data-scroll-target="#ejemplo-práctico-en-r">Ejemplo práctico en R</a></li>
   <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
@@ -221,7 +288,7 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <h2 class="anchored" data-anchor-id="qué-es-un-meta-análisis">¿Qué es un meta-análisis?</h2>
 <p>Un meta-análisis es una herramienta estadística definida como un “análisis de análisis” <span class="citation" data-cites="glass1976">(<a href="#ref-glass1976" role="doc-biblioref">Glass 1976</a>)</span>, ya que su unidad de análisis no son individuos o poblaciones, sino investigaciones independientes.</p>
 <p>El objetivo principal del meta-análisis es obtener una síntesis cuantitativa de la evidencia científica disponible sobre un problema de investigación específico. A través de estos modelos, se obtiene un estimador numérico que resume los resultados individuales de los estudios incluidos <span class="citation" data-cites="Harrer2021">(<a href="#ref-Harrer2021" role="doc-biblioref">Harrer et&nbsp;al. 2021</a>)</span>.</p>
-<p>Es importante destacar que los meta-análisis son adecuados únicamente para investigaciones cuantitativas y, en general, requieren que los estudios analizados compartan el mismo diseño y estimen medidas de asociación iguales o similares.</p>
+<p>Es importante destacar que los meta-análisis son adecuados únicamente para investigaciones cuantitativas y, en general, requieren que los estudios analizados compartan el mismo diseño y estimen medidas de asociación similares.</p>
 <p>A continuación se presentan algunas de las ventajas y desventajas de los modelos de meta-análisis:</p>
 <table class="tg caption-top table" data-quarto-postprocess="true">
 <thead>
@@ -253,45 +320,24 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 </tr>
 </tbody>
 </table>
+<p>Los paquetes de R más utilizados para ajustar modelos de meta-análisis son <em>metafor</em> <span class="citation" data-cites="metafor">(<a href="#ref-metafor" role="doc-biblioref">Viechtbauer 2010</a>)</span>y <em>meta</em> <span class="citation" data-cites="meta">(<a href="#ref-meta" role="doc-biblioref">Balduzzi, Rücker, y Schwarzer 2019</a>)</span><em>.</em></p>
 </section>
 <section id="estimadores-de-efecto" class="level2">
 <h2 class="anchored" data-anchor-id="estimadores-de-efecto">Estimadores de efecto</h2>
-<p>En estudios individuales, se asume que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de análisis exploratorio y estadística descriptiva para caracterizar la muestra y evaluar relaciones entre variables.</p>
-<p>Sin embargo, en los meta-análisis esta suposición no siempre se cumple. Aunque los criterios de inclusión sean estrictos, los estudios pueden diferir en diseño, población, medición de variables o definición de resultados. Por ello, no es posible sintetizar la evidencia utilizando exclusivamente herramientas de estadística tradicional.</p>
-<p>Para integrar los resultados de diferentes estudios, los meta-análisis utilizan <strong>estimadores de efecto</strong> (<em>effect size</em>). En algunos casos, estos valores se extraen directamente de los artículos, pero a menudo deben calcularse a partir de los datos reportados. Un buen estimador de efecto debe cumplir con las siguientes condiciones</p>
+<p>En estudios individuales, se asume que las variables de interés fueron medidas de manera uniforme en todos los participantes. Esto permite aplicar técnicas de la estadística descriptiva, tales como el <strong>análisis exploratorio de datos</strong> (EDA), para caracterizar la muestra y evaluar relaciones entre variables.</p>
+<p>Sin embargo, en los meta-análisis esta suposición no siempre se cumple. Aunque los criterios de inclusión sean estrictos, los estudios pueden diferir en diseño, población, medición de variables o definición de resultados. Por ello, no es posible sintetizar la evidencia utilizando exclusivamente herramientas de la estadística tradicional.</p>
+<p>Para integrar los resultados de diferentes estudios, los meta-análisis utilizan <strong>estimadores de efecto</strong> (<em>effect size</em>). En algunos casos, estos valores se extraen directamente de los artículos, pero a menudo deben calcularse a partir de los datos reportados. Un buen estimador de efecto debe cumplir con las siguientes condiciones:</p>
 <ul>
 <li><p><strong>Comparable:</strong> Debe ser consistente entre los estudios incluidos.</p></li>
 <li><p><strong>Computable:</strong> Debe poder calcularse a partir de la información disponible.</p></li>
 <li><p><strong>Confiable:</strong> Debe permitir estimar su error estándar.</p></li>
 <li><p><strong>Interpretable:</strong> Debe responder adecuadamente a la pregunta de investigación.</p></li>
 </ul>
-<p>Desde una perspectiva estadística, los estimadores de efecto (<em>effect size</em>) son equivalentes a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la <strong>fuerza y dirección</strong> de la relación entre dos variables. Algunos estimadores de efecto comúnmente utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis incluyen: correlación, diferencia de medias, diferencia de proporciones, <em>odds-ratio</em>, riesgo relativo y <em>hazard-ratio.</em> A continuación veremos en mayor detalle cada estimador y su aplicación en modelos de meta-análisis.</p>
-<section id="correlaciones" class="level3">
-<h3 class="anchored" data-anchor-id="correlaciones">Correlaciones</h3>
-</section>
-<section id="medias" class="level3">
-<h3 class="anchored" data-anchor-id="medias">Medias</h3>
-</section>
-<section id="proporciones" class="level3">
-<h3 class="anchored" data-anchor-id="proporciones">Proporciones</h3>
-</section>
-<section id="odds-ratio" class="level3">
-<h3 class="anchored" data-anchor-id="odds-ratio">Odds-ratio</h3>
-</section>
-<section id="riesgo-relativo" class="level3">
-<h3 class="anchored" data-anchor-id="riesgo-relativo">Riesgo relativo</h3>
-</section>
-<section id="tiempo-hasta-el-evento" class="level3">
-<h3 class="anchored" data-anchor-id="tiempo-hasta-el-evento">Tiempo hasta el evento</h3>
-</section>
+<p>Desde una perspectiva estadística, los estimadores de efecto son equivalentes a los coeficientes en modelos de regresión o a las medidas de asociación en estudios epidemiológicos, ya que cuantifican la <strong>fuerza y dirección</strong> de la relación entre dos variables. Algunos estimadores de efecto comúnmente utilizados en investigación epidemiológica y aplicables a modelos de meta-análisis incluyen: correlación, diferencia de medias, diferencia de proporciones, <em>odds-ratio</em>, riesgo relativo y <em>hazard-ratio.</em> Más adelante veremos en más detalle cada estimador de efecto y su aplicación en modelos de meta-análisis.</p>
 </section>
 <section id="modelos-de-efectos-fijos" class="level2">
 <h2 class="anchored" data-anchor-id="modelos-de-efectos-fijos">Modelos de efectos fijos</h2>
 <p>Asume que todos los estudios comparten un único efecto verdadero, y las diferencias entre ellos se deben solo al error muestral. Se usa cuando los estudios son homogéneos.</p>
-</section>
-<section id="modelos-de-efectos-aleatorios" class="level2">
-<h2 class="anchored" data-anchor-id="modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</h2>
-<p>Permite que los estudios tengan diferentes efectos verdaderos, considerando variabilidad entre ellos. Es más adecuado cuando existe heterogeneidad significativa.</p>
 </section>
 <section id="heterogeneidad-estadística" class="level2">
 <h2 class="anchored" data-anchor-id="heterogeneidad-estadística">Heterogeneidad estadística</h2>
@@ -301,12 +347,148 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <li><p><strong>Índice I²:</strong> Cuantifica el porcentaje de variabilidad atribuible a diferencias entre estudios y no al azar. Valores altos (≥50%) indican heterogeneidad sustancial.</p></li>
 </ul>
 </section>
+<section id="modelos-de-efectos-aleatorios" class="level2">
+<h2 class="anchored" data-anchor-id="modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</h2>
+<p>Permite que los estudios tengan diferentes efectos verdaderos, considerando variabilidad entre ellos. Es más adecuado cuando existe heterogeneidad significativa.</p>
+</section>
+<section id="meta-análisis-para-estudios-descriptivos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-análisis-para-estudios-descriptivos">Meta-análisis para estudios descriptivos</h2>
+<p>Para estudios observacionales de tipo descriptivo, los estimadores de efecto más comunmente utilizados son las proporciones y las correlaciones.</p>
+<section id="meta-análisis-de-proporciones" class="level3">
+<h3 class="anchored" data-anchor-id="meta-análisis-de-proporciones">Meta-análisis de proporciones</h3>
+<p>Las proporciones se suelen utilizar en Epidemiología para el cálculo de la prevalencia de un evento de salud siguiendo la fórmula:</p>
+<p><span class="math display">\[ p = \frac{k}{n} \]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> es el número de individuos con el evento.</p></li>
+<li><p><span class="math inline">\(n\)</span> es el número total de individuos.</p></li>
+</ul>
+<p>El error estándar de la proporción se estima como:</p>
+<p><span class="math display">\[ SE = \sqrt{\frac{p(1-p)}{n}} \]</span></p>
+<p>Debido a que los valores tienen un rango de entre 0 y 1, cuando <span class="math inline">\(p\)</span> se acerca a alguno de esos valores se comprime el error estándar llevando a una sobreestimación de los resultados. Para evitar este problema, se aplica una transformación <strong>logit</strong> a las proporciones antes de ajustar el modelo de meta-análisis.</p>
+<p>En el paquete <em>metafor</em> podemos realizar la transformación usando la función <code>escalc()</code> con los siguientes argumentos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>prop <span class="ot">&lt;-</span> <span class="fu">escalc</span>(<span class="at">measure =</span> <span class="st">"PLO"</span>, <span class="co"># transformación logit de proporciones</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">xi =</span> evento, <span class="co"># individuos con el evento </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">pi =</span> n, <span class="co"># total de individuos en la muestra</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">slab =</span> titulo, <span class="co"># identificador del estudio</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Si usamos el paquete <em>meta</em>, la función <code>metaprop()</code> nos permite ajustar un modelo de meta-análisis de proporciones simples sin necesidad de realizar una transformación previa de los datos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mod_prop <span class="ot">&lt;-</span> <span class="fu">metaprop</span>(<span class="at">event =</span> evento, <span class="co"># individuos con el evento   </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">n =</span> n, <span class="co"># total de individuos en la muestra    </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sm =</span> <span class="st">"PLOGIT"</span>, <span class="co"># transformación logit</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">studlab =</span> titulo, <span class="co"># identificador del estudio     </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="correlaciones" class="level3">
+<h3 class="anchored" data-anchor-id="correlaciones">Correlaciones</h3>
+<p>Las correlaciones indican la fuerza y dirección de la covarianza entre dos variables numéricas continuas y se expresa como:</p>
+<p><span class="math display">\[ r_{xy} = \frac{Cov_{xy}}{S_xS_y} \]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(Cov_{xy}\)</span> es la covarianza entre las variables X e Y.</p></li>
+<li><p><span class="math inline">\(S_x\)</span> y <span class="math inline">\(S_y\)</span> son los desvíos estándar para cada variable.</p></li>
+</ul>
+<p>El error estándar para la correlación se puede expresar como:</p>
+<p><span class="math display">\[ SE = \frac{1 - r^2_{xy}}{\sqrt{n-2}} \]</span></p>
+<p>Las correlaciones pueden tomar valores de entre -1 y 1, por lo que se pueden introducir sesgos cuando calculamos el error estándar para muestras pequeñas. Para trabajar con meta-análisis de correlaciones, los datos se transforman usando el coeficiente <strong>z de Fisher</strong>, que aproxima la muestra a una distribución normal.</p>
+<p>En el paquete <em>metafor</em> podemos realizar la transformación de los datos usando la función <code>escalc()</code> con los siguientes argumentos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cor <span class="ot">&lt;-</span> <span class="fu">escalc</span>(<span class="at">measure =</span> <span class="st">"ZCOR"</span>, <span class="co"># transformación de Fisher</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">ri =</span> correlacion, <span class="co"># vector de correlaciones </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">ni =</span> n, <span class="co"># total de individuos en la muestra  </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">slab =</span> titulo, <span class="co"># identificador del estudio  </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La función <code>metacor()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para proporciones simples sin necesidad de transformar previamente los datos usando el argumento <code>sm = "ZCOR"</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod_cor <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> correlacion, <span class="co"># vector de correlaciones </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n =</span> n, <span class="co"># total de individuos en la muestra   </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sm =</span> <span class="st">"ZCOR"</span>, <span class="co"># transformación de Fisher</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">studlab =</span> titulo, <span class="co"># identificador del estudio  </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="meta-análisis-de-estudios-analíticos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</h2>
+<p>Cuando trabajamos con datos de estudios epidemiológicos analíticos, podemos realizar meta-análisis para distintas medidas de asociación.</p>
+<section id="diferencia-de-medias" class="level3">
+<h3 class="anchored" data-anchor-id="diferencia-de-medias">Diferencia de medias</h3>
+<p>La diferencia de medias entre dos o más grupos se define como:</p>
+<p><span class="math display">\[
+MD = \bar{x_1} - \bar{x_2}
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(\bar{x_1}\)</span> es la media muestral del grupo 1.</p></li>
+<li><p><span class="math inline">\(\bar{x_2}\)</span> es la media muestral del grupo 2.</p></li>
+</ul>
+<p>El error estándar para la diferencia de medias se obtiene como:</p>
+<p><span class="math display">\[
+SE_{md} = S_{comb} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}
+\]</span></p>
+<p>donde <span class="math inline">\(n_1\)</span> y <span class="math inline">\(n_2\)</span> son los tamaños muestrales en ambos grupos y <span class="math inline">\(S_{comb}\)</span> es el desvío estándar combinado.</p>
+<p>La función <code>metacont()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para diferencia de medias:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mod_mean <span class="ot">&lt;-</span> <span class="fu">metacont</span>(<span class="at">n.e =</span> expuestos, <span class="co"># individuos expuestos</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean.e =</span> media_exp, <span class="co"># media en expuestos</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sd.e =</span> sd_exp, <span class="co"># desvío estándar en expuestos</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">n.c =</span> no_exp, <span class="co"># individuos no expuestos</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean.c =</span> media_no_exp, <span class="co"># media en no expuestos</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sd.c =</span> sd_no_exp, <span class="co"># desvío estándar en no expuestos</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">studlab =</span> titulo, <span class="co"># identificador del estudio</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="odds-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="odds-ratio">Odds-ratio</h3>
+<p>La función <code>metabin()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para el odds-ratio:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mod_or <span class="ot">&lt;-</span> <span class="fu">metabin</span>(<span class="at">event.e =</span> eventos_exp, <span class="co"># eventos en expuestos</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n.e =</span> n_exp, <span class="co"># individuos expuestos</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">event.c =</span> eventos_no_exp, <span class="co"># eventos en no expuestos</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n.c =</span> n_no_exp, <span class="co"># individuos no expuestos </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sm =</span> <span class="st">"OR"</span>, <span class="co"># Odds-ratio</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">studlab =</span> titulo, <span class="co"># identificador del estudio  </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="riesgo-relativo" class="level3">
+<h3 class="anchored" data-anchor-id="riesgo-relativo">Riesgo relativo</h3>
+<p>La función <code>metabin()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para el riesgo relativo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mod_rr <span class="ot">&lt;-</span> <span class="fu">metabin</span>(<span class="at">event.e =</span> eventos_exp, <span class="co"># eventos en expuestos</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">n.e =</span> n_exp, <span class="co"># individuos expuestos</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">event.c =</span> eventos_no_exp, <span class="co"># eventos en no expuestos</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n.c =</span> n_no_exp, <span class="co"># individuos no expuestos </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sm =</span> <span class="st">"RR"</span>, <span class="co"># Riesgo relativo</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">studlab =</span> titulo, <span class="co"># identificador del estudio  </span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tasa-de-incidencia" class="level3">
+<h3 class="anchored" data-anchor-id="tasa-de-incidencia">Tasa de incidencia</h3>
+<p>La función <code>metainc()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para la tasa de incidencia:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mod_IRR <span class="ot">&lt;-</span> <span class="fu">metainc</span>(<span class="at">event.e =</span> eventos_exp, <span class="co"># eventos en expuestos</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">time.e =</span> tiempo_exp, <span class="co"># tiempo-persona expuestos</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">event.c =</span> eventos_no_exp, <span class="co"># eventos en no expuestos</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">time.c =</span> tiempo_no_exp, <span class="co"># tiempo-persona no expuestos</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">studlab =</span> titulo, <span class="co"># identificador del estudio  </span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> datos) <span class="co"># base de datos de interés</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tiempo-hasta-el-evento" class="level3">
+<h3 class="anchored" data-anchor-id="tiempo-hasta-el-evento">Tiempo hasta el evento</h3>
+</section>
+</section>
 <section id="sesgo-de-publicación" class="level2">
 <h2 class="anchored" data-anchor-id="sesgo-de-publicación">Sesgo de publicación</h2>
 <p>El sesgo de publicación ocurre cuando los estudios con resultados significativos tienen mayor probabilidad de publicarse que aquellos con resultados nulos o negativos. Esto puede distorsionar las conclusiones del meta-análisis. Métodos como el gráfico en embudo (<em>funnel plot</em>) y la prueba de Egger ayudan a detectarlo.</p>
-</section>
-<section id="ejemplo-práctico-en-r" class="level2">
-<h2 class="anchored" data-anchor-id="ejemplo-práctico-en-r">Ejemplo práctico en R</h2>
 </section>
 <section id="referencias" class="level2">
 
@@ -316,11 +498,17 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-meta" class="csl-entry" role="listitem">
+Balduzzi, Sara, Gerta Rücker, y Guido Schwarzer. 2019. <span>«How to perform a meta-analysis with <span></span>R<span></span>: a practical tutorial»</span>.
+</div>
 <div id="ref-glass1976" class="csl-entry" role="listitem">
 Glass, Gene V. 1976. <span>«Primary, Secondary, and Meta-Analysis of Research»</span>. <em>Educational Researcher</em> 5 (10): 3-8. <a href="https://doi.org/10.2307/1174772">https://doi.org/10.2307/1174772</a>.
 </div>
 <div id="ref-Harrer2021" class="csl-entry" role="listitem">
 Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Boca Raton, FL; London: Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
+</div>
+<div id="ref-metafor" class="csl-entry" role="listitem">
+Viechtbauer, Wolfgang. 2010. <span>«Conducting meta-analyses in <span></span>R<span></span> with the <span></span>metafor<span></span> package»</span> 36. <a href="https://doi.org/10.18637/jss.v036.i03">https://doi.org/10.18637/jss.v036.i03</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
