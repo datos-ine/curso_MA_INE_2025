@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Unidad 1: Revisión Sistemática</title>
+<title>Modelos descriptivos y analíticos</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -79,6 +79,35 @@ ul.task-list li input[type="checkbox"] {
 }
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -92,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./unidad_1.html">Unidad 1</a></li><li class="breadcrumb-item"><a href="./unidad_1.html">Unidad 1: Revisión Sistemática</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./tipos_estimador.html">Modelos descriptivos y analíticos</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -137,7 +166,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./unidad_1.html" class="sidebar-item-text sidebar-link active">
+  <a href="./unidad_1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Unidad 1: Revisión Sistemática</span></a>
   </div>
 </li>
@@ -166,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tipos_estimador.html" class="sidebar-item-text sidebar-link">
+  <a href="./tipos_estimador.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Modelos descriptivos y analíticos</span></a>
   </div>
 </li>
@@ -201,14 +230,33 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contenidos</h2>
+   
+  <ul>
+  <li><a href="#meta-análisis-para-estudios-descriptivos" id="toc-meta-análisis-para-estudios-descriptivos" class="nav-link active" data-scroll-target="#meta-análisis-para-estudios-descriptivos">Meta-análisis para estudios descriptivos</a>
+  <ul class="collapse">
+  <li><a href="#meta-análisis-de-prevalencia" id="toc-meta-análisis-de-prevalencia" class="nav-link" data-scroll-target="#meta-análisis-de-prevalencia">Meta-análisis de prevalencia</a></li>
+  <li><a href="#meta-análisis-de-incidencia" id="toc-meta-análisis-de-incidencia" class="nav-link" data-scroll-target="#meta-análisis-de-incidencia">Meta-análisis de incidencia</a></li>
+  <li><a href="#meta-análisis-de-correlaciones" id="toc-meta-análisis-de-correlaciones" class="nav-link" data-scroll-target="#meta-análisis-de-correlaciones">Meta-análisis de correlaciones</a></li>
+  </ul></li>
+  <li><a href="#meta-análisis-de-estudios-analíticos" id="toc-meta-análisis-de-estudios-analíticos" class="nav-link" data-scroll-target="#meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</a>
+  <ul class="collapse">
+  <li><a href="#diferencia-de-medias" id="toc-diferencia-de-medias" class="nav-link" data-scroll-target="#diferencia-de-medias">Diferencia de medias</a></li>
+  <li><a href="#odds-ratio" id="toc-odds-ratio" class="nav-link" data-scroll-target="#odds-ratio">Odds-ratio</a></li>
+  <li><a href="#riesgo-relativo" id="toc-riesgo-relativo" class="nav-link" data-scroll-target="#riesgo-relativo">Riesgo relativo</a></li>
+  <li><a href="#tasa-de-incidencia" id="toc-tasa-de-incidencia" class="nav-link" data-scroll-target="#tasa-de-incidencia">Tasa de incidencia</a></li>
+  <li><a href="#tiempo-hasta-el-evento" id="toc-tiempo-hasta-el-evento" class="nav-link" data-scroll-target="#tiempo-hasta-el-evento">Tiempo hasta el evento</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./unidad_1.html">Unidad 1</a></li><li class="breadcrumb-item"><a href="./unidad_1.html">Unidad 1: Revisión Sistemática</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./tipos_estimador.html">Modelos descriptivos y analíticos</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Unidad 1: Revisión Sistemática</h1>
+<h1 class="title">Modelos descriptivos y analíticos</h1>
 </div>
 
 
@@ -224,11 +272,97 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-
-
 <center>
 Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis <br> © 2025 Instituto Nacional de Epidemiología “Dr.&nbsp;Juan H. Jara” (ANLIS) - <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"> CC BY-NC 4.0 </a> <img src="images/cc01.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc02.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc03.svg" class="img-fluid" style="width:3.0%"> <br> <br>
 </center>
+<section id="meta-análisis-para-estudios-descriptivos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-análisis-para-estudios-descriptivos">Meta-análisis para estudios descriptivos</h2>
+<p>Para estudios observacionales de tipo descriptivo, los estimadores de efecto más comunmente utilizados son las proporciones y las correlaciones.</p>
+<section id="meta-análisis-de-prevalencia" class="level3">
+<h3 class="anchored" data-anchor-id="meta-análisis-de-prevalencia">Meta-análisis de prevalencia</h3>
+<p>La prevalencia de un evento de salud se calcula como una proporción usando la fórmula:</p>
+<p><span class="math display">\[ p = \frac{k}{n} \]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> es el número de individuos con el evento.</p></li>
+<li><p><span class="math inline">\(n\)</span> es el número total de individuos.</p></li>
+</ul>
+<p>El error estándar de la proporción se estima como:</p>
+<p><span class="math display">\[ SE_p = \sqrt{\frac{p(1-p)}{n}} \]</span></p>
+<p>Debido a que las proporciones tienen un rango de entre 0 y 1, cuando nos acercamos a alguno de estos valores se comprime el error estándar y se produce la sobreestimación de los resultados.</p>
+<p>Una forma común de solucionar el problema es aplicar la transformación <strong>logit</strong> a las proporciones crudas. La función <code>escalc()</code> del paquete <em>metafor</em> nos permite transformar las proporciones a logit usando los siguientes argumentos:</p>
+<p><code>{r} #| eval: false  prev &lt;- escalc(measure = "PLO", # transformación logit de proporciones                xi = evento, # individuos con el evento                 ni = n, # total de individuos en la muestra                slab = titulo, # identificador del estudio                data = datos) # base de datos de interés}</code></p>
+<p>Veamos un ejemplo práctico usando la base de datos “<strong>dat.crisafulli2020</strong>” incluida en el paquete <em>metadat</em>. Comenzamos cargando la base de datos y haciendo una exploración rápida:</p>
+<p><code>{r} # Carga datos datos &lt;- dat.crisafulli2020  # Exploración datos glimpse(datos)}</code></p>
+<p>Nuestras columnas de interés son <code>study</code>, <code>cases</code> y <code>total</code>, que contienen el identificador de estudio, el número de individuos con el evento y el número total de individuos muestreados en cada estudio. Aplicamos la transformación logit:</p>
+<p><code>{r} # Crea nuevo dataset con los datos transformados prev &lt;- escalc(measure = "PLO", # transformación logit de proporciones                xi = cases,                 ni = total,                slab = study,                data = datos)  # Explora objeto glimpse(prev)}</code></p>
+<p>En el objeto que creamos con <code>escalc()</code>, aparecen dos nuevas columnas: <code>yi</code> y <code>vi</code> que corresponden al estimador de efecto y su varianza, respectivamente. Una vez aplicada la transformación, podemos correr el modelo de meta-análisis usando la función <code>rma()</code> de <em>metafor</em>:</p>
+<p><code>{r} mod_prev &lt;- rma(yi = yi,                  vi = vi,                  measure = "PLO",                 slab = study,                  data = prev)}</code></p>
+<p>Una forma más sencilla de llegar al mismo resultado, es usando la función <code>metaprop()</code> del paquete <em>meta</em>, donde en un solo paso podemos transformar los datos y ajustar el modelo de meta-análisis usando los siguientes argumentos:</p>
+<p><code>{r} mod_prev2 &lt;- metaprop(event = cases, # individuos con el evento                         n = total, # total de individuos en la muestra                          sm = "PLOGIT", # transformación logit                      studlab = study, # identificador del estudio                           data = prev) # base de datos de interés}</code></p>
+<p>Comparemos la salida de ambos modelos:</p>
+<p><code>{r} summary(mod_prev)  summary(mod_prev2)}</code></p>
+</section>
+<section id="meta-análisis-de-incidencia" class="level3">
+<h3 class="anchored" data-anchor-id="meta-análisis-de-incidencia">Meta-análisis de incidencia</h3>
+</section>
+<section id="meta-análisis-de-correlaciones" class="level3">
+<h3 class="anchored" data-anchor-id="meta-análisis-de-correlaciones">Meta-análisis de correlaciones</h3>
+<p>Las correlaciones indican la fuerza y dirección de la covarianza entre dos variables numéricas continuas y se expresa como:</p>
+<p><span class="math display">\[ r_{xy} = \frac{Cov_{xy}}{S_xS_y} \]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(Cov_{xy}\)</span> es la covarianza entre las variables X e Y.</p></li>
+<li><p><span class="math inline">\(S_x\)</span> y <span class="math inline">\(S_y\)</span> son los desvíos estándar para cada variable.</p></li>
+</ul>
+<p>El error estándar para la correlación se puede expresar como:</p>
+<p><span class="math display">\[ SE = \frac{1 - r^2_{xy}}{\sqrt{n-2}} \]</span></p>
+<p>Las correlaciones pueden tomar valores de entre -1 y 1, por lo que se pueden introducir sesgos cuando calculamos el error estándar para muestras pequeñas. Para trabajar con meta-análisis de correlaciones, los datos se transforman usando el coeficiente <strong>z de Fisher</strong>, que aproxima la muestra a una distribución normal.</p>
+<p>En el paquete <em>metafor</em> podemos realizar la transformación de los datos usando la función <code>escalc()</code> con los siguientes argumentos:</p>
+<p><code>{r} #| eval: false  cor &lt;- escalc(measure = "ZCOR", # transformación de Fisher               ri = correlacion, # vector de correlaciones                ni = n, # total de individuos en la muestra                 slab = titulo, # identificador del estudio                 data = datos) # base de datos de interés}</code></p>
+<p>La función <code>metacor()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para proporciones simples sin necesidad de transformar previamente los datos usando el argumento <code>sm = "ZCOR"</code>:</p>
+<p><code>{r} #| eval: false  mod_cor &lt;- metacor(cor = correlacion, # vector de correlaciones                     n = n, # total de individuos en la muestra                       sm = "ZCOR", # transformación de Fisher                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
+</section>
+</section>
+<section id="meta-análisis-de-estudios-analíticos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</h2>
+<p>Cuando trabajamos con datos de estudios epidemiológicos analíticos, podemos realizar meta-análisis para distintas medidas de asociación.</p>
+<section id="diferencia-de-medias" class="level3">
+<h3 class="anchored" data-anchor-id="diferencia-de-medias">Diferencia de medias</h3>
+<p>La diferencia de medias entre dos o más grupos se define como:</p>
+<p><span class="math display">\[ MD = \bar{x_1} - \bar{x_2} \]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(\bar{x_1}\)</span> es la media muestral del grupo 1.</p></li>
+<li><p><span class="math inline">\(\bar{x_2}\)</span> es la media muestral del grupo 2.</p></li>
+</ul>
+<p>El error estándar para la diferencia de medias se obtiene como:</p>
+<p><span class="math display">\[ SE_{md} = S_{comb} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} \]</span></p>
+<p>donde <span class="math inline">\(n_1\)</span> y <span class="math inline">\(n_2\)</span> son los tamaños muestrales en ambos grupos y <span class="math inline">\(S_{comb}\)</span> es el desvío estándar combinado.</p>
+<p>La función <code>metacont()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para diferencia de medias:</p>
+<p><code>{r} #| eval: false  mod_mean &lt;- metacont(n.e = expuestos, # individuos expuestos                      mean.e = media_exp, # media en expuestos                      sd.e = sd_exp, # desvío estándar en expuestos                      n.c = no_exp, # individuos no expuestos                      mean.c = media_no_exp, # media en no expuestos                      sd.c = sd_no_exp, # desvío estándar en no expuestos                      studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
+</section>
+<section id="odds-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="odds-ratio">Odds-ratio</h3>
+<p>La función <code>metabin()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para el odds-ratio:</p>
+<p><code>{r} #| eval: false  mod_or &lt;- metabin(event.e = eventos_exp, # eventos en expuestos                   n.e = n_exp, # individuos expuestos                   event.c = eventos_no_exp, # eventos en no expuestos                    n.c = n_no_exp, # individuos no expuestos                     sm = "OR", # Odds-ratio                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
+</section>
+<section id="riesgo-relativo" class="level3">
+<h3 class="anchored" data-anchor-id="riesgo-relativo">Riesgo relativo</h3>
+<p>La función <code>metabin()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para el riesgo relativo:</p>
+<p><code>{r} #| eval: false  mod_rr &lt;- metabin(event.e = eventos_exp, # eventos en expuestos                   n.e = n_exp, # individuos expuestos                   event.c = eventos_no_exp, # eventos en no expuestos                    n.c = n_no_exp, # individuos no expuestos                     sm = "RR", # Riesgo relativo                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
+</section>
+<section id="tasa-de-incidencia" class="level3">
+<h3 class="anchored" data-anchor-id="tasa-de-incidencia">Tasa de incidencia</h3>
+<p>La función <code>metainc()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para la tasa de incidencia:</p>
+<p><code>{r} #| eval: false  mod_IRR &lt;- metainc(event.e = eventos_exp, # eventos en expuestos                   time.e = tiempo_exp, # tiempo-persona expuestos                   event.c = eventos_no_exp, # eventos en no expuestos                    time.c = tiempo_no_exp, # tiempo-persona no expuestos                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
+</section>
+<section id="tiempo-hasta-el-evento" class="level3">
+<h3 class="anchored" data-anchor-id="tiempo-hasta-el-evento">Tiempo hasta el evento</h3>
+
+
+</section>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

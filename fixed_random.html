@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Modelos de efectos fijos y aleatorios</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<style type="text/css">
+.quarto-reader-toggle .bi::before, .quarto-color-scheme-toggle .bi::before {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  background-size: 25px 25px;
+  background-position: center;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(189, 195, 199, 1)" class="bi bi-moon-stars-fill" viewbox="0 0 16 16"> <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"></path> <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"></path> </svg>') !important;
+}
+</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./fixed_random.html">Modelos de efectos fijos y aleatorios</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="https://ine.gov.ar/" class="sidebar-logo-link">
+      <img src="./images/logos_ine.svg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
+</div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Unidad 1</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unidad_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unidad 1: Revisión Sistemática</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Unidad 2: Meta-análisis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fixed_random.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Modelos de efectos fijos y aleatorios</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tipos_estimador.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos descriptivos y analíticos</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analisis_moderadores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Análisis de moderadores</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Unidad 3</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unidad_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unidad 3: Meta-Análisis de Efectos Mixtos</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contenidos</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a></li>
+  <li><a href="#modelos-de-efectos-fijos" id="toc-modelos-de-efectos-fijos" class="nav-link" data-scroll-target="#modelos-de-efectos-fijos">Modelos de efectos fijos</a></li>
+  <li><a href="#modelos-de-efectos-aleatorios" id="toc-modelos-de-efectos-aleatorios" class="nav-link" data-scroll-target="#modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</a>
+  <ul class="collapse">
+  <li><a href="#heterogeneidad-estadística" id="toc-heterogeneidad-estadística" class="nav-link" data-scroll-target="#heterogeneidad-estadística">Heterogeneidad estadística</a></li>
+  </ul></li>
+  <li><a href="#implementación-en-r" id="toc-implementación-en-r" class="nav-link" data-scroll-target="#implementación-en-r">Implementación en R</a></li>
+  <li><a href="#sesgo-de-publicación" id="toc-sesgo-de-publicación" class="nav-link" data-scroll-target="#sesgo-de-publicación">Sesgo de publicación</a></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+<div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./fixed_random.html">Modelos de efectos fijos y aleatorios</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Modelos de efectos fijos y aleatorios</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<center>
+Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis <br> © 2025 Instituto Nacional de Epidemiología “Dr.&nbsp;Juan H. Jara” (ANLIS) - <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"> CC BY-NC 4.0 </a> <img src="images/cc01.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc02.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc03.svg" class="img-fluid" style="width:3.0%"> <br> <br>
+</center>
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
+<p>Uno de los propósitos fundamentales del modelado estadístico es representar la realidad de la manera más “sencilla” posible, enfocándose en su estructura esencial y omitiendo elementos cuya variabilidad podría introducir ruido en la interpretación de los fenómenos.</p>
+<p>Para ajustar un modelo estadístico, partimos de la información disponible en nuestros datos y buscamos generar una representación de la realidad basada en ellos. En el caso de los modelos de meta-análisis, los datos de interés son los estimadores de efecto observados en cada estudio, y el objetivo es explicar cómo y por qué estos estimadores varían entre estudios.</p>
+<p>A partir de esta premisa, se distinguen dos enfoques principales en meta-análisis: los modelos de <strong>efectos fijos</strong> y los modelos de <strong>efectos aleatorios</strong>. A continuación, exploraremos los fundamentos teóricos de cada uno y su implementación en R.</p>
+<p>Debido a la extensión del curso, no nos detendremos en el desarrollo matemático de estos modelos. Quienes quieran profundizar en ello, pueden consultar los libros de <span class="citation" data-cites="Schwarzer2015">Schwarzer, Carpenter, y Rücker (<a href="#ref-Schwarzer2015" role="doc-biblioref">2015</a>)</span> y <span class="citation" data-cites="Harrer2021">Harrer et&nbsp;al. (<a href="#ref-Harrer2021" role="doc-biblioref">2021</a>)</span>.</p>
+</section>
+<section id="modelos-de-efectos-fijos" class="level2">
+<h2 class="anchored" data-anchor-id="modelos-de-efectos-fijos">Modelos de efectos fijos</h2>
+<p>El modelo de efectos fijos asume que todos los estimadores de efecto incluidos en el meta-análisis provienen de una misma población homogénea y que las diferencias observadas entre ellos se deben exclusivamente al error muestral. En este enfoque, se considera que existe un único “verdadero” efecto común subyacente en todos los estudios, por lo que el objetivo es estimar este valor a partir de los datos disponibles.</p>
+<p>El estimador de efecto global en estos modelos equivale a un promedio ponderado de los estimadores individuales, donde los pesos asignados dependen del tamaño de muestra y la precisión de cada estudio. En consecuencia, los estudios con menor varianza tienen mayor influencia en la estimación final.</p>
+<p>Dado que el modelo de efectos fijos asume homogeneidad entre los estudios, no contempla la posibilidad de que existan fuentes adicionales de variabilidad más allá del error aleatorio. Por esta razón, también se lo conoce como modelo de <em>efectos comunes</em> o de <em>efectos equivalentes</em>. Sin embargo, en la práctica, es frecuente encontrar heterogeneidad entre estudios haciendo que los modelos de efectos fijos resulten poco adecuados.</p>
+</section>
+<section id="modelos-de-efectos-aleatorios" class="level2">
+<h2 class="anchored" data-anchor-id="modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</h2>
+<p>Los modelos de efectos aleatorios consideran que existe una fuente de variabilidad entre estudios independientes que va más allá de la explicada por el error aleatorio. Esta fuente adicional de varianza implica asumir que los estudios no provienen de una misma población sino de un universo de posibles poblaciones.</p>
+<p>En este enfoque, el estimador de efecto real no es único, sino que se distribuye alrededor de una media general. Esto introduce una segunda fuente de error, que debe ser considerada en el modelo. El objetivo de los modelos de efectos aleatorios es entonces estimar la media de la <strong>distribución de efectos</strong>, teniendo en cuenta tanto la variabilidad dentro de cada estudio como la variabilidad entre estudios.</p>
+<section id="heterogeneidad-estadística" class="level3">
+<h3 class="anchored" data-anchor-id="heterogeneidad-estadística">Heterogeneidad estadística</h3>
+<p>La heterogeneidad estadística refleja la variabilidad existente entre los estudios incluidos en un meta-análisis. Para cuantificar esta heterogeneidad, se utilizan indicadores como el estadístico <span class="math inline">\(Q\)</span> de Cochran, el índice <span class="math inline">\(I^2\)</span> y la varianza entre estudios (<span class="math inline">\(\tau^2\)</span>):</p>
+<ul>
+<li><p><span class="math inline">\(Q\)</span> <strong>de Cochran</strong>: Evalúa si las diferencias entre los estimadores de efecto son mayores a las esperadas por azar. Un valor alto sugiere heterogeneidad significativa.</p></li>
+<li><p><span class="math inline">\(I^2\)</span>: Expresa el porcentaje de variabilidad total atribuible a la heterogeneidad entre estudios. Valores superiores al 50% indican heterogeneidad moderada a alta.</p></li>
+<li><p><span class="math inline">\(\tau^2\)</span>: Representa la varianza real entre los efectos de los estudios. Es equivalente a la varianza de los efectos aleatorios en modelos convencionales.</p></li>
+</ul>
+<p>Estos estimadores permiten evaluar si las diferencias entre los efectos observados son mayores a las esperadas por azar, ayudando a decidir qué modelo de meta-análisis es más adecuado.</p>
+</section>
+</section>
+<section id="implementación-en-r" class="level2">
+<h2 class="anchored" data-anchor-id="implementación-en-r">Implementación en R</h2>
+<p>Para ajustar modelos de meta-análisis en R, los dos paquetes más utilizados son <code>metafor</code> <span class="citation" data-cites="metafor">(<a href="#ref-metafor" role="doc-biblioref">Viechtbauer 2010</a>)</span> y <code>meta</code> <span class="citation" data-cites="meta">(<a href="#ref-meta" role="doc-biblioref">Balduzzi, Rücker, y Schwarzer 2019</a>)</span>.</p>
+<ul>
+<li><p><code>metafor</code>: Es un paquete altamente flexible y potente, que permite modelar escenarios complejos con gran precisión. Su uso, sin embargo, requiere una curva de aprendizaje más pronunciada y un conocimiento avanzado en modelado estadístico. Es especialmente adecuado para usuarios con experiencia en estadísticas que necesiten realizar análisis más avanzados y detallados.</p></li>
+<li><p><code>meta</code>: Se caracteriza por su accesibilidad y facilidad de uso, lo que lo convierte en una excelente opción para aquellos que desean ajustar modelos de meta-análisis sin necesidad de un conocimiento profundo en estadística. Este paquete es ideal para la aplicación práctica y proporciona una interfaz más simple y directa para realizar análisis estándar.</p></li>
+</ul>
+<p>Dado que este curso está orientado a la aplicación práctica del meta-análisis, utilizaremos principalmente el paquete <code>meta</code>. El mismo, ajusta de manera predeterminada tanto modelos de efectos fijos como de efectos aleatorios para cada conjunto de datos, e incluye estimadores de heterogeneidad estadística.</p>
+<p>La función principal es <code>metaxx()</code>, donde <code>xx</code> representa el estimador de efecto que vamos a calcular (por ejemplo, <code>metacont</code> para diferencias de medias, <code>metaprop</code> para proporciones, etc.). A continuación, se muestra una estructura básica de cómo utilizarla:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metaxx</span>(studlab, <span class="co"># identificador de estudio</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       data, <span class="co"># base de datos de interés</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       sm, <span class="co"># especifica el estimador de efecto global</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">common =</span> <span class="cn">TRUE</span>, <span class="co"># modelo de efectos fijos (cambiar a FALSE para desactivarlo)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">random =</span> <span class="cn">TRUE</span>, <span class="co"># modelo de efectos aleatorios (cambiar a FALSE para desactivarlo)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">backtransf =</span> <span class="cn">TRUE</span>, <span class="co"># indica si mostrar los resultados en la escala original (por ej: odds-ratio) o transformados (log-OR)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>       subset, <span class="co"># opcional, para filtrar estudios</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>       exclude, <span class="co"># opcional, para excluir estudios</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       subgroup, <span class="co"># opcional, para análisis de subgrupos</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>       cluster <span class="co"># opcional, para modelos multinivel</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tomemos como ejemplo el dataset “<em>dat.cohen1981</em>” que contiene información para un meta-análisis de correlaciones y es parte de la dependencia <code>metadat</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargo paquete</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: metadat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading 'meta' package (version 8.0-2).
+Type 'help(meta)' for a brief overview.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargo datos</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"dat.cohen1981"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ajustamos el modelo de meta-análisis siguiendo la estructura mostrada anteriormente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri, <span class="co"># variable que contiene los datos de correlación</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni, <span class="co"># variable que contiene el tamaño muestral</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Podemos acceder a la salida del modelo usando la función <code>summary()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           COR            95%-CI %W(common) %W(random)
+Bolton et al. 1979      0.6800 [ 0.0881; 0.9170]        1.3        1.6
+Bryson 1974             0.5600 [ 0.1562; 0.8034]        3.2        3.6
+Centra 1977             0.2300 [-0.3676; 0.6931]        1.9        2.2
+Centra 1977             0.6400 [ 0.2991; 0.8360]        3.6        4.0
+Crooks &amp; Smock 1974     0.4900 [ 0.1431; 0.7297]        4.7        5.2
+Doyle &amp; Crichton 1978  -0.0400 [-0.6001; 0.5464]        1.7        2.0
+Doyle &amp; Whitely 1974    0.4900 [-0.1167; 0.8304]        1.7        2.0
+Elliott 1950            0.3300 [ 0.0016; 0.5941]        6.2        6.6
+Ellis &amp; Rickard 1977    0.5800 [ 0.1708; 0.8186]        3.0        3.5
+Frey et al. 1975        0.1800 [-0.4393; 0.6833]        1.7        2.0
+Greenwood et al. 1976  -0.1100 [-0.4232; 0.2267]        6.2        6.6
+Hoffman 1978            0.2700 [ 0.0458; 0.4683]       13.6       12.2
+McKeachie et al. 1971   0.2600 [-0.0915; 0.5539]        5.7        6.1
+Morsh et al. 1956       0.4000 [ 0.2385; 0.5399]       22.3       17.1
+Remmers et al. 1949     0.4900 [ 0.1973; 0.7025]        6.4        6.7
+Sullivan &amp; Skanes 1974  0.5100 [-0.0282; 0.8190]        2.1        2.4
+Sullivan &amp; Skanes 1974  0.4000 [ 0.1011; 0.6327]        7.0        7.2
+Sullivan &amp; Skanes 1974  0.3400 [-0.1873; 0.7152]        2.5        2.8
+Sullivan &amp; Skanes 1974  0.4200 [-0.1423; 0.7774]        2.1        2.4
+Wherry 1952             0.1600 [-0.3040; 0.5627]        3.2        3.6
+
+Number of studies: k = 20
+Number of observations: o = 590
+
+                        COR           95%-CI    z  p-value
+Common effect model  0.3626 [0.2865; 0.4342] 8.75 &lt; 0.0001
+Random effects model 0.3637 [0.2788; 0.4430] 7.88 &lt; 0.0001
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0052 [0.0000; 0.0632]; tau = 0.0723 [0.0000; 0.2514]
+ I^2 = 9.4% [0.0%; 44.6%]; H = 1.05 [1.00; 1.34]
+
+Test of heterogeneity:
+     Q d.f. p-value
+ 20.97   19  0.3382
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Fisher's z transformation of correlations</code></pre>
+</div>
+</div>
+<p>Si solamente nos interesara calcular el modelo de efectos aleatorios, cambiamos el argumento <code>common = FALSE</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri, <span class="co"># variable que contiene los datos de correlación</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni, <span class="co"># variable que contiene el tamaño muestral</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida modelo</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           COR            95%-CI %W(random)
+Bolton et al. 1979      0.6800 [ 0.0881; 0.9170]        1.6
+Bryson 1974             0.5600 [ 0.1562; 0.8034]        3.6
+Centra 1977             0.2300 [-0.3676; 0.6931]        2.2
+Centra 1977             0.6400 [ 0.2991; 0.8360]        4.0
+Crooks &amp; Smock 1974     0.4900 [ 0.1431; 0.7297]        5.2
+Doyle &amp; Crichton 1978  -0.0400 [-0.6001; 0.5464]        2.0
+Doyle &amp; Whitely 1974    0.4900 [-0.1167; 0.8304]        2.0
+Elliott 1950            0.3300 [ 0.0016; 0.5941]        6.6
+Ellis &amp; Rickard 1977    0.5800 [ 0.1708; 0.8186]        3.5
+Frey et al. 1975        0.1800 [-0.4393; 0.6833]        2.0
+Greenwood et al. 1976  -0.1100 [-0.4232; 0.2267]        6.6
+Hoffman 1978            0.2700 [ 0.0458; 0.4683]       12.2
+McKeachie et al. 1971   0.2600 [-0.0915; 0.5539]        6.1
+Morsh et al. 1956       0.4000 [ 0.2385; 0.5399]       17.1
+Remmers et al. 1949     0.4900 [ 0.1973; 0.7025]        6.7
+Sullivan &amp; Skanes 1974  0.5100 [-0.0282; 0.8190]        2.4
+Sullivan &amp; Skanes 1974  0.4000 [ 0.1011; 0.6327]        7.2
+Sullivan &amp; Skanes 1974  0.3400 [-0.1873; 0.7152]        2.8
+Sullivan &amp; Skanes 1974  0.4200 [-0.1423; 0.7774]        2.4
+Wherry 1952             0.1600 [-0.3040; 0.5627]        3.6
+
+Number of studies: k = 20
+Number of observations: o = 590
+
+                        COR           95%-CI    z  p-value
+Random effects model 0.3637 [0.2788; 0.4430] 7.88 &lt; 0.0001
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0052 [0.0000; 0.0632]; tau = 0.0723 [0.0000; 0.2514]
+ I^2 = 9.4% [0.0%; 44.6%]; H = 1.05 [1.00; 1.34]
+
+Test of heterogeneity:
+     Q d.f. p-value
+ 20.97   19  0.3382
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Fisher's z transformation of correlations</code></pre>
+</div>
+</div>
+<p>En la segunda parte de esta unidad, exploraremos las funciones específicas de <code>meta</code> utilizadas para calcular diferentes estimadores de efecto epidemiológico, así como los argumentos principales que permite ajustar. Además, abordaremos métodos para controlar la heterogeneidad observada, tales como el análisis de subgrupos (también conocido como análisis de moderadores) y la meta-regresión.</p>
+</section>
+<section id="sesgo-de-publicación" class="level2">
+<h2 class="anchored" data-anchor-id="sesgo-de-publicación">Sesgo de publicación</h2>
+<p>El sesgo de publicación (<em>publication bias</em>) ocurre cuando los resultados de los estudios publicados no son representativos de todos los estudios realizados sobre un tema. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, ya que los estudios con resultados positivos o significativos tienen más probabilidades de ser publicados que aquellos con resultados nulos o negativos, comprometiendo la validez de las conclusiones del meta-análisis.</p>
+<p>Este sesgo puede influir considerablemente en los resultados de un meta-análisis, ya que si los estudios publicados no reflejan adecuadamente toda la gama de resultados posibles, la estimación del efecto global puede estar sesgada. Por lo tanto, es esencial evaluar y ajustar el sesgo de publicación al realizar un meta-análisis, a fin de garantizar que los resultados sean lo más precisos y representativos posible.</p>
+<p><strong>Funnel plot</strong></p>
+<p>Es una herramienta gráfica que permite observar la relación entre el estimador de efecto y su variabilidad. En ausencia de sesgo de publicación, se espera que los estudios se distribuyan simétricamente alrededor del estimador de efecto global, formando un patrón similar a un embudo. Si existe sesgo de publicación, los estudios con mayor tamaño de muestra (y, por tanto, mayor precisión) estarán más concentrados en el centro, mientras que los estudios con menor tamaño de muestra se dispersarán de manera asimétrica.</p>
+<p>La función <code>funnel()</code> del paquete <code>meta</code> permite generar este diagrama para una visualización rápida.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">funnel</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fixed_random_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Test de Egger</strong></p>
+<p>Evalúa la simetría del <em>funnel plot</em> mediante una regresión lineal entre el estimador de efecto y su error estándar. En presencia de sesgo de publicación, se espera que los puntos del diagrama no estén distribuidos simétricamente. Este test proporciona una estimación estadística del sesgo de publicación: un <em>p</em>-valor menor que 0,05 sugiere la presencia de sesgo de publicación.</p>
+<p>Este test puede implementarse con la función <code>metabias()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear regression test of funnel plot asymmetry
+
+Test result: t = 0.49, df = 18, p-value = 0.6323
+Bias estimate: 0.3007 (SE = 0.6177)
+
+Details:
+- multiplicative residual heterogeneity variance (tau^2 = 1.1501)
+- predictor: standard error
+- weight:    inverse variance
+- reference: Egger et al. (1997), BMJ</code></pre>
+</div>
+</div>
+<p><strong>Test de Begg</strong></p>
+<p>Evalúa la relación entre el tamaño del efecto y el error estándar, utilizando un enfoque basado en la correlación de rangos en lugar de una regresión lineal. Un <em>p</em>-valor menor que 0,05 indica la presencia de sesgo de publicación.</p>
+<p>Este test puede implementarse con la función <code>metabias()</code>, utilizando el argumento <code>method.bias = "Begg"</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod, <span class="at">method.bias =</span> <span class="st">"Begg"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rank correlation test of funnel plot asymmetry
+
+Test result: z = 0.26, p-value = 0.7945
+Bias estimate: 8.0000 (SE = 30.7137)
+
+Reference: Begg &amp; Mazumdar (1993), Biometrics</code></pre>
+</div>
+</div>
+<p><strong><em>Trim-and-fill</em></strong></p>
+<p>Estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, agregando estudios hipotéticos que representarían los estudios no publicados. Este método ayuda a corregir la estimación del efecto global al incluir los estudios faltantes que no se publicaron debido a su falta de significancia.</p>
+<p>En R, este procedimiento puede implementarse con la función <code>trimfill()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">trimfill</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 22 (with 2 added studies)
+
+                        COR           95%-CI    z  p-value
+Random effects model 0.3430 [0.2541; 0.4261] 7.17 &lt; 0.0001
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0092 [0.0000; 0.0783]; tau = 0.0957 [0.0000; 0.2799]
+ I^2 = 18.5% [0.0%; 51.4%]; H = 1.11 [1.00; 1.43]
+
+Test of heterogeneity:
+     Q d.f. p-value
+ 25.76   21  0.2156
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Trim-and-fill method to adjust for funnel plot asymmetry (L-estimator)
+- Fisher's z transformation of correlations</code></pre>
+</div>
+</div>
+<p>Generalmente, se recomienda utilizar dos o más estimadores de sesgo de publicación para obtener una visión más completa de la posible presencia de este sesgo. Utilizando diferentes métodos, es posible realizar una evaluación más robusta y precisa del sesgo de publicación y su impacto en los resultados del meta-análisis.</p>
+</section>
+<section id="referencias" class="level2">
+
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-meta" class="csl-entry" role="listitem">
+Balduzzi, Sara, Gerta Rücker, y Guido Schwarzer. 2019. <span>«How to perform a meta-analysis with <span></span>R<span></span>: a practical tutorial»</span>.
+</div>
+<div id="ref-Harrer2021" class="csl-entry" role="listitem">
+Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Boca Raton, FL; London: Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
+</div>
+<div id="ref-Schwarzer2015" class="csl-entry" role="listitem">
+Schwarzer, Guido, James R. Carpenter, y Gerta Rücker. 2015. <em>Meta-Analysis with R</em>. Editado por R Gentleman, K Hornik, y G Parmigiani. Springer. <a href="https://doi.org/10.1007/978-3-319-21416-0_5">https://doi.org/10.1007/978-3-319-21416-0_5</a>.
+</div>
+<div id="ref-metafor" class="csl-entry" role="listitem">
+Viechtbauer, Wolfgang. 2010. <span>«Conducting meta-analyses in <span></span>R<span></span> with the <span></span>metafor<span></span> package»</span> 36. <a href="https://doi.org/10.18637/jss.v036.i03">https://doi.org/10.18637/jss.v036.i03</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiado");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiado");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/datos-ine\.github\.io\/curso_MA_INE_2025\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
