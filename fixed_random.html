@@ -133,6 +133,35 @@ div.csl-indent {
 }
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -265,7 +294,10 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#heterogeneidad-estadística" id="toc-heterogeneidad-estadística" class="nav-link" data-scroll-target="#heterogeneidad-estadística">Heterogeneidad estadística</a></li>
   </ul></li>
-  <li><a href="#implementación-en-r" id="toc-implementación-en-r" class="nav-link" data-scroll-target="#implementación-en-r">Implementación en R</a></li>
+  <li><a href="#implementación-en-r" id="toc-implementación-en-r" class="nav-link" data-scroll-target="#implementación-en-r">Implementación en R</a>
+  <ul class="collapse">
+  <li><a href="#ejemplo-práctico" id="toc-ejemplo-práctico" class="nav-link" data-scroll-target="#ejemplo-práctico">Ejemplo práctico</a></li>
+  </ul></li>
   <li><a href="#sesgo-de-publicación" id="toc-sesgo-de-publicación" class="nav-link" data-scroll-target="#sesgo-de-publicación">Sesgo de publicación</a></li>
   <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
@@ -370,27 +402,42 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <h2 class="anchored" data-anchor-id="implementación-en-r">Implementación en R</h2>
 <p>Para ajustar modelos de meta-análisis en R, los dos paquetes más utilizados son <code>metafor</code> <span class="citation" data-cites="metafor">(<a href="#ref-metafor" role="doc-biblioref">Viechtbauer 2010</a>)</span> y <code>meta</code> <span class="citation" data-cites="meta">(<a href="#ref-meta" role="doc-biblioref">Balduzzi, Rücker, y Schwarzer 2019</a>)</span>.</p>
 <ul>
-<li><p><code>metafor</code>: Es un paquete altamente flexible y potente, que permite modelar escenarios complejos con gran precisión. Su uso, sin embargo, requiere una curva de aprendizaje más pronunciada y un conocimiento avanzado en modelado estadístico. Es especialmente adecuado para usuarios con experiencia en estadísticas que necesiten realizar análisis más avanzados y detallados.</p></li>
-<li><p><code>meta</code>: Se caracteriza por su accesibilidad y facilidad de uso, lo que lo convierte en una excelente opción para aquellos que desean ajustar modelos de meta-análisis sin necesidad de un conocimiento profundo en estadística. Este paquete es ideal para la aplicación práctica y proporciona una interfaz más simple y directa para realizar análisis estándar.</p></li>
+<li><p><code>metafor</code>: Es un paquete muy flexible y potente que permite modelar escenarios complejos con alta precisión. Sin embargo, su uso requiere una curva de aprendizaje más pronunciada y un conocimiento avanzado en modelado estadístico.</p></li>
+<li><p><code>meta</code>: Es más accesible y fácil de usar, lo que lo convierte en una excelente opción para quienes tienen solo posean conocimientos básicos de estadística inferencial. Este paquete es ideal para aplicaciones prácticas y proporciona una interfaz más simple y directa para realizar análisis estándar.</p></li>
 </ul>
-<p>Dado que este curso está orientado a la aplicación práctica del meta-análisis, utilizaremos principalmente el paquete <code>meta</code>. El mismo, ajusta de manera predeterminada tanto modelos de efectos fijos como de efectos aleatorios para cada conjunto de datos, e incluye estimadores de heterogeneidad estadística.</p>
-<p>La función principal es <code>metaxx()</code>, donde <code>xx</code> representa el estimador de efecto que vamos a calcular (por ejemplo, <code>metacont</code> para diferencias de medias, <code>metaprop</code> para proporciones, etc.). A continuación, se muestra una estructura básica de cómo utilizarla:</p>
+<p>Dado que este curso se enfoca en la aplicación práctica del meta-análisis, utilizaremos principalmente el paquete <code>meta</code>, que ajusta de manera predeterminada tanto modelos de efectos fijos como de efectos aleatorios para cada conjunto de datos, e incluye distintos estimadores de heterogeneidad estadística.</p>
+<section id="ejemplo-práctico" class="level3">
+<h3 class="anchored" data-anchor-id="ejemplo-práctico">Ejemplo práctico</h3>
+<p>La función principal del paquete <code>meta</code> para realizar un meta-análisis es <code>metaxx()</code>, donde <code>xx</code> representa el tipo de estimador de efecto que vamos a calcular (por ejemplo, <code>metacont</code> para diferencias de medias, <code>metaprop</code> para proporciones, etc.). A continuación presentamos la estructura básica de esta función:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metaxx</span>(studlab, <span class="co"># identificador de estudio</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       data, <span class="co"># base de datos de interés</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       sm, <span class="co"># especifica el estimador de efecto global</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">common =</span> <span class="cn">TRUE</span>, <span class="co"># modelo de efectos fijos (cambiar a FALSE para desactivarlo)</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">random =</span> <span class="cn">TRUE</span>, <span class="co"># modelo de efectos aleatorios (cambiar a FALSE para desactivarlo)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">backtransf =</span> <span class="cn">TRUE</span>, <span class="co"># indica si mostrar los resultados en la escala original (por ej: odds-ratio) o transformados (log-OR)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>       subset, <span class="co"># opcional, para filtrar estudios</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>       exclude, <span class="co"># opcional, para excluir estudios</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       subgroup, <span class="co"># opcional, para análisis de subgrupos</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>       cluster <span class="co"># opcional, para modelos multinivel</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metaxx</span>(studlab, <span class="co"># Identificador de estudio</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       data,    <span class="co"># Base de datos de interés</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       sm,      <span class="co"># Estimador de efecto global</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">common =</span> <span class="cn">TRUE</span>, <span class="co"># Modelo de efectos fijos</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">random =</span> <span class="cn">TRUE</span>, <span class="co"># Modelo de efectos aleatorios </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">backtransf =</span> <span class="cn">TRUE</span>, <span class="co"># Escala de los resultados</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>       subset,        <span class="co"># Opcional, para filtrar estudios</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>       exclude,       <span class="co"># Opcional, para excluir estudios</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       subgroup,      <span class="co"># Opcional, para análisis de subgrupos</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>       cluster        <span class="co"># Opcional, para modelos multinivel</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Tomemos como ejemplo el dataset “<em>dat.cohen1981</em>” que contiene información para un meta-análisis de correlaciones y es parte de la dependencia <code>metadat</code>.</p>
+<p>Donde:</p>
+<ul>
+<li><p><strong>studlab</strong>: Identificador, nombre o código único de cada estudio en el conjunto de datos.</p></li>
+<li><p><strong>data</strong>: El conjunto de datos que contiene los resultados de los estudios a incluir en el meta-análisis.</p></li>
+<li><p><strong>sm</strong>: Especifica el estimador de efecto global a calcular. Algunos ejemplos comunes son: “OR” (<em>odds-ratio</em>), “RR” (riesgo relativo) y “MD” (diferencia de medias).</p></li>
+<li><p><strong>common</strong>: Establece si se utilizará el modelo de efectos fijos. La opción por defecto es <code>TRUE</code>, pero podemos especificar <code>FALSE</code> si no deseamos obtener los resultados de este modelo.</p></li>
+<li><p><strong>random</strong>: Establece si se ajustará un modelo de efectos aleatorios. La opción por defecto es <code>TRUE</code>, pero podemos especificar <code>FALSE</code> si no deseamos obtener los resultados de este modelo.</p></li>
+<li><p><strong>backtransf</strong>: Define si los resultados deben mostrarse en la escala original (<code>TRUE</code>, por ejemplo, convertir log-OR a odds-ratio) o transformados (<code>FALSE</code>).</p></li>
+<li><p><strong>subset</strong>: Permite filtrar un subconjunto de estudios para el análisis (opcional).</p></li>
+<li><p><strong>exclude</strong>: Permite excluir ciertos estudios del análisis (opcional).</p></li>
+<li><p><strong>subgroup</strong>: Permite realizar un análisis por subgrupos (opcional).</p></li>
+<li><p><strong>cluster</strong>: Permite ajustar modelos multinivel si los datos están agrupados en clústeres (opcional).</p></li>
+</ul>
+<p>Para desarrollar el ejemplo comenzaremos cargando el paquete <code>meta</code> y la base de datos <code>dat.cohen1981</code>, que contiene los resultados de 20 estudios que analizan la correlación entre las calificaciones de los instructores de un curso y el rendimiento académico de los estudiantes. Este conjunto de datos está disponible en la dependencia <code>metadat</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargo paquete</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el paquete meta</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: metadat</code></pre>
@@ -399,22 +446,22 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <pre><code>Loading 'meta' package (version 8.0-2).
 Type 'help(meta)' for a brief overview.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargo datos</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"dat.cohen1981"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Ajustamos el modelo de meta-análisis siguiendo la estructura mostrada anteriormente:</p>
+<p>Ajustamos el modelo usando la función <code>metacor()</code>, las variables de entrada serán <code>ri</code> (correlaciones) y <code>ni</code> (tamaño muestral de cada estudio):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri, <span class="co"># variable que contiene los datos de correlación</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni, <span class="co"># variable que contiene el tamaño muestral</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Podemos acceder a la salida del modelo usando la función <code>summary()</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de efectos fijos y aleatorios</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri,  <span class="co"># Variable que contiene los datos de correlación</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni,    <span class="co"># Variable que contiene el tamaño muestral</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">TRUE</span>,    </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,    </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                           COR            95%-CI %W(common) %W(random)
 Bolton et al. 1979      0.6800 [ 0.0881; 0.9170]        1.3        1.6
@@ -461,19 +508,19 @@ Details of meta-analysis methods:
 - Fisher's z transformation of correlations</code></pre>
 </div>
 </div>
-<p>Si solamente nos interesara calcular el modelo de efectos aleatorios, cambiamos el argumento <code>common = FALSE</code>:</p>
+<p>Si solo nos interesa calcular el modelo de efectos aleatorios (sin efectos fijos), simplemente ajustamos el parámetro <code>common = FALSE</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de efectos aleatorios</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri, <span class="co"># variable que contiene los datos de correlación</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni, <span class="co"># variable que contiene el tamaño muestral</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida modelo</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar solo el modelo de efectos aleatorios</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri,  <span class="co"># Variable que contiene los datos de correlación</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni,    <span class="co"># Variable que contiene el tamaño muestral</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,  </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">FALSE</span>,   <span class="co"># Desactivar modelo de efectos fijos</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                           COR            95%-CI %W(random)
 Bolton et al. 1979      0.6800 [ 0.0881; 0.9170]        1.6
@@ -519,7 +566,48 @@ Details of meta-analysis methods:
 - Fisher's z transformation of correlations</code></pre>
 </div>
 </div>
+<p>Al ejecutar <code>summary(mod)</code>, la primera sección de la salida muestra los resultados individuales de cada estudio incluido en el meta-análisis. Para cada uno, se presentan:</p>
+<ul>
+<li><p><code>COR</code>: coeficiente de correlación, que representa la asociación entre las calificaciones del instructor y el rendimiento estudiantil.</p></li>
+<li><p><code>95%-CI</code>: intervalo de confianza al 95% para el coeficiente de correlación.</p></li>
+<li><p><code>%W (random)</code>: peso asignado a cada estudio en el modelo de efectos aleatorios, determinado por el tamaño de la muestra y la varianza de cada estimación.</p></li>
+</ul>
+<p>Luego se muestran los resultados generales del meta-análisis:</p>
+<ul>
+<li><p><code>k</code>: número total de estudios incluidos.</p></li>
+<li><p><code>o</code>: número total de observaciones.</p></li>
+<li><p><code>COR 95%-CI</code>: coeficiente de correlación global con su intervalo de confianza al 95%.</p></li>
+<li><p>El estadístico <strong><code>z</code></strong> y susignificancia (<code>p-value</code>)</p></li>
+</ul>
+<p>A continuación, se presentan las métricas de heterogeneidad:</p>
+<ul>
+<li><p><code>tau^2</code> y <code>tau</code>: cuantifican la variabilidad entre estudios más allá del error muestral.</p></li>
+<li><p><code>I^2</code>: indica la proporción de variabilidad observada que se debe a diferencias reales entre los estudios.</p></li>
+<li><p><code>H</code> y <code>Q</code>: estadísticos que evalúan si existe variabilidad sustancial entre los estudios.</p></li>
+</ul>
+<p>Finalmente, la salida del modelo detalla los métodos estadísticos utilizados, incluyendo el método de varianza inversa para ponderar los estudios, el estimador de máxima verosimilitud restringida para <span class="math inline">\(\tau^2\)</span> y la transformación de Fisher para estabilizar la varianza.</p>
+<section id="interpretación" class="level4">
+<h4 class="anchored" data-anchor-id="interpretación">Interpretación</h4>
+<p>El meta-análisis realizado sobre 20 estudios individuales, muestra una correlación positiva estadísticamente significativa (<span class="math inline">\(p &lt; 0.0001\)</span>) entre las calificaciones del instructor y el rendimiento estudiantil, con una baja heterogeneidad estadística entre estudios (<span class="math inline">\(I^2 = 9,4\%\)</span>).</p>
+</section>
+<section id="forest-plots" class="level4">
+<h4 class="anchored" data-anchor-id="forest-plots">Forest plots</h4>
+<p>Son representaciones gráficas de los resultados del modelo de meta-análisis, que muestran los estimadores para cada estudio junto al estimador global y los índices de heterogeneidad estadística correspondientes.</p>
+<p>Se pueden generar <em>forest plot</em> rápidos usando la función <code>forest()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fixed_random_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Si bien esta función permite algunas opciones de configuración para los gráficos, existen otros paquetes de R que permiten generar forest plots visualmente más atractivos.</p>
 <p>En la segunda parte de esta unidad, exploraremos las funciones específicas de <code>meta</code> utilizadas para calcular diferentes estimadores de efecto epidemiológico, así como los argumentos principales que permite ajustar. Además, abordaremos métodos para controlar la heterogeneidad observada, tales como el análisis de subgrupos (también conocido como análisis de moderadores) y la meta-regresión.</p>
+</section>
+</section>
 </section>
 <section id="sesgo-de-publicación" class="level2">
 <h2 class="anchored" data-anchor-id="sesgo-de-publicación">Sesgo de publicación</h2>
