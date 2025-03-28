@@ -259,6 +259,12 @@ window.Quarto = {
  <span class="menu-text">Análisis de moderadores</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pub_bias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sesgo de publicación</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -290,15 +296,14 @@ window.Quarto = {
   <ul>
   <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a></li>
   <li><a href="#modelos-de-efectos-fijos" id="toc-modelos-de-efectos-fijos" class="nav-link" data-scroll-target="#modelos-de-efectos-fijos">Modelos de efectos fijos</a></li>
-  <li><a href="#modelos-de-efectos-aleatorios" id="toc-modelos-de-efectos-aleatorios" class="nav-link" data-scroll-target="#modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</a>
-  <ul class="collapse">
-  <li><a href="#heterogeneidad-estadística" id="toc-heterogeneidad-estadística" class="nav-link" data-scroll-target="#heterogeneidad-estadística">Heterogeneidad estadística</a></li>
-  </ul></li>
+  <li><a href="#modelos-de-efectos-aleatorios" id="toc-modelos-de-efectos-aleatorios" class="nav-link" data-scroll-target="#modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</a></li>
+  <li><a href="#medidas-de-heterogeneidad" id="toc-medidas-de-heterogeneidad" class="nav-link" data-scroll-target="#medidas-de-heterogeneidad">Medidas de heterogeneidad</a></li>
   <li><a href="#implementación-en-r" id="toc-implementación-en-r" class="nav-link" data-scroll-target="#implementación-en-r">Implementación en R</a>
   <ul class="collapse">
+  <li><a href="#estructura-básica" id="toc-estructura-básica" class="nav-link" data-scroll-target="#estructura-básica">Estructura básica</a></li>
   <li><a href="#ejemplo-práctico" id="toc-ejemplo-práctico" class="nav-link" data-scroll-target="#ejemplo-práctico">Ejemplo práctico</a></li>
+  <li><a href="#forest-plots" id="toc-forest-plots" class="nav-link" data-scroll-target="#forest-plots">Forest plots</a></li>
   </ul></li>
-  <li><a href="#sesgo-de-publicación" id="toc-sesgo-de-publicación" class="nav-link" data-scroll-target="#sesgo-de-publicación">Sesgo de publicación</a></li>
   <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
@@ -329,74 +334,98 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 </center>
 <section id="introducción" class="level2">
 <h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
-<p>Uno de los objetivos principales del modelado estadístico es representar la realidad de manera “sencilla”, capturando su estructura esencial y descartando elementos cuya variabilidad podría generar ruido en la interpretación de los fenómenos.</p>
-<p>Para ajustar un modelo estadístico, partimos de los datos disponibles y buscamos construir una representación de la realidad basada en ellos. En el caso de los modelos de meta-análisis, los datos de interés son los estimadores de efecto obtenidos en cada estudio, y el objetivo es entender las causas de la variabilidad entre esos estimadores.</p>
-<p>De esta manera, se distinguen dos enfoques principales en meta-análisis: los modelos de efectos fijos y los modelos de efectos aleatorios. Dado el alcance de este curso, no profundizaremos en los detalles matemáticos de estos modelos, sino que nos centraremos en sus principales características y en su implementación en R. Quienes tengan interés en profundizar más en estos enfoques pueden consultar los libros de meta-análisis en R de <span class="citation" data-cites="Schwarzer2015">Schwarzer, Carpenter, y Rücker (<a href="#ref-Schwarzer2015" role="doc-biblioref">2015</a>)</span> y <span class="citation" data-cites="Harrer2021">Harrer et&nbsp;al. (<a href="#ref-Harrer2021" role="doc-biblioref">2021</a>)</span>.</p>
+<p>Uno de los objetivos principales del modelado estadístico es representar la realidad de la manera más “sencilla” posible, capturando su estructura esencial y descartando elementos cuya variabilidad podría generar ruido en la interpretación de los fenómenos.</p>
+<p>Para ajustar un modelo estadístico, partimos de los datos disponibles y buscamos construir una representación de la realidad basada en ellos. En el caso de los modelos de meta-análisis, los datos de interés son los <strong>estimadores de efecto</strong> obtenidos en cada estudio, y el objetivo es entender las causas de la variabilidad entre esos estimadores.</p>
+<p>De esta manera, se distinguen dos enfoques principales en meta-análisis: los modelos de <strong>efectos fijos</strong> y los modelos de <strong>efectos aleatorios</strong>. Dado el alcance de este curso, no profundizaremos en su desarrollo matemático, sino que describiremos sus principales características y su implementación en R. Para quienes tengan interés en profundizar en los fundamentos matemáticos detrás de estos modelos, recomendamos consultar el <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pooling-es.html">Capítulo 4</a> del libro de <span class="citation" data-cites="Schwarzer2015">Schwarzer, Carpenter, y Rücker (<a href="#ref-Schwarzer2015" role="doc-biblioref">2015</a>)</span> y el Capítulo 2 de <span class="citation" data-cites="Harrer2021">Harrer et&nbsp;al. (<a href="#ref-Harrer2021" role="doc-biblioref">2021</a>)</span>.</p>
 </section>
 <section id="modelos-de-efectos-fijos" class="level2">
 <h2 class="anchored" data-anchor-id="modelos-de-efectos-fijos">Modelos de efectos fijos</h2>
-<p>El modelo de efectos fijos parte de la premisa de que todos los estimadores de efecto incluidos en el meta-análisis provienen de una misma población homogénea, y que las diferencias observadas entre ellos se deben exclusivamente al error muestral. En este enfoque, se supone que existe un único “verdadero” efecto común que subyace a todos los estudios, por lo que el objetivo principal es estimar este valor a partir de los datos disponibles.</p>
-<p>El estimador de efecto global corresponde entonces a un promedio ponderado de los estimadores individuales, donde los pesos asignados dependen del tamaño de la muestra y la precisión de cada estudio. De este modo, los estudios con menor varianza tienen mayor influencia en la estimación final.</p>
-<p>Dado que el modelo de efectos fijos asume la homogeneidad entre los estudios, no considera la posibilidad de que existan fuentes adicionales de variabilidad más allá del error aleatorio. Por esta razón, también se le conoce como modelo de <strong>efectos comunes</strong> (<em>common effects model</em>) o de <strong>efectos equivalentes</strong> (<em>equal effects model</em>). Sin embargo, en la práctica, es común encontrar heterogeneidad entre los estudios, lo que hace que los modelos de efectos fijos sean, en muchos casos, inadecuados.</p>
+<p>El modelo de efectos fijos parte de la premisa de que todos los estimadores de efecto incluidos en el meta-análisis provienen de una misma <strong>población homogénea</strong>, y que las diferencias observadas entre ellos se deben exclusivamente al error muestral. En este enfoque, se supone que existe un <strong>único “verdadero” efecto común</strong> que subyace a todos los estudios, por lo que el objetivo principal es estimar este valor a partir de los datos disponibles.</p>
+<p>El estimador de efecto global <span class="math inline">\((\theta)\)</span> se calcula como el <strong>promedio ponderado</strong> de los estimadores individuales, asignando un peso a cada estudio según su tamaño de muestra y precisión.</p>
+<p><span class="math display">\[
+\theta = \frac{\sum{y_i * w_i}}{\sum{w_i}}
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><p><span class="math inline">\(y_i\)</span> es el efecto estimado para cada estudio.</p></li>
+<li><p><span class="math inline">\(w_i\)</span> es el peso asignado para cada estudio, calculado como el inverso de su varianza <span class="math inline">\((1/S^2_i)\)</span>.</p></li>
+</ul>
+<p>De este modo, los estudios con menor varianza tienen mayor influencia en la estimación final. Esta estrategia de ponderación se conoce como el <strong>método de la varianza inversa</strong>.</p>
+<p>Dado que estos modelos suponen <strong>homogeneidad</strong> entre los estudios, no consideran la existencia de fuentes adicionales de variabilidad más allá del error aleatorio. Por esta razón, también se les conoce como <strong>modelos de efecto común</strong> (<em>common effect model</em>) o <strong>modelos de efectos equivalentes</strong> (<em>equal effect model</em>).</p>
+<p>Sin embargo, en la práctica, es frecuente encontrar <strong>heterogeneidad</strong> entre los estudios, lo que hace que el uso de modelos de efectos fijos pueda ser inadecuado en muchos casos. Cuando hay variabilidad real entre estudios, un modelo de <strong>efectos aleatorios</strong> suele ser una opción más apropiada, ya que permite incorporar esta variabilidad en la estimación del efecto global.</p>
 </section>
 <section id="modelos-de-efectos-aleatorios" class="level2">
 <h2 class="anchored" data-anchor-id="modelos-de-efectos-aleatorios">Modelos de efectos aleatorios</h2>
-<p>Los modelos de efectos aleatorios suponen que existe una fuente de variabilidad entre los estudios que va más allá del error aleatorio. Esta fuente adicional de variabilidad implica que los estudios no provienen de una única población, sino de un conjunto de posibles poblaciones.</p>
-<p>En este enfoque, el estimador del efecto real no es único, sino que se distribuye alrededor de una media general. Esto introduce una segunda fuente de error que debe ser incorporada en el modelo. El objetivo de los modelos de efectos aleatorios es, por lo tanto, estimar la media de la distribución de los efectos, considerando tanto la variabilidad dentro de cada estudio como la variabilidad entre estudios.</p>
-<section id="heterogeneidad-estadística" class="level3">
-<h3 class="anchored" data-anchor-id="heterogeneidad-estadística">Heterogeneidad estadística</h3>
-<p>En un meta-análisis existen tres fuentes potenciales de variabilidad: heterogeneidad de base (entre participantes de cada estudio), heterogeneidad estadística y heterogeneidad por otras causas (por ejemplo, el error de muestreo).</p>
-<p>La heterogeneidad estadística refleja la variabilidad existente entre los estudios incluidos en un meta-análisis. A continuación, se presenta una comparación entre los principales indicadores:</p>
+<p>Los modelos de efectos aleatorios suponen que existen otras fuentes de variabilidad entre estudios además del error aleatorio. Esta varianza adicional implica asumir que los estudios no provienen de una única población homogénea, sino de un “universo” de posibles poblaciones, cada una con su propio efecto verdadero.</p>
+<p>En este enfoque, no se asume un único <strong>efecto real común</strong>, sino que los efectos verdaderos siguen una <strong>distribución</strong> alrededor de una media global. Esto introduce una segunda fuente de error, correspondiente a la variabilidad entre estudios.</p>
+<p>El objetivo de estos modelos es estimar la media de la distribución de efectos verdaderos, incorporando tanto la variabilidad <strong>dentro de cada estudio</strong> como la <strong>variabilidad entre estudios</strong>. Para ello, el peso asignado a cada estudio en la estimación global se ajusta de la siguiente manera:</p>
+<p><span class="math display">\[w^*_i = \frac{1}{S^2_k + \tau^2}\]</span></p>
+<p>Donde</p>
+<ul>
+<li><p><span class="math inline">\(S^2_k\)</span> es la varianza intraestudio, que indica la precisión de cada estimador.</p></li>
+<li><p><span class="math inline">\(\tau^2\)</span> (tau-cuadrado) es la varianza entre estudios o <strong>heterogeneidad</strong>, que captura las diferencias sistemáticas en los efectos entre estudios.</p></li>
+</ul>
+<p>Existen diversos métodos para calcular tau-cuadrado, siendo los más comunes la máxima verosimilitud restringida (REML) o el método de DerSimonian y Laird. El desarrollo matemático de estos métodos escapa a los alcances del curso, pero su correcta aplicación es clave para interpretar los resultados de un meta-análisis con efectos aleatorios.</p>
+</section>
+<section id="medidas-de-heterogeneidad" class="level2">
+<h2 class="anchored" data-anchor-id="medidas-de-heterogeneidad">Medidas de heterogeneidad</h2>
+<p>En un meta-análisis la variabilidad puede provenir de tres fuentes:</p>
+<ul>
+<li><p>Heterogeneidad de base, dada por las diferencias entre los participantes dentro de cada estudio.</p></li>
+<li><p>Heterogeneidad estadística, es decir, la variabilidad entre los estudios incluidos en el meta-análisis.</p></li>
+<li><p>Heterogeneidad por otras causas, como por ejemplo el error de muestreo.</p></li>
+</ul>
+<p>La <strong>heterogeneidad estadística</strong> refleja la variabilidad entre los estudios más allá de lo esperado por el azar. En la siguiente tabla, adaptada de <span class="citation" data-cites="Schwarzer2015">(<a href="#ref-Schwarzer2015" role="doc-biblioref">Schwarzer, Carpenter, y Rücker 2015</a>)</span>, se muestran los indicadores de heterogeneidad más frecuentemente usados:</p>
+<style type="text/css">@media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}}</style>
+<div class="tg-wrap">
 <table class="tg caption-top table" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #ccc; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Indicador</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #ccc; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Descripción</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #ccc; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Escala</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #ccc; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Número de estudios</th>
-<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #ccc; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Precisión</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: inherit; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; position: -webkit-sticky; position: sticky; top: -1px; vertical-align: top; will-change: transform; word-break: normal;">Medida</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: inherit; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; position: -webkit-sticky; position: sticky; top: -1px; vertical-align: top; will-change: transform; word-break: normal;">Interpretación</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: inherit; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; position: -webkit-sticky; position: sticky; top: -1px; vertical-align: top; will-change: transform; word-break: normal;">Escala</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: inherit; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; position: -webkit-sticky; position: sticky; top: -1px; vertical-align: top; will-change: transform; word-break: normal;">Rango</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: inherit; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; position: -webkit-sticky; position: sticky; top: -1px; vertical-align: top; will-change: transform; word-break: normal;">Número de estudios</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: inherit; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; position: -webkit-sticky; position: sticky; top: -1px; vertical-align: top; will-change: transform; word-break: normal;">Afectada por precisión</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; font-style: italic; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;"><span style="font-style:italic">Q </span>de Cochran</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Evalúa si las diferencias entre los estimadores de efecto son mayores a las esperadas por azar</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Absoluta</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Dependiente</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">Dependiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Q de Cochran</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Evalúa si la heterogeneidad es significativa</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Absoluta</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">[0, ∞)</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Dependiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Sí</td>
 </tr>
 <tr class="even">
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">I-cuadrado (I²)</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Representa el porcentaje de variabilidad total atribuible a la heterogeneidad entre estudios</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Porcentaje</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Independiente</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">Dependiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">I²</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Cuantifica que proporción de la variabilidad se debe a heterogeneidad real</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Porcentaje</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">[0, 100]</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Independiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Sí</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">tau-cuadrado (τ²)</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Estima la varianza real entre los efectos de los estudios.</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Efecto</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Independiente</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">Independiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">τ²</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Mide la variabilidad real entre los efectos verdaderos de los estudios.</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Varianza</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">[0, ∞)</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Independiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">No</td>
 </tr>
 <tr class="even">
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">H²</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Refleja la magnitud de la heterogeneidad en los estudios.</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Absoluta</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Independiente</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">Dependiente</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">R²</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Mide la proporción de la varianza total explicada por el modelo en relación con la variabilidad total de los efectos.</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Absoluta</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Independiente</td>
-<td style="text-align: left; background-color: #fff; border-color: #ccc; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: middle; word-break: normal;">Dependiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">H²</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Razón entre la varianza total observada y la varianza esperada bajo el supuesto de homogeneidad.</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Absoluta</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">[1, ∞)</td>
+<td style="text-align: left; background-color: #FFF; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Independiente</td>
+<td style="text-align: left; background-color: #ffffff; border-color: inherit; border-style: solid; border-width: 0px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Sí</td>
 </tr>
 </tbody>
 </table>
-<p>Estos indicadores permiten evaluar si las diferencias entre los efectos observados son mayores de lo que se esperaría por azar, lo que ayuda a determinar el modelo de meta-análisis más adecuado.</p>
-</section>
+</div>
+<p>Estos indicadores permiten evaluar si las diferencias entre los efectos observados son mayores de lo que se esperaría por azar, ayudando a seleccionar el modelo de meta-análisis más adecuado.</p>
 </section>
 <section id="implementación-en-r" class="level2">
 <h2 class="anchored" data-anchor-id="implementación-en-r">Implementación en R</h2>
@@ -406,287 +435,201 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <li><p><code>meta</code>: Es más accesible y fácil de usar, lo que lo convierte en una excelente opción para quienes tienen solo posean conocimientos básicos de estadística inferencial. Este paquete es ideal para aplicaciones prácticas y proporciona una interfaz más simple y directa para realizar análisis estándar.</p></li>
 </ul>
 <p>Dado que este curso se enfoca en la aplicación práctica del meta-análisis, utilizaremos principalmente el paquete <code>meta</code>, que ajusta de manera predeterminada tanto modelos de efectos fijos como de efectos aleatorios para cada conjunto de datos, e incluye distintos estimadores de heterogeneidad estadística.</p>
-<section id="ejemplo-práctico" class="level3">
-<h3 class="anchored" data-anchor-id="ejemplo-práctico">Ejemplo práctico</h3>
-<p>La función principal del paquete <code>meta</code> para realizar un meta-análisis es <code>metaxx()</code>, donde <code>xx</code> representa el tipo de estimador de efecto que vamos a calcular (por ejemplo, <code>metacont</code> para diferencias de medias, <code>metaprop</code> para proporciones, etc.). A continuación presentamos la estructura básica de esta función:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metaxx</span>(studlab, <span class="co"># Identificador de estudio</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       data,    <span class="co"># Base de datos de interés</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       sm,      <span class="co"># Estimador de efecto global</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">common =</span> <span class="cn">TRUE</span>, <span class="co"># Modelo de efectos fijos</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">random =</span> <span class="cn">TRUE</span>, <span class="co"># Modelo de efectos aleatorios </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">backtransf =</span> <span class="cn">TRUE</span>, <span class="co"># Escala de los resultados</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>       subset,        <span class="co"># Opcional, para filtrar estudios</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>       exclude,       <span class="co"># Opcional, para excluir estudios</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       subgroup,      <span class="co"># Opcional, para análisis de subgrupos</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>       cluster        <span class="co"># Opcional, para modelos multinivel</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="estructura-básica" class="level3">
+<h3 class="anchored" data-anchor-id="estructura-básica">Estructura básica</h3>
+<p>El paquete <code>meta</code> ofrece una serie de funciones para ajustar modelos de meta-análisis con una estructura uniforme. La función principal para este propósito sigue el formato <code>metaxxx()</code>, donde <code>xxx</code> indica el estimador de efecto a calcular. Los argumentos clave de esta función incluyen:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metaxxx</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  studlab, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  data, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  sm,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  common,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  random, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  method.tau,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  backtransf,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  subset,        </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  exclude,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  subgroup,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  cluster        </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Donde:</p>
 <ul>
-<li><p><strong>studlab</strong>: Identificador, nombre o código único de cada estudio en el conjunto de datos.</p></li>
-<li><p><strong>data</strong>: El conjunto de datos que contiene los resultados de los estudios a incluir en el meta-análisis.</p></li>
-<li><p><strong>sm</strong>: Especifica el estimador de efecto global a calcular. Algunos ejemplos comunes son: “OR” (<em>odds-ratio</em>), “RR” (riesgo relativo) y “MD” (diferencia de medias).</p></li>
-<li><p><strong>common</strong>: Establece si se utilizará el modelo de efectos fijos. La opción por defecto es <code>TRUE</code>, pero podemos especificar <code>FALSE</code> si no deseamos obtener los resultados de este modelo.</p></li>
-<li><p><strong>random</strong>: Establece si se ajustará un modelo de efectos aleatorios. La opción por defecto es <code>TRUE</code>, pero podemos especificar <code>FALSE</code> si no deseamos obtener los resultados de este modelo.</p></li>
-<li><p><strong>backtransf</strong>: Define si los resultados deben mostrarse en la escala original (<code>TRUE</code>, por ejemplo, convertir log-OR a odds-ratio) o transformados (<code>FALSE</code>).</p></li>
-<li><p><strong>subset</strong>: Permite filtrar un subconjunto de estudios para el análisis (opcional).</p></li>
-<li><p><strong>exclude</strong>: Permite excluir ciertos estudios del análisis (opcional).</p></li>
+<li><p><strong>studlab</strong>: Identificador único de cada estudio en el conjunto de datos.</p></li>
+<li><p><strong>data</strong>: Conjunto de datos que contiene los resultados de los estudios a incluir en el meta-análisis.</p></li>
+<li><p><strong>sm</strong>: Estimador de efecto global a calcular (ej.: “OR” para odds ratio, “RR” para riesgo relativo, “MD” para diferencia de medias).</p></li>
+<li><p><strong>common</strong>: Indica si se ajustará un modelo de efectos fijos (<code>TRUE</code>, por defecto) o se omitirá (<code>FALSE</code>).</p></li>
+<li><p><strong>random</strong>: Indica si se ajustará un modelo de efectos aleatorios (<code>TRUE</code>, por defecto) o se omitirá (<code>FALSE</code>).</p></li>
+<li><p><strong>method.tau</strong>: Método para estimar la varianza entre estudios.</p></li>
+<li><p><strong>backtransf</strong>: Define si los resultados se mostrarán en la escala original de los datos (<code>TRUE</code>) o transformada (<code>FALSE</code>, por ejemplo log-OR).</p></li>
+<li><p><strong>subset</strong>: Permite seleccionar un subconjunto de estudios para el análisis (opcional).</p></li>
+<li><p><strong>exclude</strong>: Permite excluir estudios específicos (opcional).</p></li>
 <li><p><strong>subgroup</strong>: Permite realizar un análisis por subgrupos (opcional).</p></li>
 <li><p><strong>cluster</strong>: Permite ajustar modelos multinivel si los datos están agrupados en clústeres (opcional).</p></li>
 </ul>
-<p>Para desarrollar el ejemplo comenzaremos cargando el paquete <code>meta</code> y la base de datos <code>dat.cohen1981</code>, que contiene los resultados de 20 estudios que analizan la correlación entre las calificaciones de los instructores de un curso y el rendimiento académico de los estudiantes. Este conjunto de datos está disponible en la dependencia <code>metadat</code>:</p>
-<div class="cell">
+</section>
+<section id="ejemplo-práctico" class="level3">
+<h3 class="anchored" data-anchor-id="ejemplo-práctico">Ejemplo práctico</h3>
+<p>En este ejemplo, utilizaremos la función <code>metagen()</code>, diseñada para trabajar con estimadores de efecto previamente calculados. Usaremos el conjunto de datos <code>dat.konstantopoulos2011</code>, que contiene información de un meta-análisis de 56 estudios sobre el impacto de la modificación del calendario escolar en el rendimiento académico de los/as estudiantes. Este conjunto de datos forma parte de la dependencia <code>metadat</code>.</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el paquete meta</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: metadat</code></pre>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.konstantopoulos2011</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar datos</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "district" "school"   "study"    "year"     "yi"       "vi"      </code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading 'meta' package (version 8.0-2).
-Type 'help(meta)' for a brief overview.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"dat.cohen1981"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Las variables de entrada para la función <code>metagen()</code> serán <code>yi</code> (diferencia de medias estandarizada) y <code>vi</code> (varianza de la estimación). Comenzaremos ajustando tanto el modelo de efectos fijos como el de efectos aleatorios:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de efectos fijos y aleatorios</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metagen</span>(<span class="at">TE =</span> yi,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">seTE =</span> vi,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">TRUE</span>,    </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,    </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> datos)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>mod</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 56
+
+                                         95%-CI      z p-value
+Common effect model  -0.0133 [-0.0140; -0.0126] -38.82       0
+Random effects model  0.1219 [ 0.0365;  0.2074]   2.80  0.0052
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.1048 [0.0739; 0.1588]; tau = 0.3238 [0.2719; 0.3985]
+ I^2 = 99.9%; H = 41.32
+
+Test of heterogeneity:
+        Q d.f. p-value
+ 93892.81   55       0
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q</code></pre>
 </div>
-<p>Ajustamos el modelo usando la función <code>metacor()</code>, las variables de entrada serán <code>ri</code> (correlaciones) y <code>ni</code> (tamaño muestral de cada estudio):</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de efectos fijos y aleatorios</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri,  <span class="co"># Variable que contiene los datos de correlación</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni,    <span class="co"># Variable que contiene el tamaño muestral</span></span>
+</div>
+<p>La heterogeneidad estadística es alta <span class="math inline">\((I^2 = 99,9\%)\)</span>, por lo que podemos omitir el modelo de efectos fijos cambiando a <code>FALSE</code> el argumento <code>common</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar solo el modelo de efectos aleatorios</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metagen</span>(<span class="at">TE =</span> yi,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">seTE =</span> vi,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">TRUE</span>,    </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">FALSE</span>,    </span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,    </span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> datos)</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>mod</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                           COR            95%-CI %W(common) %W(random)
-Bolton et al. 1979      0.6800 [ 0.0881; 0.9170]        1.3        1.6
-Bryson 1974             0.5600 [ 0.1562; 0.8034]        3.2        3.6
-Centra 1977             0.2300 [-0.3676; 0.6931]        1.9        2.2
-Centra 1977             0.6400 [ 0.2991; 0.8360]        3.6        4.0
-Crooks &amp; Smock 1974     0.4900 [ 0.1431; 0.7297]        4.7        5.2
-Doyle &amp; Crichton 1978  -0.0400 [-0.6001; 0.5464]        1.7        2.0
-Doyle &amp; Whitely 1974    0.4900 [-0.1167; 0.8304]        1.7        2.0
-Elliott 1950            0.3300 [ 0.0016; 0.5941]        6.2        6.6
-Ellis &amp; Rickard 1977    0.5800 [ 0.1708; 0.8186]        3.0        3.5
-Frey et al. 1975        0.1800 [-0.4393; 0.6833]        1.7        2.0
-Greenwood et al. 1976  -0.1100 [-0.4232; 0.2267]        6.2        6.6
-Hoffman 1978            0.2700 [ 0.0458; 0.4683]       13.6       12.2
-McKeachie et al. 1971   0.2600 [-0.0915; 0.5539]        5.7        6.1
-Morsh et al. 1956       0.4000 [ 0.2385; 0.5399]       22.3       17.1
-Remmers et al. 1949     0.4900 [ 0.1973; 0.7025]        6.4        6.7
-Sullivan &amp; Skanes 1974  0.5100 [-0.0282; 0.8190]        2.1        2.4
-Sullivan &amp; Skanes 1974  0.4000 [ 0.1011; 0.6327]        7.0        7.2
-Sullivan &amp; Skanes 1974  0.3400 [-0.1873; 0.7152]        2.5        2.8
-Sullivan &amp; Skanes 1974  0.4200 [-0.1423; 0.7774]        2.1        2.4
-Wherry 1952             0.1600 [-0.3040; 0.5627]        3.2        3.6
+<pre><code>Number of studies: k = 56
 
-Number of studies: k = 20
-Number of observations: o = 590
-
-                        COR           95%-CI    z  p-value
-Common effect model  0.3626 [0.2865; 0.4342] 8.75 &lt; 0.0001
-Random effects model 0.3637 [0.2788; 0.4430] 7.88 &lt; 0.0001
+                                      95%-CI    z p-value
+Random effects model 0.1219 [0.0365; 0.2074] 2.80  0.0052
 
 Quantifying heterogeneity (with 95%-CIs):
- tau^2 = 0.0052 [0.0000; 0.0632]; tau = 0.0723 [0.0000; 0.2514]
- I^2 = 9.4% [0.0%; 44.6%]; H = 1.05 [1.00; 1.34]
+ tau^2 = 0.1048 [0.0739; 0.1588]; tau = 0.3238 [0.2719; 0.3985]
+ I^2 = 99.9%; H = 41.32
 
 Test of heterogeneity:
-     Q d.f. p-value
- 20.97   19  0.3382
+        Q d.f. p-value
+ 93892.81   55       0
 
 Details of meta-analysis methods:
 - Inverse variance method
 - Restricted maximum-likelihood estimator for tau^2
 - Q-Profile method for confidence interval of tau^2 and tau
-- Calculation of I^2 based on Q
-- Fisher's z transformation of correlations</code></pre>
+- Calculation of I^2 based on Q</code></pre>
 </div>
 </div>
-<p>Si solo nos interesa calcular el modelo de efectos aleatorios (sin efectos fijos), simplemente ajustamos el parámetro <code>common = FALSE</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar solo el modelo de efectos aleatorios</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">metacor</span>(<span class="at">cor =</span> ri,  <span class="co"># Variable que contiene los datos de correlación</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">n =</span> ni,    <span class="co"># Variable que contiene el tamaño muestral</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">studlab =</span> study,  </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">common =</span> <span class="cn">FALSE</span>,   <span class="co"># Desactivar modelo de efectos fijos</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">backtransf =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> dat.cohen1981)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                           COR            95%-CI %W(random)
-Bolton et al. 1979      0.6800 [ 0.0881; 0.9170]        1.6
-Bryson 1974             0.5600 [ 0.1562; 0.8034]        3.6
-Centra 1977             0.2300 [-0.3676; 0.6931]        2.2
-Centra 1977             0.6400 [ 0.2991; 0.8360]        4.0
-Crooks &amp; Smock 1974     0.4900 [ 0.1431; 0.7297]        5.2
-Doyle &amp; Crichton 1978  -0.0400 [-0.6001; 0.5464]        2.0
-Doyle &amp; Whitely 1974    0.4900 [-0.1167; 0.8304]        2.0
-Elliott 1950            0.3300 [ 0.0016; 0.5941]        6.6
-Ellis &amp; Rickard 1977    0.5800 [ 0.1708; 0.8186]        3.5
-Frey et al. 1975        0.1800 [-0.4393; 0.6833]        2.0
-Greenwood et al. 1976  -0.1100 [-0.4232; 0.2267]        6.6
-Hoffman 1978            0.2700 [ 0.0458; 0.4683]       12.2
-McKeachie et al. 1971   0.2600 [-0.0915; 0.5539]        6.1
-Morsh et al. 1956       0.4000 [ 0.2385; 0.5399]       17.1
-Remmers et al. 1949     0.4900 [ 0.1973; 0.7025]        6.7
-Sullivan &amp; Skanes 1974  0.5100 [-0.0282; 0.8190]        2.4
-Sullivan &amp; Skanes 1974  0.4000 [ 0.1011; 0.6327]        7.2
-Sullivan &amp; Skanes 1974  0.3400 [-0.1873; 0.7152]        2.8
-Sullivan &amp; Skanes 1974  0.4200 [-0.1423; 0.7774]        2.4
-Wherry 1952             0.1600 [-0.3040; 0.5627]        3.6
-
-Number of studies: k = 20
-Number of observations: o = 590
-
-                        COR           95%-CI    z  p-value
-Random effects model 0.3637 [0.2788; 0.4430] 7.88 &lt; 0.0001
-
-Quantifying heterogeneity (with 95%-CIs):
- tau^2 = 0.0052 [0.0000; 0.0632]; tau = 0.0723 [0.0000; 0.2514]
- I^2 = 9.4% [0.0%; 44.6%]; H = 1.05 [1.00; 1.34]
-
-Test of heterogeneity:
-     Q d.f. p-value
- 20.97   19  0.3382
-
-Details of meta-analysis methods:
-- Inverse variance method
-- Restricted maximum-likelihood estimator for tau^2
-- Q-Profile method for confidence interval of tau^2 and tau
-- Calculation of I^2 based on Q
-- Fisher's z transformation of correlations</code></pre>
-</div>
-</div>
-<p>Al ejecutar <code>summary(mod)</code>, la primera sección de la salida muestra los resultados individuales de cada estudio incluido en el meta-análisis. Para cada uno, se presentan:</p>
+<p>Para explorar los resultados en detalle, podemos utilizar <code>summary(mod)</code>, que proporciona información similar a los modelos de regresión convencionales. La primer parte de esta salida incluye los resultados individuales para cada estudio:</p>
 <ul>
-<li><p><code>COR</code>: coeficiente de correlación, que representa la asociación entre las calificaciones del instructor y el rendimiento estudiantil.</p></li>
-<li><p><code>95%-CI</code>: intervalo de confianza al 95% para el coeficiente de correlación.</p></li>
-<li><p><code>%W (random)</code>: peso asignado a cada estudio en el modelo de efectos aleatorios, determinado por el tamaño de la muestra y la varianza de cada estimación.</p></li>
+<li><p>Estimador de efecto: diferencia de medias estandarizada por estudio.</p></li>
+<li><p><code>95%-CI</code>: intervalo de confianza al 95%.</p></li>
+<li><p><code>%W (random)</code>: peso de cada estudio en el modelo de efectos aleatorios, determinado por el tamaño muestral y la varianza.</p></li>
 </ul>
 <p>Luego se muestran los resultados generales del meta-análisis:</p>
 <ul>
-<li><p><code>k</code>: número total de estudios incluidos.</p></li>
-<li><p><code>o</code>: número total de observaciones.</p></li>
-<li><p><code>COR 95%-CI</code>: coeficiente de correlación global con su intervalo de confianza al 95%.</p></li>
-<li><p>El estadístico <strong><code>z</code></strong> y susignificancia (<code>p-value</code>)</p></li>
+<li><p><code>k</code>: número total de estudios incluidos en el análisis.</p></li>
+<li><p><code>Common effects model</code>: Diferencia de medias observada para cada estudio en el modelo de efectos fijos.</p></li>
+<li><p><code>Random effects model</code>: Diferencia de medias observada para cada estudio en el modelo de efectos aleatorios.</p></li>
+<li><p>El estadístico <strong><code>z</code></strong> y su <em>p</em>-valor (<code>p-value</code>) para evaluar la significancia del efecto global.</p></li>
 </ul>
-<p>A continuación, se presentan las métricas de heterogeneidad:</p>
+<p>A continuación se presentan las métricas de heterogeneidad:</p>
 <ul>
 <li><p><code>tau^2</code> y <code>tau</code>: cuantifican la variabilidad entre estudios más allá del error muestral.</p></li>
-<li><p><code>I^2</code>: indica la proporción de variabilidad observada que se debe a diferencias reales entre los estudios.</p></li>
-<li><p><code>H</code> y <code>Q</code>: estadísticos que evalúan si existe variabilidad sustancial entre los estudios.</p></li>
+<li><p><code>I^2</code>: porcentaje de variabilidad atribuida a diferencias reales entre estudios.</p></li>
+<li><p><code>H</code> y <code>Q</code>: indicadores de heterogeneidad en el conjunto de estudios.</p></li>
 </ul>
-<p>Finalmente, la salida del modelo detalla los métodos estadísticos utilizados, incluyendo el método de varianza inversa para ponderar los estudios, el estimador de máxima verosimilitud restringida para <span class="math inline">\(\tau^2\)</span> y la transformación de Fisher para estabilizar la varianza.</p>
+<p>Finalmente, la salida del modelo detalla los métodos estadísticos utilizados, incluyendo el método de varianza inversa para ponderar los estudios, el estimador de máxima verosimilitud restringida para <code>tau^2</code> y la metodología aplicada para calcular <code>I^2</code>.</p>
 <section id="interpretación" class="level4">
 <h4 class="anchored" data-anchor-id="interpretación">Interpretación</h4>
-<p>El meta-análisis realizado sobre 20 estudios individuales, muestra una correlación positiva estadísticamente significativa (<span class="math inline">\(p &lt; 0.0001\)</span>) entre las calificaciones del instructor y el rendimiento estudiantil, con una baja heterogeneidad estadística entre estudios (<span class="math inline">\(I^2 = 9,4\%\)</span>).</p>
+<p>El meta-análisis realizado sobre 56 estudios individuales, muestra que el rendimiento académico aumenta significativamente con la modificación del calendario escolar <span class="math inline">\((p &lt; 0.005)\)</span>. La alta heterogeneidad estadística <span class="math inline">\((I^2 = 99,9\%)\)</span>, sugiere que la variabilidad observada se debe a diferencias reales entre estudios.</p>
 </section>
-<section id="forest-plots" class="level4">
-<h4 class="anchored" data-anchor-id="forest-plots">Forest plots</h4>
-<p>Son representaciones gráficas de los resultados del modelo de meta-análisis, que muestran los estimadores para cada estudio junto al estimador global y los índices de heterogeneidad estadística correspondientes.</p>
-<p>Se pueden generar <em>forest plot</em> rápidos usando la función <code>forest()</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="forest-plots" class="level3">
+<h3 class="anchored" data-anchor-id="forest-plots">Forest plots</h3>
+<p>Los resultados del meta-análisis pueden visualizarse mediante <em>forest plots</em>, que muestran la distribución de los estimadores de efecto de los estudios individuales y sus intervalos de confianza en relación con el estimador global. Además, incorporan información sobre la heterogeneidad entre estudios.</p>
+<p>Para generar un <em>forest plot</em> básico con el paquete <code>meta</code>, utilizamos la función <code>forest()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="fixed_random_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="fixed_random_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Si bien esta función permite algunas opciones de configuración para los gráficos, existen otros paquetes de R que permiten generar forest plots visualmente más atractivos.</p>
-<p>En la segunda parte de esta unidad, exploraremos las funciones específicas de <code>meta</code> utilizadas para calcular diferentes estimadores de efecto epidemiológico, así como los argumentos principales que permite ajustar. Además, abordaremos métodos para controlar la heterogeneidad observada, tales como el análisis de subgrupos (también conocido como análisis de moderadores) y la meta-regresión.</p>
+<p>El gráfico se divide en tres paneles principales:</p>
+<ul>
+<li><p><strong>Panel izquierdo</strong>:</p>
+<ul>
+<li><p>Identificador de estudio.</p></li>
+<li><p>Estimador de efecto y su error estándar.</p></li>
+</ul></li>
+<li><p><strong>Panel central</strong>:</p>
+<ul>
+<li><p>Línea vertical de referencia que representa el valor de <strong>no efecto</strong> (0 en datos continuos, 1 en escalas logarítmicas).</p></li>
+<li><p>Línea vertical punteada representa el estimador global del meta-análisis, el cual se muestra como un rombo (🔶), cuyo ancho indica su intervalo de confianza.</p></li>
+<li><p>Cada estudio se representa como un cuadrado (🟦), cuyo tamaño es proporcional al peso del estudio en el análisis.</p></li>
+<li><p>Los “bigotes” horizontales indican el intervalo de confianza al 95% de cada estudio.</p></li>
+</ul></li>
+<li><p><strong>Panel derecho</strong>:</p>
+<ul>
+<li><p>Muestra el estimador de efecto y su intervalo de confianza al 95%.</p></li>
+<li><p>Indica el <strong>peso estadístico</strong> asignado a cada estudio en el modelo de efectos aleatorios.</p></li>
+</ul></li>
+</ul>
+<p>La función <code>forest()</code> presenta diversos argumentos para personalizar la salida de los gráficos, a las que podemos acceder ejecutando el comando <code>?forest</code> en la consola de R. Algunos de los argumentos principales son::</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(mod, <span class="co"># Nombre del modelo de meta_análisis </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">sortvar =</span> <span class="cn">NULL</span>, <span class="co"># Ordena los datos según una variable numérica</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="cn">NULL</span>, <span class="co"># Define los límites del eje X</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">smlab =</span> <span class="cn">NULL</span>, <span class="co"># Etiqueta del estimador de efecto</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>       col.diamond, <span class="co"># Color del estimador global</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>       col.square, <span class="co"># Color de los estimadores individuales</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">print.tau2 =</span> <span class="cn">TRUE</span>, <span class="co"># Mostrar tau-cuadrado</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">print.I2 =</span> <span class="cn">TRUE</span>, <span class="co"># Mostar I-cuadrado</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">print.Q =</span> <span class="cn">TRUE</span>, <span class="co"># Mostrar Q de Cochran</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">print.pval.Q =</span> <span class="cn">TRUE</span>, <span class="co"># P-valor del estadístico Q</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">digits =</span> <span class="dv">2</span>, <span class="co"># Número de decimales</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>       ...)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Un aspecto importante a considerar que los gráficos generados con <code>forest()</code> no son compatibles con <code>ggplot2</code> ni autoescalables, por lo que si el número de estudios es grande, el gráfico puede quedar truncado o ilegible en la vista predeterminada. Para evitar este problema, se recomienda guardar el gráfico en un archivo de imagen (PDF, PNG, etc.) especificando el tamaño adecuado con las funciones <code>pdf()</code>, <code>png()</code>, etc.</p>
+<p>En la siguiente parte de esta unidad, exploraremos las funciones de <code>meta</code> que permiten ajustar modelos de meta-análisis para distintos estimadores de efecto en epidemiología. Además, abordaremos métodos para controlar la heterogeneidad, tales como el análisis de moderadores y la meta-regresión y aprenderemos qué es y como se mide el sesgo de publicación.</p>
 </section>
-</section>
-</section>
-<section id="sesgo-de-publicación" class="level2">
-<h2 class="anchored" data-anchor-id="sesgo-de-publicación">Sesgo de publicación</h2>
-<p>El sesgo de publicación (<em>publication bias</em>) ocurre cuando los resultados de los estudios publicados no son representativos de todos los estudios realizados sobre un tema. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, ya que los estudios con resultados positivos o significativos tienen más probabilidades de ser publicados que aquellos con resultados nulos o negativos, comprometiendo la validez de las conclusiones del meta-análisis.</p>
-<p>Este sesgo puede influir considerablemente en los resultados de un meta-análisis, ya que si los estudios publicados no reflejan adecuadamente toda la gama de resultados posibles, la estimación del efecto global puede estar sesgada. Por lo tanto, es esencial evaluar y ajustar el sesgo de publicación al realizar un meta-análisis, a fin de garantizar que los resultados sean lo más precisos y representativos posible.</p>
-<p><strong>Funnel plot</strong></p>
-<p>Es una herramienta gráfica que permite observar la relación entre el estimador de efecto y su variabilidad. En ausencia de sesgo de publicación, se espera que los estudios se distribuyan simétricamente alrededor del estimador de efecto global, formando un patrón similar a un embudo. Si existe sesgo de publicación, los estudios con mayor tamaño de muestra (y, por tanto, mayor precisión) estarán más concentrados en el centro, mientras que los estudios con menor tamaño de muestra se dispersarán de manera asimétrica.</p>
-<p>La función <code>funnel()</code> del paquete <code>meta</code> permite generar este diagrama para una visualización rápida.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">funnel</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="fixed_random_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>Test de Egger</strong></p>
-<p>Evalúa la simetría del <em>funnel plot</em> mediante una regresión lineal entre el estimador de efecto y su error estándar. En presencia de sesgo de publicación, se espera que los puntos del diagrama no estén distribuidos simétricamente. Este test proporciona una estimación estadística del sesgo de publicación: un <em>p</em>-valor menor que 0,05 sugiere la presencia de sesgo de publicación.</p>
-<p>Este test puede implementarse con la función <code>metabias()</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Linear regression test of funnel plot asymmetry
-
-Test result: t = 0.49, df = 18, p-value = 0.6323
-Bias estimate: 0.3007 (SE = 0.6177)
-
-Details:
-- multiplicative residual heterogeneity variance (tau^2 = 1.1501)
-- predictor: standard error
-- weight:    inverse variance
-- reference: Egger et al. (1997), BMJ</code></pre>
-</div>
-</div>
-<p><strong>Test de Begg</strong></p>
-<p>Evalúa la relación entre el tamaño del efecto y el error estándar, utilizando un enfoque basado en la correlación de rangos en lugar de una regresión lineal. Un <em>p</em>-valor menor que 0,05 indica la presencia de sesgo de publicación.</p>
-<p>Este test puede implementarse con la función <code>metabias()</code>, utilizando el argumento <code>method.bias = "Begg"</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod, <span class="at">method.bias =</span> <span class="st">"Begg"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rank correlation test of funnel plot asymmetry
-
-Test result: z = 0.26, p-value = 0.7945
-Bias estimate: 8.0000 (SE = 30.7137)
-
-Reference: Begg &amp; Mazumdar (1993), Biometrics</code></pre>
-</div>
-</div>
-<p><strong><em>Trim-and-fill</em></strong></p>
-<p>Estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, agregando estudios hipotéticos que representarían los estudios no publicados. Este método ayuda a corregir la estimación del efecto global al incluir los estudios faltantes que no se publicaron debido a su falta de significancia.</p>
-<p>En R, este procedimiento puede implementarse con la función <code>trimfill()</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">trimfill</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Number of studies: k = 22 (with 2 added studies)
-
-                        COR           95%-CI    z  p-value
-Random effects model 0.3430 [0.2541; 0.4261] 7.17 &lt; 0.0001
-
-Quantifying heterogeneity (with 95%-CIs):
- tau^2 = 0.0092 [0.0000; 0.0783]; tau = 0.0957 [0.0000; 0.2799]
- I^2 = 18.5% [0.0%; 51.4%]; H = 1.11 [1.00; 1.43]
-
-Test of heterogeneity:
-     Q d.f. p-value
- 25.76   21  0.2156
-
-Details of meta-analysis methods:
-- Inverse variance method
-- Restricted maximum-likelihood estimator for tau^2
-- Q-Profile method for confidence interval of tau^2 and tau
-- Calculation of I^2 based on Q
-- Trim-and-fill method to adjust for funnel plot asymmetry (L-estimator)
-- Fisher's z transformation of correlations</code></pre>
-</div>
-</div>
-<p>Generalmente, se recomienda utilizar dos o más estimadores de sesgo de publicación para obtener una visión más completa de la posible presencia de este sesgo. Utilizando diferentes métodos, es posible realizar una evaluación más robusta y precisa del sesgo de publicación y su impacto en los resultados del meta-análisis.</p>
 </section>
 <section id="referencias" class="level2">
 
