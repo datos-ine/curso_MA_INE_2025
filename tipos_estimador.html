@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Modelos descriptivos y analíticos</title>
+<title>Estudios descriptivos y analíticos</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -121,7 +175,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./tipos_estimador.html">Modelos descriptivos y analíticos</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./tipos_estimador.html">Estudios descriptivos y analíticos</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -196,7 +250,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tipos_estimador.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Modelos descriptivos y analíticos</span></a>
+ <span class="menu-text">Estudios descriptivos y analíticos</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -240,19 +294,11 @@ window.Quarto = {
     <h2 id="toc-title">Contenidos</h2>
    
   <ul>
-  <li><a href="#meta-análisis-para-estudios-descriptivos" id="toc-meta-análisis-para-estudios-descriptivos" class="nav-link active" data-scroll-target="#meta-análisis-para-estudios-descriptivos">Meta-análisis para estudios descriptivos</a>
+  <li><a href="#meta-análisis-de-estudios-descriptivos" id="toc-meta-análisis-de-estudios-descriptivos" class="nav-link active" data-scroll-target="#meta-análisis-de-estudios-descriptivos">Meta-análisis de estudios descriptivos</a>
   <ul class="collapse">
-  <li><a href="#meta-análisis-de-prevalencia" id="toc-meta-análisis-de-prevalencia" class="nav-link" data-scroll-target="#meta-análisis-de-prevalencia">Meta-análisis de prevalencia</a></li>
-  <li><a href="#meta-análisis-de-incidencia" id="toc-meta-análisis-de-incidencia" class="nav-link" data-scroll-target="#meta-análisis-de-incidencia">Meta-análisis de incidencia</a></li>
-  <li><a href="#meta-análisis-de-correlaciones" id="toc-meta-análisis-de-correlaciones" class="nav-link" data-scroll-target="#meta-análisis-de-correlaciones">Meta-análisis de correlaciones</a></li>
-  </ul></li>
-  <li><a href="#meta-análisis-de-estudios-analíticos" id="toc-meta-análisis-de-estudios-analíticos" class="nav-link" data-scroll-target="#meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</a>
-  <ul class="collapse">
-  <li><a href="#diferencia-de-medias" id="toc-diferencia-de-medias" class="nav-link" data-scroll-target="#diferencia-de-medias">Diferencia de medias</a></li>
-  <li><a href="#odds-ratio" id="toc-odds-ratio" class="nav-link" data-scroll-target="#odds-ratio">Odds-ratio</a></li>
-  <li><a href="#riesgo-relativo" id="toc-riesgo-relativo" class="nav-link" data-scroll-target="#riesgo-relativo">Riesgo relativo</a></li>
+  <li><a href="#prevalencia" id="toc-prevalencia" class="nav-link" data-scroll-target="#prevalencia">Prevalencia</a></li>
   <li><a href="#tasa-de-incidencia" id="toc-tasa-de-incidencia" class="nav-link" data-scroll-target="#tasa-de-incidencia">Tasa de incidencia</a></li>
-  <li><a href="#tiempo-hasta-el-evento" id="toc-tiempo-hasta-el-evento" class="nav-link" data-scroll-target="#tiempo-hasta-el-evento">Tiempo hasta el evento</a></li>
+  <li><a href="#correlaciones" id="toc-correlaciones" class="nav-link" data-scroll-target="#correlaciones">Correlaciones</a></li>
   </ul></li>
   </ul>
 <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
@@ -260,9 +306,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./tipos_estimador.html">Modelos descriptivos y analíticos</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./tipos_estimador.html">Estudios descriptivos y analíticos</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Modelos descriptivos y analíticos</h1>
+<h1 class="title">Estudios descriptivos y analíticos</h1>
 </div>
 
 
@@ -281,96 +327,234 @@ window.Quarto = {
 <center>
 Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis <br> © 2025 Instituto Nacional de Epidemiología “Dr.&nbsp;Juan H. Jara” (ANLIS) - <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"> CC BY-NC 4.0 </a> <img src="images/cc01.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc02.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc03.svg" class="img-fluid" style="width:3.0%"> <br> <br>
 </center>
-<section id="meta-análisis-para-estudios-descriptivos" class="level2">
-<h2 class="anchored" data-anchor-id="meta-análisis-para-estudios-descriptivos">Meta-análisis para estudios descriptivos</h2>
-<p>Para estudios observacionales de tipo descriptivo, los estimadores de efecto más comunmente utilizados son las proporciones y las correlaciones.</p>
-<section id="meta-análisis-de-prevalencia" class="level3">
-<h3 class="anchored" data-anchor-id="meta-análisis-de-prevalencia">Meta-análisis de prevalencia</h3>
-<p>La prevalencia de un evento de salud se calcula como una proporción usando la fórmula:</p>
+<section id="meta-análisis-de-estudios-descriptivos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-análisis-de-estudios-descriptivos">Meta-análisis de estudios descriptivos</h2>
+<p>En epidemiología, las medidas de asociación más utilizadas en estudios descriptivos incluyen la prevalencia, la tasa de incidencia y la correlación. A continuación, se describe cómo ajustar modelos de meta-análisis para cada una de ellas usando el paquete <code>meta</code>. Quienes tengan interés en ampliar el desarrollo matemático de cada caso, pueden consultar los Capítulos <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html">3</a> y <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pooling-es.html#pooling-es-r">4.2</a> de <span class="citation" data-cites="Harrer2021">Harrer et&nbsp;al. (<a href="#ref-Harrer2021" role="doc-biblioref">2021</a>)</span>.</p>
+<p>Antes de comenzar con los ejemplos, cargaremos los paquetes necesarios:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar paquetes</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="prevalencia" class="level3">
+<h3 class="anchored" data-anchor-id="prevalencia">Prevalencia</h3>
+<p>La prevalencia de un evento de salud se define como la proporción de individuos que presentan el evento <span class="math inline">\((k)\)</span> dentro de una población o muestra determinada <span class="math inline">\((n)\)</span>:</p>
 <p><span class="math display">\[ p = \frac{k}{n} \]</span></p>
-<p>donde:</p>
-<ul>
-<li><p><span class="math inline">\(k\)</span> es el número de individuos con el evento.</p></li>
-<li><p><span class="math inline">\(n\)</span> es el número total de individuos.</p></li>
-</ul>
-<p>El error estándar de la proporción se estima como:</p>
-<p><span class="math display">\[ SE_p = \sqrt{\frac{p(1-p)}{n}} \]</span></p>
-<p>Debido a que las proporciones tienen un rango de entre 0 y 1, cuando nos acercamos a alguno de estos valores se comprime el error estándar y se produce la sobreestimación de los resultados.</p>
-<p>Una forma común de solucionar el problema es aplicar la transformación <strong>logit</strong> a las proporciones crudas. La función <code>escalc()</code> del paquete <em>metafor</em> nos permite transformar las proporciones a logit usando los siguientes argumentos:</p>
-<p><code>{r} #| eval: false  prev &lt;- escalc(measure = "PLO", # transformación logit de proporciones                xi = evento, # individuos con el evento                 ni = n, # total de individuos en la muestra                slab = titulo, # identificador del estudio                data = datos) # base de datos de interés}</code></p>
-<p>Veamos un ejemplo práctico usando la base de datos “<strong>dat.crisafulli2020</strong>” incluida en el paquete <em>metadat</em>. Comenzamos cargando la base de datos y haciendo una exploración rápida:</p>
-<p><code>{r} # Carga datos datos &lt;- dat.crisafulli2020  # Exploración datos glimpse(datos)}</code></p>
-<p>Nuestras columnas de interés son <code>study</code>, <code>cases</code> y <code>total</code>, que contienen el identificador de estudio, el número de individuos con el evento y el número total de individuos muestreados en cada estudio. Aplicamos la transformación logit:</p>
-<p><code>{r} # Crea nuevo dataset con los datos transformados prev &lt;- escalc(measure = "PLO", # transformación logit de proporciones                xi = cases,                 ni = total,                slab = study,                data = datos)  # Explora objeto glimpse(prev)}</code></p>
-<p>En el objeto que creamos con <code>escalc()</code>, aparecen dos nuevas columnas: <code>yi</code> y <code>vi</code> que corresponden al estimador de efecto y su varianza, respectivamente. Una vez aplicada la transformación, podemos correr el modelo de meta-análisis usando la función <code>rma()</code> de <em>metafor</em>:</p>
-<p><code>{r} mod_prev &lt;- rma(yi = yi,                  vi = vi,                  measure = "PLO",                 slab = study,                  data = prev)}</code></p>
-<p>Una forma más sencilla de llegar al mismo resultado, es usando la función <code>metaprop()</code> del paquete <em>meta</em>, donde en un solo paso podemos transformar los datos y ajustar el modelo de meta-análisis usando los siguientes argumentos:</p>
-<p><code>{r} mod_prev2 &lt;- metaprop(event = cases, # individuos con el evento                         n = total, # total de individuos en la muestra                          sm = "PLOGIT", # transformación logit                      studlab = study, # identificador del estudio                           data = prev) # base de datos de interés}</code></p>
-<p>Comparemos la salida de ambos modelos:</p>
-<p><code>{r} summary(mod_prev)  summary(mod_prev2)}</code></p>
+<p>El error estándar de una proporción se estima usando la fórmula:</p>
+<p><span class="math display">\[
+SE_p = \sqrt{\frac{p(1-p)}{n}}
+\]</span></p>
+<p>Dado que las proporciones toman valores entre 0 y 1, los valores cercanos a estos extremos pueden generar problemas de asimetría y compresión del error estándar, llevando a sobrestimar la precisión de las estimaciones. Para corregir este efecto, se puede aplicar <strong>transformación logit</strong> a las proporciones crudas antes de realizar el análisis.</p>
+<p>La función <code>metaprop()</code> del paquete <code>meta</code> permite ajustar modelos para prevalencia e incorpora automáticamente la transformación logit con el argumento <code>sm = "PLOGIT"</code>. A modo de ejemplo, ajustaremos un modelo utilizando la base de datos <code>dat.crisafulli2020</code>, que contiene datos de 26 estudios sobre la prevalencia de la distrofia muscular de Duchenne en recién nacidos:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de datos</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.crisafulli2020</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para prevalencia</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>mod_prev <span class="ot">&lt;-</span> <span class="fu">metaprop</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> cases,     <span class="co"># Número de individuos con el evento</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> total,         <span class="co"># Tamaño de la muestra en cada estudio</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,   <span class="co"># Identificador único de cada estudio</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,      <span class="co"># Conjunto de datos</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"PLOGIT"</span>,     <span class="co"># Transformación logit para proporciones</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,    <span class="co"># Omitir modelo de efectos fijos</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,     <span class="co"># Ajustar modelo de efectos aleatorios</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span>, <span class="co"># Convertir resultados a la escala original</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100</span>       <span class="co"># Expresar prevalencias como porcentajes</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo ajustado</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>mod_prev</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 26
+Number of observations: o = 6831388
+Number of events: e = 1545
+
+                     events           95%-CI
+Random effects model 0.0222 [0.0206; 0.0240]
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0126; tau = 0.1121; I^2 = 33.2% [0.0%; 58.6%]; H = 1.22 [1.00; 1.55]
+
+Test of heterogeneity:
+          Q d.f. p-value
+ Wald 37.41   25  0.0527
+ LRT  39.01   25  0.0368
+
+Details of meta-analysis methods:
+- Random intercept logistic regression model
+- Maximum-likelihood estimator for tau^2
+- Calculation of I^2 based on Q
+- Logit transformation
+- Events per 100 observations</code></pre>
+</div>
+</div>
+<p>En este caso, la prevalencia global estimada es muy baja <span class="math inline">\((0,02\%, 95\% IC: 0,21-0,24\%)\)</span>. Para mejorar la interpretación de estos valores, podemos expresarlos en casos por 10 000 o 100 000 habitantes ajustando el argumento <code>pscale</code>, ya sea en el ajuste del modelo como en la visualización del <em>forest plot</em>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forest plot con casos cada 100 000 habitantes</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  mod_prev, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Prevalencia (por 100 000 hab.)"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> <span class="st">"#B200B2"</span>, <span class="co"># Magenta</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> <span class="st">"#FFFF66"</span>, <span class="co"># Amarillo claro</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100000</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="meta-análisis-de-incidencia" class="level3">
-<h3 class="anchored" data-anchor-id="meta-análisis-de-incidencia">Meta-análisis de incidencia</h3>
+<section id="tasa-de-incidencia" class="level3">
+<h3 class="anchored" data-anchor-id="tasa-de-incidencia">Tasa de incidencia</h3>
+<p>La tasa de incidencia se utiliza cuando el evento de interés es la incidencia de un evento de salud a lo largo del tiempo:</p>
+<p><span class="math display">\[
+IR = \frac {k}{T}
+\]</span>​</p>
+<p>donde <span class="math inline">\(k\)</span> es el número de eventos observados y <span class="math inline">\(T\)</span> es la suma del tiempo-persona en riesgo en cada estudio.</p>
+<p>La función <code>metarate()</code> permite ajustar modelos de meta-análisis para tasas de incidencia, aplicando una transformación logarítmica a los datos mediante el argumento <code>sm = "IRLN"</code>. Para ejemplificar, usaremos la base de datos <code>dat.nielweise2008</code> que contiene resultados de 9 estudios sobre incidencia de infecciones sanguíneas relacionadas al uso de cateteres:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.nielweise2008</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para tasas de incidencia</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mod_ir <span class="ot">&lt;-</span> <span class="fu">metarate</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> x2i,         <span class="co"># Número de eventos observados</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> t2i, <span class="co"># Tiempo-persona en riesgo</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,    <span class="co"># Identificador único de cada estudio</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,      <span class="co"># Conjunto de datos</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"IRLN"</span>,       <span class="co"># Transformación logaritmo natural para tasas</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,    <span class="co"># Omitir modelo de efectos fijos</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,     <span class="co"># Ajustar modelo de efectos aleatorios</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1</span>,     <span class="co"># Tasas por años-persona</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">irunit =</span> <span class="st">"años-persona"</span> <span class="co"># Etiqueta para la unidad de tiempo-persona</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>mod_ir</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 9
+Number of events: e = 77
+
+                       rate           95%-CI
+Random effects model 0.0043 [0.0027; 0.0070]
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.3699 [0.0940; 1.5145]; tau = 0.6082 [0.3065; 1.2307]
+ I^2 = 78.0% [58.4%; 88.4%]; H = 2.13 [1.55; 2.93]
+
+Test of heterogeneity:
+     Q d.f.  p-value
+ 36.38    8 &lt; 0.0001
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Log transformation</code></pre>
+</div>
+</div>
+<p>Realizamos el <em>forest plot</em> para la tasa de incidencia expresada en 1000 años-persona:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  mod_ir, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Tasa de incidencia"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> <span class="st">"#B200B2"</span>, <span class="co"># Magenta</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> <span class="st">"#FFFF66"</span>, <span class="co"># Amarillo claro</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1000</span>,       <span class="co"># Incidencia por 1000 años-persona</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="meta-análisis-de-correlaciones" class="level3">
-<h3 class="anchored" data-anchor-id="meta-análisis-de-correlaciones">Meta-análisis de correlaciones</h3>
+<section id="correlaciones" class="level3">
+<h3 class="anchored" data-anchor-id="correlaciones">Correlaciones</h3>
 <p>Las correlaciones indican la fuerza y dirección de la covarianza entre dos variables numéricas continuas y se expresa como:</p>
-<p><span class="math display">\[ r_{xy} = \frac{Cov_{xy}}{S_xS_y} \]</span></p>
+<p><span class="math display">\[
+r_{xy} = \frac{Cov_{xy}}{S_xS_y}
+\]</span></p>
 <p>donde:</p>
 <ul>
 <li><p><span class="math inline">\(Cov_{xy}\)</span> es la covarianza entre las variables X e Y.</p></li>
 <li><p><span class="math inline">\(S_x\)</span> y <span class="math inline">\(S_y\)</span> son los desvíos estándar para cada variable.</p></li>
 </ul>
-<p>El error estándar para la correlación se puede expresar como:</p>
-<p><span class="math display">\[ SE = \frac{1 - r^2_{xy}}{\sqrt{n-2}} \]</span></p>
-<p>Las correlaciones pueden tomar valores de entre -1 y 1, por lo que se pueden introducir sesgos cuando calculamos el error estándar para muestras pequeñas. Para trabajar con meta-análisis de correlaciones, los datos se transforman usando el coeficiente <strong>z de Fisher</strong>, que aproxima la muestra a una distribución normal.</p>
-<p>En el paquete <em>metafor</em> podemos realizar la transformación de los datos usando la función <code>escalc()</code> con los siguientes argumentos:</p>
-<p><code>{r} #| eval: false  cor &lt;- escalc(measure = "ZCOR", # transformación de Fisher               ri = correlacion, # vector de correlaciones                ni = n, # total de individuos en la muestra                 slab = titulo, # identificador del estudio                 data = datos) # base de datos de interés}</code></p>
-<p>La función <code>metacor()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para proporciones simples sin necesidad de transformar previamente los datos usando el argumento <code>sm = "ZCOR"</code>:</p>
-<p><code>{r} #| eval: false  mod_cor &lt;- metacor(cor = correlacion, # vector de correlaciones                     n = n, # total de individuos en la muestra                       sm = "ZCOR", # transformación de Fisher                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
-</section>
-</section>
-<section id="meta-análisis-de-estudios-analíticos" class="level2">
-<h2 class="anchored" data-anchor-id="meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</h2>
-<p>Cuando trabajamos con datos de estudios epidemiológicos analíticos, podemos realizar meta-análisis para distintas medidas de asociación.</p>
-<section id="diferencia-de-medias" class="level3">
-<h3 class="anchored" data-anchor-id="diferencia-de-medias">Diferencia de medias</h3>
-<p>La diferencia de medias entre dos o más grupos se define como:</p>
-<p><span class="math display">\[ MD = \bar{x_1} - \bar{x_2} \]</span></p>
-<p>donde:</p>
-<ul>
-<li><p><span class="math inline">\(\bar{x_1}\)</span> es la media muestral del grupo 1.</p></li>
-<li><p><span class="math inline">\(\bar{x_2}\)</span> es la media muestral del grupo 2.</p></li>
-</ul>
-<p>El error estándar para la diferencia de medias se obtiene como:</p>
-<p><span class="math display">\[ SE_{md} = S_{comb} \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} \]</span></p>
-<p>donde <span class="math inline">\(n_1\)</span> y <span class="math inline">\(n_2\)</span> son los tamaños muestrales en ambos grupos y <span class="math inline">\(S_{comb}\)</span> es el desvío estándar combinado.</p>
-<p>La función <code>metacont()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para diferencia de medias:</p>
-<p><code>{r} #| eval: false  mod_mean &lt;- metacont(n.e = expuestos, # individuos expuestos                      mean.e = media_exp, # media en expuestos                      sd.e = sd_exp, # desvío estándar en expuestos                      n.c = no_exp, # individuos no expuestos                      mean.c = media_no_exp, # media en no expuestos                      sd.c = sd_no_exp, # desvío estándar en no expuestos                      studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
-</section>
-<section id="odds-ratio" class="level3">
-<h3 class="anchored" data-anchor-id="odds-ratio">Odds-ratio</h3>
-<p>La función <code>metabin()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para el odds-ratio:</p>
-<p><code>{r} #| eval: false  mod_or &lt;- metabin(event.e = eventos_exp, # eventos en expuestos                   n.e = n_exp, # individuos expuestos                   event.c = eventos_no_exp, # eventos en no expuestos                    n.c = n_no_exp, # individuos no expuestos                     sm = "OR", # Odds-ratio                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
-</section>
-<section id="riesgo-relativo" class="level3">
-<h3 class="anchored" data-anchor-id="riesgo-relativo">Riesgo relativo</h3>
-<p>La función <code>metabin()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para el riesgo relativo:</p>
-<p><code>{r} #| eval: false  mod_rr &lt;- metabin(event.e = eventos_exp, # eventos en expuestos                   n.e = n_exp, # individuos expuestos                   event.c = eventos_no_exp, # eventos en no expuestos                    n.c = n_no_exp, # individuos no expuestos                     sm = "RR", # Riesgo relativo                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
-</section>
-<section id="tasa-de-incidencia" class="level3">
-<h3 class="anchored" data-anchor-id="tasa-de-incidencia">Tasa de incidencia</h3>
-<p>La función <code>metainc()</code> del paquete <em>meta<strong>,</strong></em> nos permite ajustar modelos de meta-análisis para la tasa de incidencia:</p>
-<p><code>{r} #| eval: false  mod_IRR &lt;- metainc(event.e = eventos_exp, # eventos en expuestos                   time.e = tiempo_exp, # tiempo-persona expuestos                   event.c = eventos_no_exp, # eventos en no expuestos                    time.c = tiempo_no_exp, # tiempo-persona no expuestos                    studlab = titulo, # identificador del estudio                      data = datos) # base de datos de interés}</code></p>
-</section>
-<section id="tiempo-hasta-el-evento" class="level3">
-<h3 class="anchored" data-anchor-id="tiempo-hasta-el-evento">Tiempo hasta el evento</h3>
+<p>Como las correlaciones toman valores de entre -1 y 1, se pueden introducir sesgos cuando calculamos el error estándar para muestras pequeñas. Para evitar este sesgo, los datos se transforman usando el coeficiente <strong>z de Fisher</strong>, que aproxima la muestra a una distribución normal.</p>
+<p>La función <code>metacor()</code> permite ajustar modelos de meta-análisis para correlaciones, aplicando la transformación z de Fisher mediante el argumento <code>sm = "ZCOR"</code>. Para ejemplificar, usaremos la base de datos <code>dat.aloe2013</code> que contiene resultados de 5 estudios sobre correlación entre condiciones laborales y salud mental en asistentes sociales:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.aloe2013</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para tasas de incidencia</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>mod_cor <span class="ot">&lt;-</span> <span class="fu">metacor</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor =</span> R2,       <span class="co"># Número de eventos observados</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n,            <span class="co"># Tamaño de la muestra</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,  <span class="co"># Identificador único de cada estudio</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,     <span class="co"># Conjunto de datos</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"ZCOR"</span>,      <span class="co"># Transformación z de Fisher</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,   <span class="co"># Omitir modelo de efectos fijos</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,    <span class="co"># Ajustar modelo de efectos aleatorios</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>mod_cor</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 5
+Number of observations: o = 1247
+
+                        COR           95%-CI    z  p-value
+Random effects model 0.3320 [0.1903; 0.4602] 4.44 &lt; 0.0001
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0259 [0.0064; 0.2528]; tau = 0.1608 [0.0800; 0.5028]
+ I^2 = 84.9% [66.3%; 93.2%]; H = 2.57 [1.72; 3.84]
+
+Test of heterogeneity:
+     Q d.f.  p-value
+ 26.44    4 &lt; 0.0001
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Fisher's z transformation of correlations</code></pre>
+</div>
+</div>
+<p>Podemos generar el <em>forest plot</em> con el siguiente código:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  mod_cor, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Correlación"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> <span class="st">"#B200B2"</span>, <span class="co"># Magenta</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> <span class="st">"#FFFF66"</span>, <span class="co"># Amarillo claro</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+
 </section>
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Harrer2021" class="csl-entry" role="listitem">
+Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Boca Raton, FL; London: Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
