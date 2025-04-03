@@ -579,32 +579,29 @@ Details of meta-analysis methods:
 </section>
 <section id="forest-plots" class="level3">
 <h3 class="anchored" data-anchor-id="forest-plots">Forest plots</h3>
-<p>Los resultados del meta-análisis pueden visualizarse mediante <em>forest plots</em>, que representan gráficamente los estimadores de efecto de los estudios individuales junto con sus intervalos de confianza, en relación con el estimador global. Además, estos gráficos incorporan información sobre la heterogeneidad entre estudios, facilitando la interpretación de los resultados.</p>
-<p>El paquete <code>meta</code> ofrece la función <code>forest()</code> para generar <em>forest plots</em> de manera rápida y flexible. Esta función incluye múltiples argumentos para personalizar el gráfico según las necesidades del análisis que pueden consultarse ejecutando <code>?forest</code> en la consola de R. Algunos de los principales argumentos son:</p>
+<p>Los resultados del meta-análisis pueden visualizarse mediante <em>forest plots</em>, gráficos que representan la distribución de los estimadores de efecto de los estudios individuales y sus intervalos de confianza en relación con el estimador global. Además, proporcionan información sobre la heterogeneidad entre estudios, facilitando la interpretación de los resultados.</p>
+<p>El paquete <code>meta</code> incluye la función <code>forest()</code>, que permite generar <strong>forest plots</strong> de forma rápida y con múltiples opciones de personalización. Para conocer todos los argumentos disponibles, se puede ejecutar <code>?forest</code> en la consola de R.</p>
+<p>Algunos de los principales argumentos de <code>forest()</code> incluyen:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  mod,  <span class="co"># Modelo de meta-análisis</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  sortvar,  <span class="co"># Variable numérica para ordenar los estudios</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  smlab,  <span class="co"># Etiqueta del estimador de efecto</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  leftcols,  <span class="co"># Columnas a mostrar en el panel izquierdo</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  col.diamond,  <span class="co"># Color del estimador global</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  col.square,  <span class="co"># Color de los estimadores individuales</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.tau2 =</span> <span class="cn">TRUE</span>,  <span class="co"># Mostrar tau^2 (TRUE por defecto)</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.I2 =</span> <span class="cn">TRUE</span>,  <span class="co"># Mostrar I^2 (TRUE por defecto)</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.Q =</span> <span class="cn">TRUE</span>,  <span class="co"># Mostrar Q de Cochran (TRUE por defecto)</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.pval.Q =</span> <span class="cn">TRUE</span>,  <span class="co"># P-valor del estadístico Q (TRUE por defecto)</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>  <span class="co"># Número de decimales (2 dígitos por defecto)</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  mod, <span class="co"># Nombre del modelo de meta-análisis</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  sortvar, <span class="co"># Ordena los estudios según una variable numérica</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  smlab, <span class="co"># Etiqueta del estimador de efecto</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  col.diamond, <span class="co"># Color del estimador global</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  col.square, <span class="co"># Color de los estimadores individuales</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.tau2 =</span> <span class="cn">TRUE</span>, <span class="co"># Tau-cuadrado (TRUE por defecto)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.I2 =</span> <span class="cn">TRUE</span>, <span class="co"># I-cuadrado (TRUE por defecto)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.Q =</span> <span class="cn">TRUE</span>, <span class="co"># Estadístico Q de Cochran (TRUE por defecto)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">print.pval.Q =</span> <span class="cn">TRUE</span>, <span class="co"># p-valor del estadístico Q (TRUE por defecto)</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>, <span class="co"># Número de decimales a mostrar</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  ...)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A continuación, generamos un <em>forest plot</em> básico para el modelo de efectos aleatorios:</p>
+<p>A continuación, generamos un forest plot básico a partir del modelo de efectos aleatorios. Para una mejor visualización, vamos a personalizar los colores del gráfico con los argumentos <code>col.diamond</code> y <code>col.square</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  mod,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Diferencia de medias estandarizada"</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> <span class="st">"orange"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> <span class="st">"turquoise"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">leftcols =</span> <span class="st">"studlab"</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(mod,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">smlab =</span> <span class="st">"Diferencia de medias estandarizada"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">col.diamond =</span> <span class="st">"orange"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">col.square =</span> <span class="st">"turquoise"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -615,23 +612,28 @@ Details of meta-analysis methods:
 </div>
 <p>El gráfico generado se organiza en tres paneles principales:</p>
 <ul>
-<li><p><strong>Panel izquierdo</strong>: Contiene información adicional sobre los estudios incluidos en el meta-análisis. Incluye el identificador de estudio (<code>"studlab"</code>) y columnas adicionales dependientes del estimador de efecto utilizado.</p></li>
+<li><p><strong>Panel izquierdo</strong>:</p>
+<ul>
+<li><p>Identificador de estudio (<code>"studlab"</code>)</p></li>
+<li><p>Columnas adicionales dependientes del estimador de efecto utilizado.</p></li>
+</ul></li>
 <li><p><strong>Panel central</strong>:</p>
 <ul>
-<li><p>Línea vertical de referencia que indica el valor de no efecto (<em>0</em> para diferencias de medias, <em>1</em> en escalas logarítmicas).</p></li>
-<li><p>Línea vertical punteada que representa el estimador global del meta-análisis.</p></li>
-<li><p>El estimador global se representa con un rombo (🔶), cuyo ancho indica su intervalo de confianza.</p></li>
-<li><p>Cada estudio se representa con un cuadrado (🟦), cuyo tamaño es proporcional al peso del estudio en el análisis.</p></li>
-<li><p>Los “bigotes” horizontales indican el intervalo de confianza al 95% de cada estudio.</p></li>
+<li><p>Línea vertical de referencia que indica el valor de no efecto (<em>0</em> en datos continuos, 1 en escalas logarítmicas).</p></li>
+<li><p>Línea punteada que representa el estimador global del meta-análisis.</p></li>
+<li><p>Rombo (🔶): Representa el estimador global, cuyo ancho indica el intervalo de confianza al 95%.</p></li>
+<li><p>Cuadrados (🟦): Representan los estimadores de los estudios individuales, con un tamaño proporcional al peso del estudio en el análisis.</p></li>
+<li><p>Bigotes horizontales: Indican los intervalos de confianza al 95% de cada estudio.</p></li>
 </ul></li>
 <li><p><strong>Panel derecho</strong>:</p>
 <ul>
-<li><p>Muestra el estimador de efecto y su intervalo de confianza al 95%.</p></li>
-<li><p>Indica el peso estadístico asignado a cada estudio en el modelo de efectos aleatorios.</p></li>
+<li><p>Estimador de efecto e intervalo de confianza al 95% de cada estudio.</p></li>
+<li><p>Peso estadístico asignado a cada estudio en el modelo de efectos aleatorios.</p></li>
 </ul></li>
 </ul>
-<p>Los gráficos generados con <code>forest()</code> no son compatibles con <code>ggplot2</code> ni se ajustan automáticamente al número de estudios incluidos. Cuando el meta-análisis contiene muchos estudios, el gráfico puede quedar truncado o volverse ilegible en la vista predeterminada.</p>
-<p>Para solucionar este problema, se recomienda exportar el gráfico a un archivo de imagen (por ejemplo, PDF o PNG) y ajustar manualmente el tamaño hasta obtener una visualización adecuada. Esto se puede hacer con las funciones <code>pdf()</code> o <code>png()</code> antes de ejecutar <code>forest()</code>. Por ejemplo, para guardar el gráfico generado anteriormente:</p>
+<p>Se puede controlar la información que aparece en los lados del forest plot mediante los argumentos <code>leftcols</code>, <code>rightcols</code>, <code>leftlabs</code> y <code>rightlabs</code>. También es posible aplicar formatos predefinidos con <code>layout = "RevMan5"</code> o <code>layout = "JAMA"</code>, que ajustan el diseño según estilos ampliamente utilizados en la literatura científica.</p>
+<p>Los gráficos generados con <code>forest()</code> <strong>no son compatibles</strong> con<code>ggplot2</code> <strong>ni se autoescalan</strong>, lo que puede ser problemático si el número de estudios es grande, ya que el gráfico podría quedar ilegible en la vista predeterminada.</p>
+<p>Para evitar este problema, se recomienda exportar el gráfico a un archivo de imagen (por ejemplo, PDF o PNG) usando las funciones <code>pdf()</code> o <code>png()</code>, especificando un tamaño adecuado antes de ejecutarlo con <code>forest()</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Defino parámetros para guardar la imagen</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(</span>

@@ -296,10 +296,18 @@ window.Quarto = {
   <ul>
   <li><a href="#meta-análisis-de-estudios-descriptivos" id="toc-meta-análisis-de-estudios-descriptivos" class="nav-link active" data-scroll-target="#meta-análisis-de-estudios-descriptivos">Meta-análisis de estudios descriptivos</a>
   <ul class="collapse">
+  <li><a href="#correlaciones" id="toc-correlaciones" class="nav-link" data-scroll-target="#correlaciones">Correlaciones</a></li>
   <li><a href="#prevalencia" id="toc-prevalencia" class="nav-link" data-scroll-target="#prevalencia">Prevalencia</a></li>
   <li><a href="#tasa-de-incidencia" id="toc-tasa-de-incidencia" class="nav-link" data-scroll-target="#tasa-de-incidencia">Tasa de incidencia</a></li>
-  <li><a href="#correlaciones" id="toc-correlaciones" class="nav-link" data-scroll-target="#correlaciones">Correlaciones</a></li>
   </ul></li>
+  <li><a href="#meta-análisis-de-estudios-analíticos" id="toc-meta-análisis-de-estudios-analíticos" class="nav-link" data-scroll-target="#meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</a>
+  <ul class="collapse">
+  <li><a href="#diferencia-de-medias" id="toc-diferencia-de-medias" class="nav-link" data-scroll-target="#diferencia-de-medias">Diferencia de medias</a></li>
+  <li><a href="#odds-ratio" id="toc-odds-ratio" class="nav-link" data-scroll-target="#odds-ratio">Odds-ratio</a></li>
+  <li><a href="#riesgo-relativo" id="toc-riesgo-relativo" class="nav-link" data-scroll-target="#riesgo-relativo">Riesgo relativo</a></li>
+  <li><a href="#razón-de-tasas-de-incidencia" id="toc-razón-de-tasas-de-incidencia" class="nav-link" data-scroll-target="#razón-de-tasas-de-incidencia">Razón de tasas de incidencia</a></li>
+  </ul></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
     </div>
@@ -329,47 +337,148 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 </center>
 <section id="meta-análisis-de-estudios-descriptivos" class="level2">
 <h2 class="anchored" data-anchor-id="meta-análisis-de-estudios-descriptivos">Meta-análisis de estudios descriptivos</h2>
-<p>En epidemiología, las medidas de asociación más utilizadas en estudios descriptivos incluyen la prevalencia, la tasa de incidencia y la correlación. A continuación, se describe cómo ajustar modelos de meta-análisis para cada una de ellas usando el paquete <code>meta</code>. Quienes tengan interés en ampliar el desarrollo matemático de cada caso, pueden consultar los Capítulos <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html">3</a> y <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pooling-es.html#pooling-es-r">4.2</a> de <span class="citation" data-cites="Harrer2021">Harrer et&nbsp;al. (<a href="#ref-Harrer2021" role="doc-biblioref">2021</a>)</span>.</p>
-<p>Antes de comenzar con los ejemplos, cargaremos los paquetes necesarios:</p>
+<p>En los estudios descriptivos, las principales medidas de resumen incluyen la <strong>correlación</strong>, la <strong>prevalencia</strong> y la <strong>tasa de incidencia</strong>. A continuación, presentamos ejemplos prácticos de ajuste de modelos para cada una de ellas.</p>
+<p>Comenzaremos por cargar el paquete <code>meta</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar paquetes</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>En secciones previas, exploramos cómo personalizar los colores de los <strong>forest plots</strong> con los argumentos <code>col.diamond</code> y <code>col.square</code>. Para garantizar que los gráficos sean accesibles a personas con dificultades en la percepción del color, utilizaremos la paletas <em>colorblind-friendly</em> del paquete <code>scico</code> <span class="citation" data-cites="scico">(<a href="#ref-scico" role="doc-biblioref">Pedersen y Crameri 2023</a>)</span>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar paquete (solo una vez por computadora)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("scico")</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar paquete</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scico)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Lista de paletas categóricas</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">scico_palette_show</span>(<span class="at">categorical =</span> <span class="cn">TRUE</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>En los ejemplos siguientes, emplearemos la paleta <code>"buda"</code>, que genera un gradiente discreto de colores entre magenta y amarillo: (más información <a href="https://s-ink.org/scientific-colour-maps">aquí</a>):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Paleta colorblind-friendly</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pal <span class="ot">&lt;-</span> <span class="fu">scico</span>(<span class="at">n =</span> <span class="dv">2</span>, <span class="at">palette =</span> <span class="st">"buda"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="correlaciones" class="level3">
+<h3 class="anchored" data-anchor-id="correlaciones">Correlaciones</h3>
+<p>Las correlaciones miden la <strong>fuerza</strong> y <strong>dirección</strong> de la relación entre dos variables numéricas continuas, calculándose como:</p>
+<p><span class="math display">\[
+r_{xy} = \frac{Cov_{xy}}{S_xS_y}
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(Cov_{xy}\)</span> es la covarianza entre las variables X e Y.</p></li>
+<li><p><span class="math inline">\(S_x\)</span> y <span class="math inline">\(S_y\)</span> son los desvíos estándar de cada variable.</p></li>
+</ul>
+<p>Dado que los coeficientes de correlación solamente toman valores entre -1 y 1, su distribución no es simétrica, pudiendo afectar la estimación del error estándar en muestras pequeñas. Para corregir este sesgo y estabilizar la varianza, se utiliza la <strong>transformación z de Fisher</strong>.</p>
+<p>La función <code>metacor()</code> del paquete <code>meta</code> ajusta modelos de meta-análisis para correlaciones y aplica automáticamente esta transformación mediante el argumento <code>sm = "ZCOR"</code>.</p>
+<p>Como ejemplo, usaremos la base de datos <code>dat.aloe2013</code>, que contiene resultados de cinco estudios sobre la correlación entre condiciones laborales y salud mental en asistentes sociales infantiles:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.aloe2013</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo de meta-análisis para correlaciones</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>mod_cor <span class="ot">&lt;-</span> <span class="fu">metacor</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor =</span> R2,         <span class="co"># Coeficiente de correlación</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n,            <span class="co"># Tamaño de la muestra</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,  <span class="co"># Identificador del estudio</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,     <span class="co"># Conjunto de datos</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"ZCOR"</span>,      <span class="co"># Transformación z de Fisher</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,    <span class="co"># Modelo de efectos fijos</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>     <span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>mod_cor</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 5
+Number of observations: o = 1247
+
+                        COR           95%-CI     z  p-value
+Common effect model  0.3195 [0.2685; 0.3687] 11.62 &lt; 0.0001
+Random effects model 0.3320 [0.1903; 0.4602]  4.44 &lt; 0.0001
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0259 [0.0064; 0.2528]; tau = 0.1608 [0.0800; 0.5028]
+ I^2 = 84.9% [66.3%; 93.2%]; H = 2.57 [1.72; 3.84]
+
+Test of heterogeneity:
+     Q d.f.  p-value
+ 26.44    4 &lt; 0.0001
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Fisher's z transformation of correlations</code></pre>
+</div>
+</div>
+<p>Los resultados indican una correlación positiva moderada entre condiciones laborales y salud mental <span class="math inline">\((r = 0,33, 95\%~IC: 0,19-0,46)\)</span>, con alta heterogeneidad estadística <span class="math inline">\((I^2 = 84,9\%)\)</span>, sugiriendo diferencias importantes entre los estudios incluidos.</p>
+<p>Para visualizar los resultados, generamos un forest plot usando el siguiente código:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  mod_cor, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Correlación de Pearson"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>], <span class="co"># Magenta</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">2</span>],  <span class="co"># Amarillo</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>        <span class="co"># Omite modelo de efectos fijos</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="prevalencia" class="level3">
 <h3 class="anchored" data-anchor-id="prevalencia">Prevalencia</h3>
-<p>La prevalencia de un evento de salud se define como la proporción de individuos que presentan el evento <span class="math inline">\((k)\)</span> dentro de una población o muestra determinada <span class="math inline">\((n)\)</span>:</p>
-<p><span class="math display">\[ p = \frac{k}{n} \]</span></p>
-<p>El error estándar de una proporción se estima usando la fórmula:</p>
+<p>La prevalencia representa la proporción de individuos con un evento de interés dentro de una población:</p>
 <p><span class="math display">\[
-SE_p = \sqrt{\frac{p(1-p)}{n}}
+p = \frac{k}{n}
 \]</span></p>
-<p>Dado que las proporciones toman valores entre 0 y 1, los valores cercanos a estos extremos pueden generar problemas de asimetría y compresión del error estándar, llevando a sobrestimar la precisión de las estimaciones. Para corregir este efecto, se puede aplicar <strong>transformación logit</strong> a las proporciones crudas antes de realizar el análisis.</p>
-<p>La función <code>metaprop()</code> del paquete <code>meta</code> permite ajustar modelos para prevalencia e incorpora automáticamente la transformación logit con el argumento <code>sm = "PLOGIT"</code>. A modo de ejemplo, ajustaremos un modelo utilizando la base de datos <code>dat.crisafulli2020</code>, que contiene datos de 26 estudios sobre la prevalencia de la distrofia muscular de Duchenne en recién nacidos:</p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> es el número de individuos con la condición/evento.</p></li>
+<li><p><span class="math inline">\(n\)</span> es el tamaño total de la población o muestra.</p></li>
+</ul>
+<p>Dado que las proporciones pueden estar cercanas a los valores extremos (0 o 1), su distribución es asimétrica, lo que afecta el cálculo del error estándar. Para corregir este problema, se aplica una transformación <strong>logit</strong> a los datos.</p>
+<p>La función <code>metaprop()</code> del paquete <code>meta</code> permite ajustar modelos para prevalencias e incorpora automáticamente esta transformación con el argumento <code>sm = "PLOGIT"</code>.</p>
+<p>Para ejemplificar, usaremos la base de datos <code>dat.crisafulli2020</code>, que contiene 26 estudios sobre la prevalencia de la distrofia muscular de Duchenne en recién nacidos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de datos</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.crisafulli2020</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para prevalencia</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>mod_prev <span class="ot">&lt;-</span> <span class="fu">metaprop</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> cases,     <span class="co"># Número de individuos con el evento</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> total,         <span class="co"># Tamaño de la muestra en cada estudio</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,   <span class="co"># Identificador único de cada estudio</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,      <span class="co"># Conjunto de datos</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"PLOGIT"</span>,     <span class="co"># Transformación logit para proporciones</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,    <span class="co"># Omitir modelo de efectos fijos</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,     <span class="co"># Ajustar modelo de efectos aleatorios</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span>, <span class="co"># Convertir resultados a la escala original</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100</span>       <span class="co"># Expresar prevalencias como porcentajes</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo ajustado</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>mod_prev</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.crisafulli2020</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo de meta-análisis para prevalencia</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>mod_prev <span class="ot">&lt;-</span> <span class="fu">metaprop</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> cases,     <span class="co"># Casos observados</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> total,         <span class="co"># Tamaño de la muestra</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,   <span class="co"># Identificador del estudio</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,      <span class="co"># Conjunto de datos</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"PLOGIT"</span>,     <span class="co"># Transformación logit</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,     <span class="co"># Modelo de efectos fijos</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,     <span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">backtransf =</span> <span class="cn">TRUE</span>, <span class="co"># Convertir resultados a proporciones</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100</span>       <span class="co"># Expresar prevalencias como porcentaje</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Salida del modelo ajustado</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>mod_prev</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of studies: k = 26
 Number of observations: o = 6831388
 Number of events: e = 1545
 
                      events           95%-CI
+Common effect model  0.0226 [0.0215; 0.0238]
 Random effects model 0.0222 [0.0206; 0.0240]
 
 Quantifying heterogeneity (with 95%-CIs):
@@ -388,154 +497,18 @@ Details of meta-analysis methods:
 - Events per 100 observations</code></pre>
 </div>
 </div>
-<p>En este caso, la prevalencia global estimada es muy baja <span class="math inline">\((0,02\%, 95\% IC: 0,21-0,24\%)\)</span>. Para mejorar la interpretación de estos valores, podemos expresarlos en casos por 10 000 o 100 000 habitantes ajustando el argumento <code>pscale</code>, ya sea en el ajuste del modelo como en la visualización del <em>forest plot</em>:</p>
+<p>Como la prevalencia es baja, podemos expresarla en <strong>casos por 100 000 habitantes</strong> modificando el argumento <code>pscale</code>. Además, la heterogeneidad estadística es alta, por lo que se puede omitir el modelo de efectos fijos.</p>
+<p>Generamos el forest plot con el siguiente código:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forest plot con casos cada 100 000 habitantes</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  mod_prev, </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Prevalencia (por 100 000 hab.)"</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> <span class="st">"#B200B2"</span>, <span class="co"># Magenta</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> <span class="st">"#FFFF66"</span>, <span class="co"># Amarillo claro</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100000</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="tasa-de-incidencia" class="level3">
-<h3 class="anchored" data-anchor-id="tasa-de-incidencia">Tasa de incidencia</h3>
-<p>La tasa de incidencia se utiliza cuando el evento de interés es la incidencia de un evento de salud a lo largo del tiempo:</p>
-<p><span class="math display">\[
-IR = \frac {k}{T}
-\]</span>​</p>
-<p>donde <span class="math inline">\(k\)</span> es el número de eventos observados y <span class="math inline">\(T\)</span> es la suma del tiempo-persona en riesgo en cada estudio.</p>
-<p>La función <code>metarate()</code> permite ajustar modelos de meta-análisis para tasas de incidencia, aplicando una transformación logarítmica a los datos mediante el argumento <code>sm = "IRLN"</code>. Para ejemplificar, usaremos la base de datos <code>dat.nielweise2008</code> que contiene resultados de 9 estudios sobre incidencia de infecciones sanguíneas relacionadas al uso de cateteres:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.nielweise2008</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para tasas de incidencia</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mod_ir <span class="ot">&lt;-</span> <span class="fu">metarate</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> x2i,         <span class="co"># Número de eventos observados</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> t2i, <span class="co"># Tiempo-persona en riesgo</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,    <span class="co"># Identificador único de cada estudio</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,      <span class="co"># Conjunto de datos</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"IRLN"</span>,       <span class="co"># Transformación logaritmo natural para tasas</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,    <span class="co"># Omitir modelo de efectos fijos</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,     <span class="co"># Ajustar modelo de efectos aleatorios</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1</span>,     <span class="co"># Tasas por años-persona</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">irunit =</span> <span class="st">"años-persona"</span> <span class="co"># Etiqueta para la unidad de tiempo-persona</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>mod_ir</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Number of studies: k = 9
-Number of events: e = 77
-
-                       rate           95%-CI
-Random effects model 0.0043 [0.0027; 0.0070]
-
-Quantifying heterogeneity (with 95%-CIs):
- tau^2 = 0.3699 [0.0940; 1.5145]; tau = 0.6082 [0.3065; 1.2307]
- I^2 = 78.0% [58.4%; 88.4%]; H = 2.13 [1.55; 2.93]
-
-Test of heterogeneity:
-     Q d.f.  p-value
- 36.38    8 &lt; 0.0001
-
-Details of meta-analysis methods:
-- Inverse variance method
-- Restricted maximum-likelihood estimator for tau^2
-- Q-Profile method for confidence interval of tau^2 and tau
-- Calculation of I^2 based on Q
-- Log transformation</code></pre>
-</div>
-</div>
-<p>Realizamos el <em>forest plot</em> para la tasa de incidencia expresada en 1000 años-persona:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  mod_ir, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Tasa de incidencia"</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> <span class="st">"#B200B2"</span>, <span class="co"># Magenta</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> <span class="st">"#FFFF66"</span>, <span class="co"># Amarillo claro</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1000</span>,       <span class="co"># Incidencia por 1000 años-persona</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="correlaciones" class="level3">
-<h3 class="anchored" data-anchor-id="correlaciones">Correlaciones</h3>
-<p>Las correlaciones indican la fuerza y dirección de la covarianza entre dos variables numéricas continuas y se expresa como:</p>
-<p><span class="math display">\[
-r_{xy} = \frac{Cov_{xy}}{S_xS_y}
-\]</span></p>
-<p>donde:</p>
-<ul>
-<li><p><span class="math inline">\(Cov_{xy}\)</span> es la covarianza entre las variables X e Y.</p></li>
-<li><p><span class="math inline">\(S_x\)</span> y <span class="math inline">\(S_y\)</span> son los desvíos estándar para cada variable.</p></li>
-</ul>
-<p>Como las correlaciones toman valores de entre -1 y 1, se pueden introducir sesgos cuando calculamos el error estándar para muestras pequeñas. Para evitar este sesgo, los datos se transforman usando el coeficiente <strong>z de Fisher</strong>, que aproxima la muestra a una distribución normal.</p>
-<p>La función <code>metacor()</code> permite ajustar modelos de meta-análisis para correlaciones, aplicando la transformación z de Fisher mediante el argumento <code>sm = "ZCOR"</code>. Para ejemplificar, usaremos la base de datos <code>dat.aloe2013</code> que contiene resultados de 5 estudios sobre correlación entre condiciones laborales y salud mental en asistentes sociales:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.aloe2013</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para tasas de incidencia</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>mod_cor <span class="ot">&lt;-</span> <span class="fu">metacor</span>(</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cor =</span> R2,       <span class="co"># Número de eventos observados</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> n,            <span class="co"># Tamaño de la muestra</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,  <span class="co"># Identificador único de cada estudio</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,     <span class="co"># Conjunto de datos</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"ZCOR"</span>,      <span class="co"># Transformación z de Fisher</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,   <span class="co"># Omitir modelo de efectos fijos</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,    <span class="co"># Ajustar modelo de efectos aleatorios</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>mod_cor</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Number of studies: k = 5
-Number of observations: o = 1247
-
-                        COR           95%-CI    z  p-value
-Random effects model 0.3320 [0.1903; 0.4602] 4.44 &lt; 0.0001
-
-Quantifying heterogeneity (with 95%-CIs):
- tau^2 = 0.0259 [0.0064; 0.2528]; tau = 0.1608 [0.0800; 0.5028]
- I^2 = 84.9% [66.3%; 93.2%]; H = 2.57 [1.72; 3.84]
-
-Test of heterogeneity:
-     Q d.f.  p-value
- 26.44    4 &lt; 0.0001
-
-Details of meta-analysis methods:
-- Inverse variance method
-- Restricted maximum-likelihood estimator for tau^2
-- Q-Profile method for confidence interval of tau^2 and tau
-- Calculation of I^2 based on Q
-- Fisher's z transformation of correlations</code></pre>
-</div>
-</div>
-<p>Podemos generar el <em>forest plot</em> con el siguiente código:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  mod_cor, </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Correlación"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> <span class="st">"#B200B2"</span>, <span class="co"># Magenta</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> <span class="st">"#FFFF66"</span>, <span class="co"># Amarillo claro</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  mod_prev,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Prevalencia (por 100 000 hab.)"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">leftcols =</span> <span class="st">"studlab"</span>, <span class="co"># Muestra solamente el identificador de estudio</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>], <span class="co"># Magenta</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">2</span>],  <span class="co"># Amarillo</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100000</span>,      <span class="co"># Escala a 100 000 habitantes</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>        <span class="co"># Omite modelo de efectos fijos</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -544,15 +517,337 @@ Details of meta-analysis methods:
 </div>
 </div>
 </div>
-
-
-
 </section>
+<section id="tasa-de-incidencia" class="level3">
+<h3 class="anchored" data-anchor-id="tasa-de-incidencia">Tasa de incidencia</h3>
+<p>La tasa de incidencia se utiliza para eventos que ocurren a lo largo del tiempo y se define como:</p>
+<p><span class="math display">\[
+IR = \frac {k}{T}
+\]</span>​</p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> es el número de eventos observados.</p></li>
+<li><p><span class="math inline">\(T\)</span> es la suma del tiempo-persona en riesgo en cada estudio.</p></li>
+</ul>
+<p>Dado que las tasas de incidencia pueden ser pequeñas y presentar asimetría, se recomienda aplicar una <strong>transformación logarítmica</strong> a los datos para estabilizar su varianza.</p>
+<p>La función <code>metarate()</code> ajusta modelos de meta-análisis para tasas de incidencia, aplicando esta transformación (<code>sm = "IRLN"</code>).</p>
+<p>Como ejemplo, usamos la base <code>dat.nielweise2008</code>, que contiene 9 estudios sobre la <strong>i</strong>ncidencia de infecciones sanguíneas asociadas al uso de catéteres:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.nielweise2008</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo de meta-análisis para tasas de incidencia</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>mod_ir <span class="ot">&lt;-</span> <span class="fu">metarate</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> x2i,            <span class="co"># Casos observados</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> t2i,             <span class="co"># Tiempo-persona en riesgo</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> authors,        <span class="co"># Identificador del estudio</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,           <span class="co"># Conjunto de datos</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"IRLN"</span>,            <span class="co"># Transformación logarítmica</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,          <span class="co"># Modelo de efectos fijos</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,          <span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1</span>,            <span class="co"># Tasas por años-persona</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">irunit =</span> <span class="st">"años-persona"</span> <span class="co"># Etiqueta para la unidad de tiempo-persona</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Podemos presentar el forest plot en escala de 1000 años-persona usando el siguiente código:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  mod_ir,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Tasa de incidencia"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>], <span class="co"># Magenta</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">2</span>],  <span class="co"># Amarillo</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1000</span>,       <span class="co"># Expresión en 1000 años-persona</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>        <span class="co"># Omite modelo de efectos fijos</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="meta-análisis-de-estudios-analíticos" class="level2">
+<h2 class="anchored" data-anchor-id="meta-análisis-de-estudios-analíticos">Meta-análisis de estudios analíticos</h2>
+<p>Dentro de los estudios analíticos (observacionales y/o experimentales), las medidas de asociación más utilizadas para comparar grupos son la <strong>diferencia de medias</strong>, el <strong>odds-ratio</strong>, el <strong>riesgo relativo</strong> y la <strong>razón de tasas de incidencia</strong>. A continuación, se describe cómo ajustar modelos de meta-análisis para cada una de ellas usando el paquete <code>meta</code>.</p>
+<section id="diferencia-de-medias" class="level3">
+<h3 class="anchored" data-anchor-id="diferencia-de-medias">Diferencia de medias</h3>
+<p>La diferencia de medias entre dos grupos de exposición se define como:</p>
+<p><span class="math display">\[
+MD = \bar{x_1} - \bar{x_2}
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(\bar{x_1}\)</span> es la media muestral del grupo expuesto o tratado.</p></li>
+<li><p><span class="math inline">\(\bar{x_2}\)</span> es la media muestral del grupo no expuesto o control.</p></li>
+</ul>
+<p>El cálculo de la diferencia de medias requiere que todas las mediciones se hayan tomado en la misma escala. Para los modelos de meta-análisis, se utiliza la <strong>diferencia de medias estandarizada</strong>, que elimina la dependencia de las unidades de medición al ponderar por el desvío estándar.</p>
+<p>En <code>meta</code>, la función <code>metacont()</code> ajusta modelos de meta-análisis para diferencias de medias estandarizadas con el argumento <code>sm = "SMD"</code>.</p>
+<p>Como ejemplo, utilizaremos la base de datos <code>dat.furukawa2003</code>, que contiene resultados de 17 estudios sobre la efectividad de la dosis de antidepresivos tricíclicos en casos de depresión severa:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.furukawa2003</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para diferencia de medias</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>mod_mdif <span class="ot">&lt;-</span> <span class="fu">metacont</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.e =</span> Ne,         <span class="co"># Tamaño muestra grupo expuestos</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean.e =</span> Me,      <span class="co"># Media en grupo expuestos</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd.e =</span> Se,        <span class="co"># Desvío estándar en grupo expuestos</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.c =</span> Nc,         <span class="co"># Tamaño muestra grupo control</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean.c =</span> Mc,      <span class="co"># Media en grupo control</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd.c =</span> Sc,        <span class="co"># Desvío estándar en grupo control</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> author,  <span class="co"># Identificador del estudio</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,     <span class="co"># Conjunto de datos</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"SMD"</span>,       <span class="co"># Diferencia de medias estandarizada</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,    <span class="co"># Modelo de efectos fijos</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,    <span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado </span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>mod_mdif</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 17
+Number of observations: o = 902 (o.e = 479, o.c = 423)
+
+                         SMD             95%-CI     z  p-value
+Common effect model  -0.3918 [-0.5286; -0.2551] -5.62 &lt; 0.0001
+Random effects model -0.6056 [-0.9326; -0.2787] -3.63   0.0003
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.3415 [0.1422; 1.1791]; tau = 0.5844 [0.3771; 1.0859]
+ I^2 = 72.6% [55.5%; 83.1%]; H = 1.91 [1.50; 2.43]
+
+Test of heterogeneity:
+     Q d.f.  p-value
+ 58.38   16 &lt; 0.0001
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q
+- Hedges' g (bias corrected standardised mean difference; using exact formulae)</code></pre>
+</div>
+</div>
+<p>La diferencia de medias estandarizada entre el grupo tratado y el grupo control es estadísticamente significativa <span class="math inline">\((p&lt;0,001)\)</span> y presenta alta heterogeneidad <span class="math inline">\((I^2 = 73,8\%)\)</span>, por lo que puede descartarse el modelo de efectos fijos.</p>
+<p>El siguiente código genera un forest plot para la diferencia de medias estandarizada:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  mod_mdif,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Diferencia de medias"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>], <span class="co"># Magenta</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">2</span>],  <span class="co"># Amarillo claro</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>        <span class="co"># Omite modelo de efectos fijos</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="odds-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="odds-ratio">Odds-ratio</h3>
+<p>El <strong>odds-ratio</strong> (OR) o razón de productos cruzados se define como:</p>
+<p><span class="math display">\[
+OR =  \frac{a/b}{c/d}
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(a\)</span> es el número de eventos en el grupo expuesto/tratamiento.</p></li>
+<li><p><span class="math inline">\(b\)</span> es el número de individuos que no presentan el evento en el grupo expuesto/tratamiento.</p></li>
+<li><p><span class="math inline">\(c\)</span> es el número de eventos en el grupo no expuesto/control.</p></li>
+<li><p><span class="math inline">\(d\)</span> es el número de individuos que no presentan el evento en el grupo no expuesto/control.</p></li>
+</ul>
+<p>El OR solo puede tomar valores positivos <span class="math inline">\((0-\infty)\)</span>, donde:</p>
+<ul>
+<li><p><span class="math inline">\(OR = 1\)</span> indica ausencia de efecto.</p></li>
+<li><p><span class="math inline">\(OR &gt;1\)</span> indica un incremento en las probabilidades de ocurrencia del evento.</p></li>
+<li><p><span class="math inline">\(OR &lt; 1\)</span> indica un posible efecto protector.</p></li>
+</ul>
+<p>Esto genera una distribución asimétrica y dificulta el análisis estadístico. Para estabilizar la varianza y obtener una distribución aproximadamente normal, se utiliza la <strong>transformación logarítmica</strong>.</p>
+<p>La función <code>metabin()</code> ajusta modelos de meta-análisis para OR con la transformación logarítmica incluida automáticamente usando el argumento <code>sm = "OR"</code>, e incorpora una una corrección de continuidad para efectos con valores de 0.</p>
+<p>El siguiente ejemplo utiliza la base de datos <code>dat.collins1985b</code>, que contiene información de 9 estudios sobre el efecto de los diuréticos en la prevención de preeclampsia:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.collins1985b</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para OR</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>mod_or <span class="ot">&lt;-</span> <span class="fu">metabin</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event.e =</span> pre.xti,  <span class="co"># Eventos en el grupo expuesto/tratamiento</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.e =</span> pre.nti,      <span class="co"># Tamaño muestral en el grupo expuesto/tratamiento</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">event.c =</span> pre.xci,  <span class="co"># Eventos en el grupo no expuesto/control</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.c =</span> pre.nci,      <span class="co"># Tamaño muestral en el grupo control</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> author,   <span class="co"># Identificador único de cada estudio</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,       <span class="co"># Conjunto de datos</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"OR"</span>,          <span class="co"># Odds-ratio</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,      <span class="co"># Modelo de efectos fijos</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>       <span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>mod_or</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 9
+Number of observations: o = 6942 (o.e = 3759, o.c = 3183)
+Number of events: e = 636
+
+                         OR           95%-CI     z  p-value
+Common effect model  0.6677 [0.5620; 0.7932] -4.60 &lt; 0.0001
+Random effects model 0.5956 [0.3843; 0.9233] -2.32   0.0205
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.3008 [0.0723; 2.2027]; tau = 0.5484 [0.2689; 1.4842]
+ I^2 = 70.7% [41.8%; 85.2%]; H = 1.85 [1.31; 2.60]
+
+Test of heterogeneity:
+     Q d.f. p-value
+ 27.26    8  0.0006
+
+Details of meta-analysis methods:
+- Mantel-Haenszel method (common effect model)
+- Inverse variance method (random effects model)
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q</code></pre>
+</div>
+</div>
+<p>El <strong>OR combinado</strong> sugiere que el uso de diuréticos reduce las probabilidades de preeclampsia en comparación con el grupo control <span class="math inline">\((p = 0,021)\)</span>. La heterogeneidad estadística es alta <span class="math inline">\((I^2 = 70,7\%)\)</span>, por lo que descartamos el modelo de efectos fijos.</p>
+<p>Generamos el forest plot:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  mod_or,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"Odds-ratio"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>], <span class="co"># Magenta</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">2</span>],  <span class="co"># Amarillo</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>        <span class="co"># Omitir modelo de efectos fijos</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="riesgo-relativo" class="level3">
+<h3 class="anchored" data-anchor-id="riesgo-relativo">Riesgo relativo</h3>
+<p>El riesgo relativo (RR) o <em>risk ratio</em> expresa la razón entre las probabilidades de desarrollar un evento en el grupo expuesto y en el grupo control:</p>
+<p><span class="math display">\[
+RR =  \frac{a/(a + b)}{c/(c + d)}
+\]</span></p>
+<p>donde los términos tienen el mismo significado que en el OR.</p>
+<p>Al igual que el OR, el <strong>RR</strong> es una medida asimétrica con valores positivos <span class="math inline">\((0-\infty)\)</span>. Para estabilizar la varianza y mejorar la interpretación estadística, se usa la <strong>transformación logarítmica.</strong> Esta transformación permite modelar el <strong>RR</strong> en un intervalo simétrico y facilita la interpretación de los resultados.</p>
+<p>La función <code>metabin()</code> permite calcular RR con <code>sm = "RR"</code>, aplicando la transformación logarítmica automáticamente. Debido a la similitud en el cálculo respecto al OR, omitiremos el ejemplo para esta medida de asociación.</p>
+</section>
+<section id="razón-de-tasas-de-incidencia" class="level3">
+<h3 class="anchored" data-anchor-id="razón-de-tasas-de-incidencia">Razón de tasas de incidencia</h3>
+<p>La <strong>razón de tasas de incidencia</strong> (<em>incidence rate ratio</em>, IRR) compara la frecuencia de eventos en dos grupos considerando el <strong>tiempo-persona</strong> de exposición:</p>
+<p><span class="math display">\[
+IRR = \frac{IR_e}{IR_c}
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(IR_e\)</span> es la tasa de incidencia en el grupo expuesto/tratamiento.</p></li>
+<li><p><span class="math inline">\(IR_c\)</span> es la tasa de incidencia en el grupo no expuesto/control.</p></li>
+</ul>
+<p>Al igual que para la tasa de incidencia, se recomienda realizar la <strong>transformación logarítmica</strong> de los datos para aproximarlos a una distribución normal.</p>
+<p>En <code>meta</code>, la función <code>metainc()</code> ajusta modelos de IRR con <code>sm = "IRR"</code>, aplicando automáticamente la transformación logarítmica.</p>
+<p>A modo de ejemplo, usaremos nuevamente la base <code>dat.nielweise2008</code>, esta vez comparando entre grupo de exposición y control:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga datos</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> dat.nielweise2008</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo de meta-análisis para IRR</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>mod_irr <span class="ot">&lt;-</span> <span class="fu">metainc</span>(</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">event.e =</span> x1i,      <span class="co"># Casos observados en grupo expuesto/tratamiento</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">time.e =</span> t1i,       <span class="co"># Tiempo-persona en grupo expuesto/tratamiento</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">event.c =</span> x2i,      <span class="co"># Casos observados en grupo no expuesto/control</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">time.c =</span> t2i,       <span class="co"># Tiempo-persona en grupo no expuesto/control</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> authors,   <span class="co"># Identificador único de cada estudio</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos,       <span class="co"># Conjunto de datos</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"IRR"</span>,         <span class="co"># Razón de tasas de incidencia</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">TRUE</span>,      <span class="co"># Modelo de efectos fijos</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,          <span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1</span>,            <span class="co"># Tasas por años-persona</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">irunit =</span> <span class="st">"años-persona"</span> <span class="co"># Etiqueta para la unidad de tiempo-persona</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>mod_irr</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 9
+Number of events: e = 125
+
+                        IRR           95%-CI     z p-value
+Common effect model  0.6602 [0.4608; 0.9459] -2.26  0.0236
+Random effects model 0.6728 [0.4314; 1.0494] -1.75  0.0806
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0936 [0.0000; 1.4845]; tau = 0.3060 [0.0000; 1.2184]
+ I^2 = 17.5% [0.0%; 59.5%]; H = 1.10 [1.00; 1.57]
+
+Test of heterogeneity:
+    Q d.f. p-value
+ 9.70    8  0.2869
+
+Details of meta-analysis methods:
+- Mantel-Haenszel method (common effect model)
+- Inverse variance method (random effects model)
+- Restricted maximum-likelihood estimator for tau^2
+- Q-Profile method for confidence interval of tau^2 and tau
+- Calculation of I^2 based on Q</code></pre>
+</div>
+</div>
+<p>Los resultados del modelo muestran que existe una disminución en el riesgo del evento en el grupo tratado comparado con el control, significativa en el modelo de efectos fijos <span class="math inline">\((p = 0,24)\)</span> pero no en el de efectos aleatorios <span class="math inline">\((p = 0,81)\)</span>, con baja heterogeneidad estadística <span class="math inline">\((I^2 = 17,5\%)\)</span>.</p>
+<p>Con el siguiente código obtenemos el forest plot expresado en 1000 años-persona:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  mod_irr,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">smlab =</span> <span class="st">"IRR"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.diamond =</span> pal[<span class="dv">1</span>], <span class="co"># Magenta</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.square =</span> pal[<span class="dv">2</span>],  <span class="co"># Amarillo</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">irscale =</span> <span class="dv">1000</span>     <span class="co"># Expresión en 1000 años-persona</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tipos_estimador_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-caution">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Debido a la extensión del curso, nos enfocaremos exclusivamente en la implementación en R de los modelos para cada medida de asociación. Quienes deseen profundizar en el desarrollo matemático de estos modelos pueden consultar los capítulos <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html">3</a> y <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pooling-es.html#pooling-es-r">4.2</a> de <span class="citation" data-cites="Harrer2021">Harrer et&nbsp;al. (<a href="#ref-Harrer2021" role="doc-biblioref">2021</a>)</span>.</p>
+<p>Actualmente, el paquete <code>meta</code> no incluye funciones específicas para modelar el tiempo hasta el evento (hazard ratio, HR). Sin embargo, si los estudios reportan el log-HR y su error estándar, es posible utilizar la función <code>metagen()</code> con el argumento <code>sm = "HR"</code> para obtener una estimación combinada del efecto.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="referencias" class="level2">
+
+
+
+
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-Harrer2021" class="csl-entry" role="listitem">
 Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Boca Raton, FL; London: Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
+</div>
+<div id="ref-scico" class="csl-entry" role="listitem">
+Pedersen, Thomas Lin, y Fabio Crameri. 2023. <span>«scico: Colour Palettes Based on the Scientific Colour-Maps»</span>. <a href="https://CRAN.R-project.org/package=scico">https://CRAN.R-project.org/package=scico</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
