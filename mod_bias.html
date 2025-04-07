@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Análisis de moderadores y sesgo de publicación</title>
+<title>Exploración de la heterogeneidad: moderadores y sesgo de publicación</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,6 +133,35 @@ div.csl-indent {
 }
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -146,7 +175,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./mod_bias.html">Análisis de moderadores y sesgo de publicación</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./mod_bias.html">Exploración de la heterogeneidad: moderadores y sesgo de publicación</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -227,7 +256,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mod_bias.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Análisis de moderadores y sesgo de publicación</span></a>
+ <span class="menu-text">Exploración de la heterogeneidad: moderadores y sesgo de publicación</span></a>
   </div>
 </li>
       </ul>
@@ -259,17 +288,29 @@ div.csl-indent {
     <h2 id="toc-title">Contenidos</h2>
    
   <ul>
-  <li><a href="#análisis-de-moderadores" id="toc-análisis-de-moderadores" class="nav-link active" data-scroll-target="#análisis-de-moderadores">Análisis de moderadores</a></li>
-  <li><a href="#sesgo-de-publicación" id="toc-sesgo-de-publicación" class="nav-link" data-scroll-target="#sesgo-de-publicación">Sesgo de publicación</a></li>
+  <li><a href="#análisis-de-moderadores" id="toc-análisis-de-moderadores" class="nav-link active" data-scroll-target="#análisis-de-moderadores">Análisis de moderadores</a>
+  <ul class="collapse">
+  <li><a href="#análisis-de-sugbgrupos" id="toc-análisis-de-sugbgrupos" class="nav-link" data-scroll-target="#análisis-de-sugbgrupos">Análisis de sugbgrupos</a></li>
+  <li><a href="#metarregresión" id="toc-metarregresión" class="nav-link" data-scroll-target="#metarregresión">Metarregresión</a></li>
+  <li><a href="#visualización-avanzada-con-paquete-orchard" id="toc-visualización-avanzada-con-paquete-orchard" class="nav-link" data-scroll-target="#visualización-avanzada-con-paquete-orchard">Visualización avanzada con paquete orchaRd</a></li>
+  </ul></li>
+  <li><a href="#sesgo-de-publicación-y-análisis-de-sensibilidad" id="toc-sesgo-de-publicación-y-análisis-de-sensibilidad" class="nav-link" data-scroll-target="#sesgo-de-publicación-y-análisis-de-sensibilidad">Sesgo de publicación y análisis de sensibilidad</a>
+  <ul class="collapse">
+  <li><a href="#funnel-plot" id="toc-funnel-plot" class="nav-link" data-scroll-target="#funnel-plot"><strong>Funnel plot</strong></a></li>
+  <li><a href="#test-de-egger" id="toc-test-de-egger" class="nav-link" data-scroll-target="#test-de-egger"><strong>Test de Egger</strong></a></li>
+  <li><a href="#test-de-begg" id="toc-test-de-begg" class="nav-link" data-scroll-target="#test-de-begg"><strong>Test de Begg</strong></a></li>
+  <li><a href="#trim-and-fill" id="toc-trim-and-fill" class="nav-link" data-scroll-target="#trim-and-fill"><strong><em>Trim-and-fill</em></strong></a></li>
+  <li><a href="#análisis-de-sensibilidad" id="toc-análisis-de-sensibilidad" class="nav-link" data-scroll-target="#análisis-de-sensibilidad">Análisis de sensibilidad</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./mod_bias.html">Análisis de moderadores y sesgo de publicación</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./mod_bias.html">Exploración de la heterogeneidad: moderadores y sesgo de publicación</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Análisis de moderadores y sesgo de publicación</h1>
+<h1 class="title">Exploración de la heterogeneidad: moderadores y sesgo de publicación</h1>
 </div>
 
 
@@ -290,15 +331,17 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 </center>
 <section id="análisis-de-moderadores" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-de-moderadores">Análisis de moderadores</h2>
-<p>El análisis de moderadores permite explorar fuentes de heterogeneidad en los estudios incluidos en un meta-análisis. Se puede realizar mediante la inclusión de una variable independiente categórica (<em>análisis de subgrupos</em>) o numérica (<em>metarregresión</em>).</p>
-<p>Este análisis ayuda a evaluar hipótesis sobre variaciones en la magnitud del efecto entre estudios y a interpretar diferencias en los resultados. Sin embargo, para evitar sesgos de selección, las variables a utilizar como moderadores deben definirse previamente al extraer los datos relevantes para la revisión sistemática.</p>
+<p>El análisis de moderadores permite explorar fuentes de heterogeneidad entre los estudios incluidos en un meta-análisis. Se puede realizar mediante la inclusión de una variable independiente categórica (<em>análisis de subgrupos</em>) o numérica (<em>metarregresión</em>).</p>
+<p>Este procedimiento contribuye a evaluar hipótesis sobre variaciones en la magnitud del efecto entre estudios y a interpretar diferencias observadas en los resultados. Sin embargo, para evitar sesgos de selección, las variables utilizadas como moderadores deben definirse de antemano, durante la extracción de datos relevantes para la revisión sistemática.</p>
 <p>El análisis de moderadores consta de dos etapas:</p>
 <ul>
 <li><p>Estimación del efecto <strong>dentro de cada subgrupo.</strong></p></li>
 <li><p>Prueba estadística para evaluar diferencias <strong>entre subgrupos</strong>.</p></li>
 </ul>
-<p>Para implementar este análisis en R, se añade el argumento <code>subgroup</code> al modelo de meta-análisis. A continuación, realizaremos un análisis de subgrupos sobre el <a href="./tipos_estimador.html">modelo de prevalencia</a> ajustado anteriormente, considerando el país (<code>country</code>) como moderador.</p>
-<p>Antes de comenzar con el ejemplo, cargaremos los paquetes necesarios:</p>
+<section id="análisis-de-sugbgrupos" class="level3">
+<h3 class="anchored" data-anchor-id="análisis-de-sugbgrupos">Análisis de sugbgrupos</h3>
+<p>Para evaluar el efecto de una variable categórica, se puede utilizar el argumento <code>subgroup</code> al ajustar un modelo de meta-análisis. A continuación, realizaremos un análisis de subgrupos sobre el <a href="./tipos_estimador.html#Prevalencia">modelo de prevalencia</a> ajustado previamente, considerando el país (<code>country</code>) como moderador.</p>
+<p>Comenzaremos cargando los paquetes necesarios:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga de paquetes</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)       <span class="co"># Modelos de meta-análisis</span></span>
@@ -353,7 +396,7 @@ $ total   &lt;int&gt; 177413, 234396, 91157, 10000, 532302, 371698, 301283, 4203
       US 1    3.8%</code></pre>
 </div>
 </div>
-<p>Dado que la mayoría de los estudios provienen de Italia y la frecuencia en otros países es baja, crearemos la variable dicotómica <code>pais_cat</code> para categorizar los países en “<em>Italia” y “Otro/s”:</em></p>
+<p>Dado que la mayoría de los estudios provienen de Italia y la frecuencia en otros países es baja, creamos una variable dicotómica <code>pais_cat</code>:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>datos_prev <span class="ot">&lt;-</span> datos_prev <span class="sc">|&gt;</span> </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pais_cat =</span> <span class="fu">if_else</span>(</span>
@@ -362,7 +405,7 @@ $ total   &lt;int&gt; 177413, 234396, 91157, 10000, 532302, 371698, 301283, 4203
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Otro/s"</span> )        <span class="co"># Valor si la condición no se cumple</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Ajustamos el modelo de meta-análisis para proporciones con país como moderador:</p>
+<p>Ajustamos el modelo de meta-análisis para proporciones, incorporando la variable <code>pais_cat</code> como moderador:</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste modelo</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mod_sg <span class="ot">&lt;-</span> <span class="fu">metaprop</span>(</span>
@@ -412,7 +455,9 @@ Details of meta-analysis methods:
 - Events per 100000 observations</code></pre>
 </div>
 </div>
-<p>La salida del modelo es similar a la que obtuvimos al ajustar el <a href="./tipos_estimador.html">modelo para prevalencia</a>, sin embargo, se incorporan dos nuevas secciones. En la sección <code>Results for subgroups (random effects model)</code> se identifican los siguientes elementos:</p>
+<p>La salida del modelo incluye dos secciones adicionales:</p>
+<ul>
+<li><p><code>Results for subgroups (random effects model)</code>: muestra los resultados para cada categoría del moderador, incluyendo:</p>
 <ul>
 <li><p>Identificador de las categorías del moderador.</p></li>
 <li><p><code>k</code>: número de estudios en la categoría/subgrupo.</p></li>
@@ -422,10 +467,11 @@ Details of meta-analysis methods:
 <li><p><code>tau</code>: desvío estándar en la categoría/subgrupo.</p></li>
 <li><p><code>Q</code>: estadístico Q de Cochran para la categoría/subgrupo.</p></li>
 <li><p><code>I^2</code>: porcentaje de heterogeneidad observado en la categoría/subgrupo.</p></li>
+</ul></li>
+<li><p><code>Test for subgroup differences (random effects model)</code>: prueba de hipótesis para detectar diferencias significativas entre subgrupos.</p></li>
 </ul>
-<p>La segunda sección, <code>Test for subgroup differences (random effects model)</code>, contiene los resultados de la prueba para evaluar si existen diferencias estadísticamente significativas entre las categorías o subgrupos.</p>
-<p>En los datos de nuestro ejemplo, podemos ver que la prevalencia del evento es mayor en Italia que en otros países y que estas diferencias son estadísticamente significativas.</p>
-<p>Para visualizar los resultados, añadimos al forest plot algunos de los siguientes argumentos:</p>
+<p>En este ejemplo, observamos una prevalencia significativamente mayor en Italia en comparación con otros países <span class="math inline">\((p = 0,013)\)</span>.</p>
+<p>Podemos visualizar los resultados del análisis de moderadores incorporando los siguiente argumentos a la función <code>forest()</code>:</p>
 <ul>
 <li><p><code>layout = "subgroup"</code>: muestra los estimadores de efecto para cada subgrupo y el estimador global, omitiendo los resultados de los estudios individuales.</p></li>
 <li><p><code>sort.subgroup</code>: ordena alfabeticamente las categorías de la variable moderadora.</p></li>
@@ -458,64 +504,349 @@ Details of meta-analysis methods:
 </div>
 </div>
 </div>
-<p>A diferencia de cuando ajustábamos modelos sin moderadores, el argumento <code>col.diamond</code> va a cambiar tanto el color del estimador global como de los estimadores para cada categoría o subgrupo, mientras que el argumento <code>col.square</code> no aplica ningún cambio sobre el forest plot.</p>
-<p>Algunos paquetes como <code>foresploter</code>, <code>ggforestplot</code> y <code>orchaRd</code> permiten realizar forest plot visualmente más atractivos, pero para utilizarlos necesitamos extraer los datos del modelo ajustado.</p>
-<p>Para instalar estos paquetes ejecutamos el siguiente código:</p>
+<p>A diferencia de modelos sin moderadores, <code>col.diamond</code> modifica el color del estimador global y de los estimadores para cada subgrupo. En cambio, <code>col.square</code> no tiene efecto sobre los colores del forest plot.</p>
+</section>
+<section id="metarregresión" class="level3">
+<h3 class="anchored" data-anchor-id="metarregresión">Metarregresión</h3>
+<p>Para evaluar el efecto de una variable continua, como el año de publicación (<code>pubyear</code>), primero ajustamos el modelo de meta-análisis:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># foresploter</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"forestploter"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ggforestplot</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"https://github.com/nightingalehealth/ggforestplot"</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># orchaRd</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"https://github.com/daniel1noble/orchaRd"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste modelo</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mod_prev <span class="ot">&lt;-</span> <span class="fu">metaprop</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> cases,          <span class="co"># Casos observados</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> total,              <span class="co"># Tamaño de la muestra</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">studlab =</span> study,        <span class="co"># Identificador del estudio</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_prev,      <span class="co"># Conjunto de datos</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sm =</span> <span class="st">"PLOGIT"</span>,          <span class="co"># Transformación logit</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">common =</span> <span class="cn">FALSE</span>,         <span class="co"># Omitir modelo de efectos fijos</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">TRUE</span>,          <span class="co"># Modelo de efectos aleatorios</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pscale =</span> <span class="dv">100000</span>,        <span class="co"># Escala a casos/100 000 habitantes</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a> )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Una vez instalados los activamos:</p>
+<p>Al modelo anterior le aplicamos la función <code>metareg()</code>, incluyendo <code>pubyear</code> como moderador en el argumento <code>formula</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga paquetes</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forestploter)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggforestplot)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(orchaRd)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo de metarregresión</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mod_year <span class="ot">&lt;-</span> <span class="fu">metareg</span>(mod_prev,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">formula =</span> <span class="sc">~</span> pubyear)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo ajustado</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_year)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Mixed-Effects Model (k = 26; tau^2 estimator: ML)
+
+  logLik  deviance       AIC       BIC      AICc   
+-75.9315   14.5514  157.8629  161.6372  158.9538   
+
+tau^2 (estimated amount of residual heterogeneity):     0.0067
+tau (square root of estimated tau^2 value):             0.0816
+I^2 (residual heterogeneity / unaccounted variability): 26.61%
+H^2 (unaccounted variability / sampling variability):   1.36
+
+Tests for Residual Heterogeneity:
+Wld(df = 24) = 28.8391, p-val = 0.2262
+LRT(df = 24) = 30.5162, p-val = 0.1682
+
+Test of Moderators (coefficient 2):
+QM(df = 1) = 7.1208, p-val = 0.0076
+
+Model Results:
+
+         estimate      se     zval    pval    ci.lb    ci.ub     
+intrcpt    8.5560  6.3550   1.3463  0.1782  -3.8996  21.0116     
+pubyear   -0.0085  0.0032  -2.6685  0.0076  -0.0148  -0.0023  ** 
+
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Los resultados muestran un efecto estadísticamente significativo del año de publicación sobre la prevalencia del evento <span class="math inline">\((p = 0,008)\)</span>.</p>
+<p>Los resultados de la metarregresión se visualizan usando <em>bubble plots.</em> Estos gráficos representan en el eje <span class="math inline">\(X\)</span> el valor del moderador continuo y en el eje <span class="math inline">\(Y\)</span> el efecto estimado para cada estudio. Cada burbuja representa un estudio individual, y su tamaño es proporcional al peso del estudio (generalmente inversamente proporcional a la varianza). Además, el gráfico incluye una línea de regresión con su intervalo de confianza del 95%, permitiendo visualizar la tendencia general.</p>
+<p>La función <code>bubble()</code> genera este gráfico de forma rápida:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bubble</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  mod_year,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="st">"common"</span>,        <span class="co"># Escala de los símbolos</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.line =</span> pal[<span class="dv">2</span>]      <span class="co"># Color de la línea de regresión</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mod_bias_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Para ajustar el tamaño de las burbujas según el peso de cada estudio, se puede modificar el argumento <code>cex</code> utilizando la función <code>rescale()</code> del paquete <code>plotrix</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bubble</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  mod_year,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> plotrix<span class="sc">::</span><span class="fu">rescale</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="dv">1</span> <span class="sc">/</span> mod_year<span class="sc">$</span>vi,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">newrange =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">3</span>)),  <span class="co"># Ajusta la escala de los símbolos</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.line =</span> pal[<span class="dv">2</span>]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mod_bias_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
-<section id="sesgo-de-publicación" class="level2">
-<h2 class="anchored" data-anchor-id="sesgo-de-publicación">Sesgo de publicación</h2>
-<p>El sesgo de publicación (<em>publication bias</em>) ocurre cuando los resultados de los estudios publicados no son representativos de todos los estudios realizados sobre un tema. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, ya que los estudios con resultados positivos o significativos tienen más probabilidades de ser publicados que aquellos con resultados nulos o negativos, comprometiendo la validez de las conclusiones del meta-análisis.</p>
-<p>Este sesgo puede influir considerablemente en los resultados de un meta-análisis, ya que si los estudios publicados no reflejan adecuadamente toda la gama de resultados posibles, la estimación del efecto global puede estar sesgada. Por lo tanto, es esencial evaluar y ajustar el sesgo de publicación al realizar un meta-análisis, a fin de garantizar que los resultados sean lo más precisos y representativos posible.</p>
-<p><strong>Funnel plot</strong></p>
-<p>Es una herramienta gráfica que permite observar la relación entre el estimador de efecto y su variabilidad. En ausencia de sesgo de publicación, se espera que los estudios se distribuyan simétricamente alrededor del estimador de efecto global, formando un patrón similar a un embudo. Si existe sesgo de publicación, los estudios con mayor tamaño de muestra (y, por tanto, mayor precisión) estarán más concentrados en el centro, mientras que los estudios con menor tamaño de muestra se dispersarán de manera asimétrica.</p>
-<p>La función <code>funnel()</code> del paquete <code>meta</code> permite generar este diagrama para una visualización rápida.</p>
+<section id="visualización-avanzada-con-paquete-orchard" class="level3">
+<h3 class="anchored" data-anchor-id="visualización-avanzada-con-paquete-orchard">Visualización avanzada con paquete orchaRd</h3>
+<p>Este contenido es opcional y está dirigido a quienes tengan conocimientos más avanzados de R y deseen generar visualizaciones más atractivas y listas para la presentación en informes o artículos científicos.</p>
+<p>El paquete orchaRd <span class="citation" data-cites="orchaRd">(<a href="#ref-orchaRd" role="doc-biblioref">Nakagawa et&nbsp;al. 2023</a>)</span> permite crear visualizaciones con mayores opciones de personalización y compatibles con <code>ggplot2</code>. Sin embargo, dado que <code>orchaRd</code> no permite utilizar modelos ajustados por el paquete <code>meta</code>, es necesario reajustar el modelo utilizando <code>metafor.</code></p>
+<p>instalamos y cargamos los paquetes requeridos:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">funnel</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar orchaRd</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"daniel1noble/orchaRd"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Test de Egger</strong></p>
-<p>Evalúa la simetría del <em>funnel plot</em> mediante una regresión lineal entre el estimador de efecto y su error estándar. En presencia de sesgo de publicación, se espera que los puntos del diagrama no estén distribuidos simétricamente. Este test proporciona una estimación estadística del sesgo de publicación: un <em>p</em>-valor menor que 0,05 sugiere la presencia de sesgo de publicación.</p>
-<p>Este test puede implementarse con la función <code>metabias()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carga paquetes</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(orchaRd)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(metafor)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Test de Begg</strong></p>
-<p>Evalúa la relación entre el tamaño del efecto y el error estándar, utilizando un enfoque basado en la correlación de rangos en lugar de una regresión lineal. Un <em>p</em>-valor menor que 0,05 indica la presencia de sesgo de publicación.</p>
-<p>Este test puede implementarse con la función <code>metabias()</code>, utilizando el argumento <code>method.bias = "Begg"</code>:</p>
+<p>Calculamos los estimadores de efecto individuales utilizando la función <code>escalc()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod, <span class="at">method.bias =</span> <span class="st">"Begg"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dat_forest <span class="ot">&lt;-</span> <span class="fu">escalc</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure =</span> <span class="st">"PLO"</span>,     <span class="co"># estimador de efecto</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">xi =</span> cases,          <span class="co"># número de casos</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ni =</span> total,          <span class="co"># tamaño muestral</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> datos_prev    <span class="co"># conjunto de datos</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  )  </span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong><em>Trim-and-fill</em></strong></p>
-<p>Estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, agregando estudios hipotéticos que representarían los estudios no publicados. Este método ayuda a corregir la estimación del efecto global al incluir los estudios faltantes que no se publicaron debido a su falta de significancia.</p>
-<p>En R, este procedimiento puede implementarse con la función <code>trimfill()</code>:</p>
+<p>Ajustamos el modelo de meta-análisis con moderadores utilizando <code>rma.mv()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">trimfill</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mod_forest <span class="ot">&lt;-</span> <span class="fu">rma.mv</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">yi =</span> yi,                             <span class="co"># estimador de efecto</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">V =</span> vi,                              <span class="co"># error estándar</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mods =</span> <span class="sc">~</span> <span class="fu">factor</span>(pais_cat) <span class="sc">+</span> pubyear, <span class="co"># moderadores</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>study,                  <span class="co"># modelo de efectos aleatorios</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat_forest                    <span class="co"># conjunto de datos</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Generalmente, se recomienda utilizar dos o más estimadores de sesgo de publicación para obtener una visión más completa de la posible presencia de este sesgo. Utilizando diferentes métodos, es posible realizar una evaluación más robusta y precisa del sesgo de publicación y su impacto en los resultados del meta-análisis.</p>
+<p>Generamos el forest plot con la función <code>orchard_plot()</code>, definiendo los siguientes argumentos:</p>
+<ul>
+<li><p><code>group</code>: identificador de estudio.</p></li>
+<li><p><code>mod</code>: nombre del moderador (1 para estimador de efecto global).</p></li>
+<li><p><code>xlab</code>: nombre del estimador de efecto.</p></li>
+<li><p><code>transf</code>: mostrar los datos en escala original (opcional).</p></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forest plot por subgrupos</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">orchard_plot</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  mod_forest, </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">"study"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mod =</span> <span class="st">"pais_cat"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"prevalencia"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">transfm =</span> <span class="st">"invlogit"</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Paleta personalizada</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> pal) <span class="sc">+</span>  <span class="co"># color de borde</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> pal)     <span class="co"># color de relleno</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mod_bias_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Con el argumento <code>scale_fill_scico_d()</code> podemos usar cualquiera de las paletas <em>colorblind-friendly</em> incluidas en <code>scico</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forest plot por subgrupos</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">orchard_plot</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  mod_forest, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">"study"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mod =</span> <span class="st">"pais_cat"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"prevalencia"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">transfm =</span> <span class="st">"invlogit"</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Paleta colorblind-friendly</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_scico_d</span>(<span class="at">palette =</span> <span class="st">"hawaii"</span>) <span class="sc">+</span> <span class="co"># color de borde</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_scico_d</span>(<span class="at">palette =</span> <span class="st">"hawaii"</span>)    <span class="co"># color de relleno</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mod_bias_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Generamos el bubble plot para el moderador continuo (<code>pubyear</code>):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bubble_plot</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  mod_forest,           <span class="co"># modelo ajustado con metafor</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">transfm =</span> <span class="st">"invlogit"</span>, <span class="co"># muestra resultados como proporciones</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mod =</span> <span class="st">"pubyear"</span>,      <span class="co"># moderador continuo</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">"study"</span>,      <span class="co"># identificador de estudio</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">est.col =</span> pal[<span class="dv">2</span>],     <span class="co"># color de la línea de regresión</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci.col =</span> pal[<span class="dv">1</span>],      <span class="co"># color de las líneas del 95% IC</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mod_bias_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Si quisiera generar un bubble plot para cada nivel de <code>pais_cat</code>, puedo usar el argumento <code>by</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bubble_plot</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  mod_forest,           <span class="co"># modelo ajustado con metafor</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">transfm =</span> <span class="st">"invlogit"</span>, <span class="co"># muestra resultados como proporciones</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mod =</span> <span class="st">"pubyear"</span>,      <span class="co"># moderador continuo</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">"study"</span>,      <span class="co"># identificador de estudio</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">est.col =</span> pal[<span class="dv">2</span>],     <span class="co"># color de la línea de regresión</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci.col =</span> pal[<span class="dv">1</span>],      <span class="co"># color de las líneas del 95% IC</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"pais_cat"</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Paleta colorblind-friendly</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_scico_d</span>(<span class="at">palette =</span> <span class="st">"glasgow"</span>) <span class="sc">+</span> <span class="co"># color de borde</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_scico_d</span>(<span class="at">palette =</span> <span class="st">"glasgow"</span>)    <span class="co"># color de relleno</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mod_bias_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sesgo-de-publicación-y-análisis-de-sensibilidad" class="level2">
+<h2 class="anchored" data-anchor-id="sesgo-de-publicación-y-análisis-de-sensibilidad">Sesgo de publicación y análisis de sensibilidad</h2>
+<p>El sesgo de publicación (<em>publication bias</em>) se refiere a la tendencia de publicar con mayor frecuencia estudios con resultados positivos, estadísticamente significativos o con grandes tamaños del efecto. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, produciendo una sobreestimación del efecto global. Por ello, es esencial evaluar y ajustar el sesgo de publicación para garantizar que los resultados sean lo más precisos y representativos posible.</p>
+<section id="funnel-plot" class="level3">
+<h3 class="anchored" data-anchor-id="funnel-plot"><strong>Funnel plot</strong></h3>
+<p>El funnel plot o gráfico de embudo representa en el eje <span class="math inline">\(Y\)</span> el tamaño muestral o la precisión de los estudios, y en el eje <span class="math inline">\(X\)</span> el estimador de efecto para cada estudio. En ausencia de sesgo de publicación, se espera una distribución simétrica que forme un patrón similar a un embudo; de lo contrario, se observa asimetría.</p>
+<p>Para generar un funnel plot, se utiliza la función <code>funnel()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">funnel</span>(mod_prev)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mod_bias_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="test-de-egger" class="level3">
+<h3 class="anchored" data-anchor-id="test-de-egger"><strong>Test de Egger</strong></h3>
+<p>El test de Egger evalúa la simetría del funnel plot mediante una regresión lineal entre el estimador de efecto y su error estándar. Un <em>p</em>-valor menor a 0,05 sugiere la presencia de sesgo de publicación.</p>
+<p>Este test se implementa con la función <code>metabias()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  mod_prev,               <span class="co"># modelo de meta-análisis</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method.bias =</span> <span class="st">"Egger"</span>   <span class="co"># aplica test de Egger (opción por defecto)</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear regression test of funnel plot asymmetry
+
+Test result: t = -1.45, df = 24, p-value = 0.1603
+Bias estimate: -0.6649 (SE = 0.4589)
+
+Details:
+- multiplicative residual heterogeneity variance (tau^2 = 1.4335)
+- predictor: standard error
+- weight:    inverse variance
+- reference: Egger et al. (1997), BMJ</code></pre>
+</div>
+</div>
+</section>
+<section id="test-de-begg" class="level3">
+<h3 class="anchored" data-anchor-id="test-de-begg"><strong>Test de Begg</strong></h3>
+<p>El test de Begg utiliza la correlación de rangos para evaluar la relación entre el tamaño del efecto y el error estándar. Un <em>p</em>-valor menor que 0,05 indica la presencia de sesgo de publicación.</p>
+<p>Se implementa añadiendo el argumento <code>method.bias = "Begg"</code> a la función <code>metabias()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  mod_prev,             <span class="co"># modelo de meta-análisis</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method.bias =</span> <span class="st">"Begg"</span>  <span class="co"># aplica test de Begg</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rank correlation test of funnel plot asymmetry
+
+Test result: z = -0.90, p-value = 0.3662
+Bias estimate: -41.0000 (SE = 45.3689)
+
+Reference: Begg &amp; Mazumdar (1993), Biometrics</code></pre>
+</div>
+</div>
+</section>
+<section id="trim-and-fill" class="level3">
+<h3 class="anchored" data-anchor-id="trim-and-fill"><strong><em>Trim-and-fill</em></strong></h3>
+<p>El método <em>trim-and-fill</em> estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, incorporando estudios hipotéticos. Esto ayuda a corregir la estimación del efecto global.</p>
+<p>Se utiliza la función <code>trimfill()</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">trimfill</span>(mod_prev)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 32 (with 6 added studies)
+
+                      events             95%-CI
+Random effects model 23.4496 [21.7062; 25.3329]
+
+Quantifying heterogeneity (with 95%-CIs):
+ tau^2 = 0.0181; tau = 0.1344; I^2 = 42.4% [12.2%; 62.2%]; H = 1.32 [1.07; 1.63]
+
+Test of heterogeneity:
+     Q d.f. p-value
+ 53.82   31  0.0067
+
+Details of meta-analysis methods:
+- Inverse variance method
+- Maximum-likelihood estimator for tau^2
+- Calculation of I^2 based on Q
+- Trim-and-fill method to adjust for funnel plot asymmetry (L-estimator)
+- Logit transformation
+- Events per 100000 observations</code></pre>
+</div>
+</div>
+<p>Generalmente, se recomienda utilizar dos o más métodos para evaluar el sesgo de publicación y obtener una visión más completa de su impacto en el meta-análisis. En el ejemplo anterior, no hubiera sido necesario realizar el <em>trim-and-fill</em> ya que el funnel plot tiene una forma bastante simétrica y el <em>p</em>-valor de los test de Egger y Begg fue menor a 0,05.</p>
+</section>
+<section id="análisis-de-sensibilidad" class="level3">
+<h3 class="anchored" data-anchor-id="análisis-de-sensibilidad">Análisis de sensibilidad</h3>
+<p>El análisis de sensibilidad se utiliza para evaluar la robustez de los resultados del meta-análisis. Una estrategia común es reajustar el modelo excluyendo estudios con menor tamaño muestral o de menor calidad, y comparar el estimador de efecto y su 95% IC con el modelo original. Otra opción es realizar un análisis <em>leave-one-out</em>, en el que se remueve un estudio a la vez y se observa la variación del efecto global.</p>
+<p>La función <code>metainf()</code> permite realizar el análisis de influencia (<em>leave-one-out</em>):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metainf</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  mod_prev,          <span class="co"># modelo de meta-análisis</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">pooled =</span> <span class="st">"random"</span>  <span class="co"># modelo de efectos aleatorios</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Este análisis ayuda a determinar si algún estudio en particular influye de forma excesiva en los resultados del meta-análisis. Al igual que en los modelos anteriores, los resultados pueden visualizarse usando forest plots.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Hasta aquí hemos cubierto los aspectos básicos para evaluar fuentes de heterogeneidad en modelos de meta-análisis. Quienes tengan interés en profundizar en las medidas de heterogeneidad y su aplicación, recomendamos consultar el artículo de <span class="citation" data-cites="bown2010">Bown y Sutton (<a href="#ref-bown2010" role="doc-biblioref">2010</a>)</span> y los capítulos <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/subgroup.html">7</a>, <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/metareg.html">8</a> y <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/pub-bias.html">9</a> de <span class="citation" data-cites="Harrer2021">Harrer et&nbsp;al. (<a href="#ref-Harrer2021" role="doc-biblioref">2021</a>)</span>.</p>
+</div>
+</div>
+</div>
 
 
 
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-bown2010" class="csl-entry" role="listitem">
+Bown, M. J., y A. J. Sutton. 2010. <span>«Quality control in systematic reviews and meta-analyses»</span>. <em>European Journal of Vascular and Endovascular Surgery</em> 40 (5): 669-77. <a href="https://doi.org/10.1016/j.ejvs.2010.07.011">https://doi.org/10.1016/j.ejvs.2010.07.011</a>.
+</div>
 <div id="ref-janitor" class="csl-entry" role="listitem">
 Firke, Sam. 2024. <span>«janitor: Simple Tools for Examining and Cleaning Dirty Data»</span>. <a href="https://CRAN.R-project.org/package=janitor">https://CRAN.R-project.org/package=janitor</a>.
+</div>
+<div id="ref-Harrer2021" class="csl-entry" role="listitem">
+Harrer, Mathias, Pim Cuijpers, Toshi A Furukawa, y David D Ebert. 2021. <em>Doing Meta-Analysis With R: A Hands-On Guide</em>. Boca Raton, FL; London: Chapman &amp; Hall/CRC Press. <a href="https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074">https://www.routledge.com/Doing-Meta-Analysis-with-R-A-Hands-On-Guide/Harrer-Cuijpers-Furukawa-Ebert/p/book/9780367610074</a>.
+</div>
+<div id="ref-orchaRd" class="csl-entry" role="listitem">
+Nakagawa, Shinichi, Malgorzata Lagisz, Rose E. O’Dea, Patrice Pottier, Joanna Rutkowska, Alistair M. Senior, Yefeng Yang, y Daniel W. A. Noble. 2023. <span>«orchaRd 2.0: An R package for visualizing meta-analyses with orchard plots»</span> 12: 4-12. https://doi.org/<a href="https://doi.org/10.32942/X2QC7K">https://doi.org/10.32942/X2QC7K</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
