@@ -239,7 +239,7 @@ div.csl-indent {
   <li><a href="#archivos-de-datos" id="toc-archivos-de-datos" class="nav-link" data-scroll-target="#archivos-de-datos">Archivos de datos</a></li>
   <li><a href="#buenas-prácticas" id="toc-buenas-prácticas" class="nav-link" data-scroll-target="#buenas-prácticas">Buenas prácticas</a></li>
   </ul>
-<div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Otros formatos</h2><ul><li><a href="intro_R.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div><div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -274,7 +274,7 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 </center>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://github.com/allisonhorst/stats-illustrations/blob/main/rstats-artwork/monster_support.jpg?raw=true" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="images/monster_support.jpg" class="img-fluid figure-img" style="width:80.0%"></p>
 <figcaption><a href="https://allisonhorst.com/">Artwork por @allison_horst</a></figcaption>
 </figure>
 </div>
@@ -301,9 +301,6 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <ul>
 <li><p><strong>Asistente de código</strong>: al escribir en el editor o la consola, la tecla <strong>Tab</strong> activa el autocompletado de funciones, nombres de objetos y argumentos, agilizando la escritura y reduciendo errores de sintaxis. En versiones recientes, el asistente también permite la previsualización de colores en los gráficos, resaltar los paréntesis de cierre en funciones anidadas con distintos colores y gestionar automáticamente la indentación del código.</p>
 <p><img src="images/asistente.png" class="img-fluid"></p></li>
-</ul>
-<!-- -->
-<ul>
 <li><p><strong>Ayuda en línea</strong>: al posicionar el cursor sobre el nombre de una función en el editor y presionar <strong>F1</strong>, se accede directamente a la documentación correspondiente en el panel <strong>Help</strong> (habitualmente ubicado en la esquina inferior derecha).</p>
 <p><img src="images/help.png" class="img-fluid"></p></li>
 <li><p><strong>Historial de comandos</strong>: en la consola, al usar las teclas de flecha arriba/abajo, se puede navegar por los comandos ejecutados durante la sesión actual. Además, el panel <strong>History</strong> (parte superior derecha) almacena los comandos de todas las sesiones previas, permitiendo reutilizarlos con un clic en <strong>To Console</strong> (Enter) o <strong>To Source</strong> (Shift + Enter), según se desee insertarlos en la consola o en el script activo.</p>
@@ -362,14 +359,12 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <h4 class="anchored" data-anchor-id="reglas-de-sintaxis">Reglas de sintaxis</h4>
 <p>Dado que R es un lenguaje interpretado, la <strong>sintaxis debe ser estrictamente correcta</strong>. Algunos puntos clave:</p>
 <ul>
-<li>Los argumentos pueden escribirse con el <strong>nombre del parámetro seguido de un signo igual</strong>:</li>
+<li><p>Los argumentos pueden escribirse con el <strong>nombre del parámetro seguido de un signo igual</strong>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">funcion</span>(<span class="at">arg1 =</span> <span class="dv">32</span>, <span class="at">arg2 =</span> <span class="dv">5</span>, <span class="at">arg3 =</span> <span class="dv">65</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
 </ul>
-<pre><code>::: {.cell layout-align="center"}
-
-```{.r .cell-code}
-funcion(arg1 = 32, arg2 = 5, arg3 = 65)
-```
-:::</code></pre>
+<!-- -->
 <ul>
 <li><p>También se pueden omitir los nombres y escribir directamente los valores. En ese caso, <strong>el orden importa</strong> y debe coincidir con el definido en la documentación de la función:</p>
 <div class="cell" data-layout-align="center">
@@ -554,12 +549,9 @@ Paquetes a instalar
 <ul>
 <li><p>Trabajar siempre dentro de un <strong>proyecto de RStudio</strong> (<code>.Rproj</code>). Esto permite organizar los archivos, mantener rutas relativas consistentes y acceder a funcionalidades específicas como control de versiones o panel de archivos integrados.</p></li>
 <li><p>Incluir al comienzo de cada script las líneas de <strong>activación de paquetes</strong> necesarios, utilizando la función <code>library()</code>.</p></li>
-</ul>
-<!-- -->
-<ul>
-<li><strong>Cargar los datos una vez activados los paquetes</strong>, para garantizar que todas las funciones requeridas estén disponibles.</li>
-<li>Documentar el código mediante <strong>comentarios</strong> iniciados con <code>#</code>. Esto permite entender qué hace cada bloque de código, facilitando futuras modificaciones o revisiones.</li>
-<li><strong>Usar espacios e indentación adecuada</strong> para mejorar la legibilidad. Esto es especialmente importante en estructuras anidadas (como condicionales, bucles o funciones).</li>
+<li><p><strong>Cargar los datos</strong> una vez activados los paquetes, para garantizar que todas las funciones requeridas estén disponibles.</p></li>
+<li><p>Documentar el código mediante <strong>comentarios</strong> iniciados con <code>#</code>. Esto permite entender qué hace cada bloque de código, facilitando futuras modificaciones o revisiones.</p></li>
+<li><p><strong>Usar espacios e indentación adecuada</strong> para mejorar la legibilidad. Esto es especialmente importante en estructuras anidadas (como condicionales, bucles o funciones).</p></li>
 </ul>
 <p>Una guía de estilo ampliamente recomendada —aunque no oficial— es la de <code>tidyverse</code>. Incluye ejemplos concretos de buenas y malas prácticas para nombrar variables, manejar líneas largas, usar sangrías, entre otros aspectos. Puede consultarse en: <a href="https://style.tidyverse.org/" class="uri">https://style.tidyverse.org/</a></p>
 <div class="callout callout-style-simple callout-caution callout-titled">
@@ -572,8 +564,7 @@ Importante
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Este apunte ofrece un resumen general para quienes deseen repasar los aspectos básicos de R y RStudio.<br>
-</p>
+<p>Este apunte ofrece un resumen general para quienes deseen repasar los aspectos básicos de R y RStudio.</p>
 <p>Si no cuentan con experiencia previa en R y necesitan una introducción más detallada, podés consultar los siguientes recursos:</p>
 <ul>
 <li><p><strong>Curso de Epidemiología Nivel Avanzado</strong> - <a href="https://datos-ine.github.io/unidad_1/">Unidad 1: Introducción a R.</a></p></li>
