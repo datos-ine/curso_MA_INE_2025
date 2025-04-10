@@ -264,6 +264,16 @@ window.Quarto = {
 <center>
 Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis <br> © 2025 Instituto Nacional de Epidemiología “Dr.&nbsp;Juan H. Jara” (ANLIS) - <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"> CC BY-NC 4.0 </a> <img src="images/cc01.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc02.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc03.svg" class="img-fluid" style="width:3.0%"> <br> <br>
 </center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://allisonhorst.com/"><img src="images/inferencia.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Artwork por @allison_horst"></a></p>
+</figure>
+</div>
+<figcaption>Artwork por @allison_horst</figcaption>
+</figure>
+</div>
 <section id="fundamentos" class="level2">
 <h2 class="anchored" data-anchor-id="fundamentos">Fundamentos</h2>
 <p>La <strong>estadística inferencial</strong> es la rama de la estadística que permite extraer conclusiones sobre una población a partir de una muestra de datos. Este proceso se sustenta en dos procedimientos principales: la <strong>estimación</strong> y la <strong>prueba de hipótesis</strong>.</p>
@@ -318,7 +328,7 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -328,7 +338,7 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -339,7 +349,7 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
 </figure>
 </div>
 </div>
@@ -353,6 +363,35 @@ Este material es parte del curso interno de Introducción a la Revisión Sistem�
 <section id="potencia-estadística" class="level3">
 <h3 class="anchored" data-anchor-id="potencia-estadística">Potencia estadística</h3>
 <p>La potencia estadística es la probabilidad de rechazar <span class="math inline">\(H_0\)</span>​ cuando esta es falsa, es decir, de detectar un efecto real. Se calcula como 1 menos la probabilidad de cometer un error de Tipo II o <span class="math inline">\(\beta\)</span> y es directamente proporcional al tamaño muestral y inversamente proporcional a la varianza de las observaciones.</p>
+<p>En resumen…</p>
+<table class="tg caption-top table" data-quarto-postprocess="true">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #aaa; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: normal; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;"></th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #aaa; border-style: solid; border-width: 0px; color: #fff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">H0 es verdadera</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; background-color: #2f2e4e; border-color: #aaa; border-style: solid; border-width: 0px; color: #fff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">H0 es falsa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; background-color: #2f2e4e; border-color: #aaa; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Rechazo H0<br>
+</td>
+<td style="text-align: left; background-color: #fff; border-color: #aaa; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Error tipo I (α)</td>
+<td style="text-align: left; background-color: #fff; border-color: #aaa; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Decisión correcta (1−β)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: #2f2e4e; border-color: #aaa; border-style: solid; border-width: 0px; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">No rechazo H0<br>
+</td>
+<td style="text-align: left; background-color: #fff; border-color: #aaa; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Decisión correcta (1−α)</td>
+<td style="text-align: left; background-color: #fff; border-color: #aaa; border-style: solid; border-width: 0px; color: #333; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; padding: 10px 5px; vertical-align: top; word-break: normal;">Error tipo II (β)</td>
+</tr>
+</tbody>
+</table>
 </section>
 </section>
 <section id="aplicaciones-e-interpretación" class="level2">
