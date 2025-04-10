@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Tamara Ricardo">
 
-<title>Sesgo de publicación</title>
+<title>Introducción a la inferencia estadística</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,41 +21,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-</style>
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -113,6 +100,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -126,7 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./pub_bias.html">Sesgo de publicación</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro_R.html">Material suplementario</a></li><li class="breadcrumb-item"><a href="./intro_inferencia.html">Introducción a la inferencia estadística</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -157,80 +173,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Introducción</span></a>
+ <span class="menu-text">Portada</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Unidad 1</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./unidad_1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unidad 1: Revisión Sistemática</span></a>
-  </div>
-</li>
-      </ul>
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Unidad 1: Revisión sistemática</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Unidad 2: Meta-análisis de efectos fijos y aleatorios</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Unidad 3: Modelos avanzados de meta-análisis</span></span>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Unidad 2: Meta-análisis</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Material suplementario</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Introducción</span></a>
+  <a href="./intro_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción a R y RStudio</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fixed_random.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Modelos de efectos fijos y aleatorios</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./tipos_estimador.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Estudios descriptivos y analíticos</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./analisis_moderadores.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Análisis de moderadores</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pub_bias.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Sesgo de publicación</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Unidad 3</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./unidad_3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unidad 3: Meta-Análisis de Efectos Mixtos</span></a>
+  <a href="./intro_inferencia.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Introducción a la inferencia estadística</span></a>
   </div>
 </li>
       </ul>
@@ -245,22 +221,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contenidos</h2>
    
   <ul>
-  <li><a href="#sesgo-de-publicación" id="toc-sesgo-de-publicación" class="nav-link active" data-scroll-target="#sesgo-de-publicación">Sesgo de publicación</a></li>
+  <li><a href="#fundamentos" id="toc-fundamentos" class="nav-link active" data-scroll-target="#fundamentos">Fundamentos</a></li>
+  <li><a href="#estimación-de-parámetros" id="toc-estimación-de-parámetros" class="nav-link" data-scroll-target="#estimación-de-parámetros">Estimación de parámetros</a></li>
+  <li><a href="#pruebas-de-hipótesis" id="toc-pruebas-de-hipótesis" class="nav-link" data-scroll-target="#pruebas-de-hipótesis">Pruebas de Hipótesis</a>
+  <ul class="collapse">
+  <li><a href="#estadístico-de-prueba" id="toc-estadístico-de-prueba" class="nav-link" data-scroll-target="#estadístico-de-prueba">Estadístico de prueba</a></li>
+  <li><a href="#valor-crítico" id="toc-valor-crítico" class="nav-link" data-scroll-target="#valor-crítico">Valor crítico</a></li>
+  <li><a href="#p-valor" id="toc-p-valor" class="nav-link" data-scroll-target="#p-valor"><em>p</em>-valor</a></li>
+  <li><a href="#potencia-estadística" id="toc-potencia-estadística" class="nav-link" data-scroll-target="#potencia-estadística">Potencia estadística</a></li>
+  </ul></li>
+  <li><a href="#aplicaciones-e-interpretación" id="toc-aplicaciones-e-interpretación" class="nav-link" data-scroll-target="#aplicaciones-e-interpretación">Aplicaciones e Interpretación</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Otros Enlaces</h2><ul><li><a href="http://capacitacion.anlis.gob.ar/"><i class="bi bi-tag-fill"></i>Plataforma Educativa ANLIS</a></li><li><a href="https://datos-ine.github.io/curso_MA_INE_2025/"><i class="bi bi-github"></i>Github</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Unidad 2: Meta-análisis</a></li><li class="breadcrumb-item"><a href="./pub_bias.html">Sesgo de publicación</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro_R.html">Material suplementario</a></li><li class="breadcrumb-item"><a href="./intro_inferencia.html">Introducción a la inferencia estadística</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Sesgo de publicación</h1>
+<h1 class="title">Introducción a la inferencia estadística</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Autor/a</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tamara Ricardo </p>
+          </div>
+  </div>
     
   
     
@@ -273,40 +264,133 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <center>
 Este material es parte del curso interno de Introducción a la Revisión Sistemática con Meta-análisis <br> © 2025 Instituto Nacional de Epidemiología “Dr.&nbsp;Juan H. Jara” (ANLIS) - <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"> CC BY-NC 4.0 </a> <img src="images/cc01.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc02.svg" class="img-fluid" style="width:3.0%"> <img src="images/cc03.svg" class="img-fluid" style="width:3.0%"> <br> <br>
 </center>
-<section id="sesgo-de-publicación" class="level2">
-<h2 class="anchored" data-anchor-id="sesgo-de-publicación">Sesgo de publicación</h2>
-<p>El sesgo de publicación (<em>publication bias</em>) ocurre cuando los resultados de los estudios publicados no son representativos de todos los estudios realizados sobre un tema. Esto puede distorsionar la síntesis de la evidencia en un meta-análisis, ya que los estudios con resultados positivos o significativos tienen más probabilidades de ser publicados que aquellos con resultados nulos o negativos, comprometiendo la validez de las conclusiones del meta-análisis.</p>
-<p>Este sesgo puede influir considerablemente en los resultados de un meta-análisis, ya que si los estudios publicados no reflejan adecuadamente toda la gama de resultados posibles, la estimación del efecto global puede estar sesgada. Por lo tanto, es esencial evaluar y ajustar el sesgo de publicación al realizar un meta-análisis, a fin de garantizar que los resultados sean lo más precisos y representativos posible.</p>
-<p><strong>Funnel plot</strong></p>
-<p>Es una herramienta gráfica que permite observar la relación entre el estimador de efecto y su variabilidad. En ausencia de sesgo de publicación, se espera que los estudios se distribuyan simétricamente alrededor del estimador de efecto global, formando un patrón similar a un embudo. Si existe sesgo de publicación, los estudios con mayor tamaño de muestra (y, por tanto, mayor precisión) estarán más concentrados en el centro, mientras que los estudios con menor tamaño de muestra se dispersarán de manera asimétrica.</p>
-<p>La función <code>funnel()</code> del paquete <code>meta</code> permite generar este diagrama para una visualización rápida.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">funnel</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="fundamentos" class="level2">
+<h2 class="anchored" data-anchor-id="fundamentos">Fundamentos</h2>
+<p>La <strong>estadística inferencial</strong> es la rama de la estadística que permite extraer conclusiones sobre una población a partir de una muestra de datos. Este proceso se sustenta en dos procedimientos principales: la <strong>estimación</strong> y la <strong>prueba de hipótesis</strong>.</p>
+<p>La <strong>población</strong> se define como el conjunto completo de individuos u observaciones de interés, mientras que la <strong>muestra</strong> es el subconjunto representativo de esa población, diseñado para reflejar sus características fundamentales. Para describir la población se utilizan <strong>parámetros</strong>, valores numéricos como la media poblacional <span class="math inline">\((\mu)\)</span>, mientras que los datos muestrales se resumen con <strong>estadísticos</strong>, por ejemplo, la media muestral <span class="math inline">\((\bar{x})\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/poblacion_muestra.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
+</figure>
 </div>
-<p><strong>Test de Egger</strong></p>
-<p>Evalúa la simetría del <em>funnel plot</em> mediante una regresión lineal entre el estimador de efecto y su error estándar. En presencia de sesgo de publicación, se espera que los puntos del diagrama no estén distribuidos simétricamente. Este test proporciona una estimación estadística del sesgo de publicación: un <em>p</em>-valor menor que 0,05 sugiere la presencia de sesgo de publicación.</p>
-<p>Este test puede implementarse con la función <code>metabias()</code>:</p>
+</section>
+<section id="estimación-de-parámetros" class="level2">
+<h2 class="anchored" data-anchor-id="estimación-de-parámetros">Estimación de parámetros</h2>
+<p>La estimación consiste en utilizar información muestral para inferir el valor de un parámetro poblacional. Se distingue entre la estimación puntual, que proporciona un único valor estimado (por ejemplo, <span class="math inline">\(\bar{x}\)</span> como estimador de <span class="math inline">\(\mu\)</span>), y la estimación por intervalos de confianza, que define un rango de valores en el cual se espera, con un nivel de confianza dado (habitualmente 95%), que se encuentre el parámetro. La fórmula típica del intervalo de confianza para la media es:</p>
+<p><span class="math display">\[
+95\% IC = (\bar{x}  -1,96~SE, \bar{x} + 1,96~SE)
+\]</span></p>
+<p>donde <span class="math inline">\(SE\)</span> es el error estándar de <span class="math inline">\(\bar{x}\)</span> y 1.96 es el valor crítico derivado de la distribución normal (o t de Student en muestras pequeñas o cuando se desconoce la desviación estándar poblacional). Si bien existen ICs del 99%, un mayor nivel de confianza requiere una muestra más grande para mantener un intervalo estrecho y, de esta forma, lograr una mayor precisión en la estimación. El 95% de confianza representa un equilibrio entre el ancho del intervalo (precisión) y el tamaño muestral.</p>
+</section>
+<section id="pruebas-de-hipótesis" class="level2">
+<h2 class="anchored" data-anchor-id="pruebas-de-hipótesis">Pruebas de Hipótesis</h2>
+<p>Las pruebas de hipótesis (también conocidas como <em>test</em> o <em>contrastes de hipótesis</em>) permiten evaluar afirmaciones sobre parámetros poblacionales a partir de datos muestrales.</p>
+<p>Cuando hablamos de hipótesis, es útil distinguir entre dos tipos principales:</p>
+<ul>
+<li><p><strong>Hipótesis de investigación</strong>: representan la pregunta o problema que motiva el estudio.</p></li>
+<li><p><strong>Hipótesis estadística</strong>: es la formulación cuantificable que se evalúa mediante métodos de inferencia estadística.</p></li>
+</ul>
+<p>El contraste de hipótesis se basa en la comparación de dos hipótesis estadísticas:</p>
+<ul>
+<li><p><strong>Hipótesis nula</strong> <span class="math inline">\((H_0)\)</span>, que postula que no existen diferencias entre los grupos comparados (por ejemplo, <span class="math inline">\(\mu = \mu_0\)</span>​).</p></li>
+<li><p><strong>Hipótesis alternativa</strong> <span class="math inline">\((H_1)\)</span>, que plantea que existen diferencias entre grupos (por ejemplo, <span class="math inline">\(\mu \neq \mu_0,~ \mu &gt; \mu_0~ ó~ \mu &lt; \mu_0\)</span>). Es equivalente a nuestra hipótesis de investigación y no puede aceptarse ni rechazarse de forma directa.</p></li>
+</ul>
+<p>La hipótesis que se pone a prueba es <span class="math inline">\(H_0\)</span>. Para decidir si se la acepta o rechaza, se utilizan estadísticos de prueba que se comparan con un valor crítico determinado por el nivel de significancia <span class="math inline">\(\alpha\)</span> (típicamente 0.05).</p>
+<section id="estadístico-de-prueba" class="level3">
+<h3 class="anchored" data-anchor-id="estadístico-de-prueba">Estadístico de prueba</h3>
+<p>Es el valor calculado a partir de los datos muestrales que permite tomar una decisión sobre <span class="math inline">\(H_0\)</span>. Su elección depende del tipo de variable y del problema en estudio. Por ejemplo:</p>
+<ul>
+<li><p>Para variables categóricas se utiliza el estadístico chi-cuadrado <span class="math inline">\((\chi^2)\)</span>.</p></li>
+<li><p>Para variables numéricas, se emplean las distribuciones normal <span class="math inline">\((Z)\)</span> o t de Student <span class="math inline">\((t)\)</span>.</p></li>
+</ul>
+</section>
+<section id="valor-crítico" class="level3">
+<h3 class="anchored" data-anchor-id="valor-crítico">Valor crítico</h3>
+<p>Se denomina <strong>región crítica</strong> o región de rechazo al conjunto de valores del estadístico de prueba que llevan al rechazo de <span class="math inline">\(H_0\)</span>.</p>
+<p>El <strong>nivel de significancia</strong> (<span class="math inline">\(\alpha\)</span>) representa la probabilidad de que el estadístico caiga en la región crítica cuando <span class="math inline">\(H_0\)</span> es verdadera, lo cual constituye un <strong>error de tipo I</strong>.</p>
+<p>El <strong>valor crítico</strong> es el umbral que separa los valores que llevan al rechazo de <span class="math inline">\(H_0\)</span> de aquellos que no. Representa la probabilidad de obtener un resultado igual o más extremo que el observado, bajo la suposición de que <span class="math inline">\(H_0\)</span> es verdadera. En una prueba de hipótesis, es el menor valor de <span class="math inline">\(\alpha\)</span> para el cual <span class="math inline">\(H_0\)</span> puede rechazarse.</p>
+<p>Para ilustrar la región crítica, se suele usar la gráfica de la distribución normal, donde el <em>p</em>-valor corresponde al área bajo la curva en la región de interés.</p>
+<ul>
+<li><p>En <strong>pruebas unilaterales</strong>, se considera el área bajo una sola cola de la distribución. El valor crítico es 1,645 ó -1,645, lo que implica que hay un 5% de probabilidad de observar un valor mayor (o menor) que ese umbral si <span class="math inline">\(H_0\)</span> es verdadera.</p>
+<ul>
+<li><p>Test de cola izquierda <span class="math inline">\((H_1: \mu &lt; \kappa)\)</span></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
 </div>
-<p><strong>Test de Begg</strong></p>
-<p>Evalúa la relación entre el tamaño del efecto y el error estándar, utilizando un enfoque basado en la correlación de rangos en lugar de una regresión lineal. Un <em>p</em>-valor menor que 0,05 indica la presencia de sesgo de publicación.</p>
-<p>Este test puede implementarse con la función <code>metabias()</code>, utilizando el argumento <code>method.bias = "Begg"</code>:</p>
+</div>
+</div></li>
+<li><p>Test de cola derecha <span class="math inline">\((H_1: \mu &gt; \kappa)\)</span></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">metabias</span>(mod, <span class="at">method.bias =</span> <span class="st">"Begg"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
 </div>
-<p><strong><em>Trim-and-fill</em></strong></p>
-<p>Estima el número de estudios faltantes debido al sesgo de publicación y ajusta la media global en consecuencia, agregando estudios hipotéticos que representarían los estudios no publicados. Este método ayuda a corregir la estimación del efecto global al incluir los estudios faltantes que no se publicaron debido a su falta de significancia.</p>
-<p>En R, este procedimiento puede implementarse con la función <code>trimfill()</code>:</p>
+</div>
+</div></li>
+</ul></li>
+<li><p>En <strong>pruebas bilaterales</strong> <span class="math inline">\((H_1: \mu \neq \kappa)\)</span>, se reparte el 5% en ambas colas de la distribución, y el valor crítico es 1,96. Esto indica que hay un 2,5% de probabilidad en cada cola de obtener un valor más extremo si <span class="math inline">\(H_0\)</span> es verdadera.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">trimfill</span>(mod)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="intro_inferencia_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%"></p>
+</figure>
 </div>
-<p>Generalmente, se recomienda utilizar dos o más estimadores de sesgo de publicación para obtener una visión más completa de la posible presencia de este sesgo. Utilizando diferentes métodos, es posible realizar una evaluación más robusta y precisa del sesgo de publicación y su impacto en los resultados del meta-análisis.</p>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="p-valor" class="level3">
+<h3 class="anchored" data-anchor-id="p-valor"><em>p</em>-valor</h3>
+<p>El <em>p</em>-valor representa la probabilidad de obtener un resultado igual o más extremo que el observado, bajo la suposición de que <span class="math inline">\(H_0\)</span> es verdadera. Es decir, el <em>p</em>-valor indica cuán compatibles son los datos con la hipótesis nula. En un test de hipótesis, se rechaza <span class="math inline">\(H_0\)</span> cuando el <em>p</em>-valor es menor que el nivel de significancia <span class="math inline">\(\alpha\)</span>, lo que apoya la <strong>hipótesis alternativa</strong> (<span class="math inline">\(H_1\)</span>).</p>
+</section>
+<section id="potencia-estadística" class="level3">
+<h3 class="anchored" data-anchor-id="potencia-estadística">Potencia estadística</h3>
+<p>La potencia estadística es la probabilidad de rechazar <span class="math inline">\(H_0\)</span>​ cuando esta es falsa, es decir, de detectar un efecto real. Se calcula como 1 menos la probabilidad de cometer un error de Tipo II o <span class="math inline">\(\beta\)</span> y es directamente proporcional al tamaño muestral y inversamente proporcional a la varianza de las observaciones.</p>
+</section>
+</section>
+<section id="aplicaciones-e-interpretación" class="level2">
+<h2 class="anchored" data-anchor-id="aplicaciones-e-interpretación">Aplicaciones e Interpretación</h2>
+<p>La inferencia estadística permite responder preguntas de investigación tales como:</p>
+<ul>
+<li><p>¿Es significativa la diferencia entre dos medias?</p></li>
+<li><p>¿Existe una relación entre dos variables?</p></li>
+<li><p>¿Cómo se distribuyen los datos respecto a un parámetro de interés?</p></li>
+</ul>
+<p>Al aplicar estos métodos, es crucial tener en cuenta la calidad y representatividad de la muestra, así como la validez de las asunciones subyacentes (normalidad, homogeneidad de varianzas, etc.).</p>
+<div class="callout callout-style-simple callout-warning">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Este apunte sintetiza los conceptos esenciales y las herramientas básicas para llevar a cabo un análisis inferencial, que sirve de base para la interpretación de modelos y resultados en análisis cuantitativos. Quienes necesiten profundizar más en los temas, les recomendamos consultar las siguientes fuentes:</p>
+<ul>
+<li><p><a href="https://ine.gov.ar/descarga/Manual%20EpiIntermedia.pdf">Manual de Epidemiología: Fundamentos, Métodos y Aplicaciones</a> <span class="citation" data-cites="institutonacionaldeepidemiología">(<a href="#ref-institutonacionaldeepidemiología" role="doc-biblioref">Epidemiología 2015</a>)</span>: Capítulo 3.</p></li>
+<li><p><a href="https://www.academia.edu/44058808/Estadistica_Mario_F_Triola_12ED?auto=download">Estadística 12A Edición</a> <span class="citation" data-cites="triola2018">(<a href="#ref-triola2018" role="doc-biblioref">Triola 2018</a>)</span>: Capítulos 8 y 9.</p></li>
+</ul>
+</div>
+</div>
+</div>
+
 
 
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-institutonacionaldeepidemiología" class="csl-entry" role="listitem">
+Epidemiología, Instituto Nacional de. 2015. <em>MANUAL DE EPIDEMIOLOGÍA: FUNDAMENTOS, MÉTODOS Y APLICACIONES</em>. Edición 2015.
+</div>
+<div id="ref-triola2018" class="csl-entry" role="listitem">
+Triola, Mario F. 2018. <em>ESTADÍSTICA Decimosegunda Edicion</em>. Pearson Educación de México, SA de CV.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
