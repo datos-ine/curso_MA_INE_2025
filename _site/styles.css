@@ -4,4 +4,5 @@ h1 {
   color: white; /* Color del texto */
   padding: 10px; /* Espaciado interno */
   border-radius: 5px; /* Bordes redondeados */
+  text-align: center;
 }
