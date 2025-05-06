@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Andrea Silva">
 <meta name="author" content="Tamara Ricardo">
@@ -48,17 +48,18 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../extras/intro_R.html" rel="next">
+<link href="../unidad_2/mod_bias.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-a0076978644d860a83bbf0c2f7e9225c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-9228549a85f7d9f7491bbf186e2efc26.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -91,7 +92,7 @@ div.csl-indent {
   width: 40px;
   background-size: 20px 20px;
   background-position: center;
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(189, 195, 199, 1)" class="bi bi-moon-stars-fill" viewbox="0 0 16 16"> <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"></path> <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"></path> </svg>') !important;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(189, 195, 199, 1)" class="bi bi-moon-stars-fill" viewBox="0 0 16 16"> <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"/> <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z"/> </svg>') !important;
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
@@ -143,7 +144,7 @@ window.Quarto = {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-introducción-a-la-revisión-sistemática-con-meta-análisis">
 <li class="dropdown-header">Unidad 1</li>
         <li class="dropdown-header">Unidad 2</li>
-        <li class="dropdown-header">Unidad 3: Estudios ecológicos</li>
+        <li class="dropdown-header">Unidad 3</li>
     </ul>
 </li>
 </ul>
@@ -214,10 +215,41 @@ window.Quarto = {
  <span class="menu-text">Unidad 1</span></span>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <span class="sidebar-item-text sidebar-link text-start"><i class="bi bi-file-earmark-bar-graph" role="img">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true"><i class="bi bi-file-earmark-bar-graph" role="img">
 </i> 
- <span class="menu-text">Unidad 2</span></span>
-  </li>
+ <span class="menu-text">Unidad 2</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/fixed_random.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelos de efectos fijos y aleatorios</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/tipos_estimador.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estimadores de efecto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../unidad_2/mod_bias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exploración de la heterogeneidad</span></a>
+  </div>
+</li>
+      </ul>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <span class="sidebar-item-text sidebar-link text-start"><i class="bi bi-file-earmark-bar-graph" role="img">
 </i> 
@@ -267,12 +299,12 @@ window.Quarto = {
 <a href="#pruebas-de-hip%C3%B3tesis" id="toc-pruebas-de-hipótesis" class="nav-link" data-scroll-target="#pruebas-de-hip%C3%B3tesis">Pruebas de Hipótesis</a>
   <ul class="collapse">
 <li><a href="#estad%C3%ADstico-de-prueba" id="toc-estadístico-de-prueba" class="nav-link" data-scroll-target="#estad%C3%ADstico-de-prueba">Estadístico de prueba</a></li>
+  <li><a href="#errores" id="toc-errores" class="nav-link" data-scroll-target="#errores">Errores</a></li>
   <li><a href="#nivel-de-significancia" id="toc-nivel-de-significancia" class="nav-link" data-scroll-target="#nivel-de-significancia">Nivel de significancia</a></li>
   <li><a href="#regi%C3%B3n-cr%C3%ADtica" id="toc-región-crítica" class="nav-link" data-scroll-target="#regi%C3%B3n-cr%C3%ADtica">Región crítica</a></li>
   <li><a href="#valor-cr%C3%ADtico" id="toc-valor-crítico" class="nav-link" data-scroll-target="#valor-cr%C3%ADtico">Valor crítico</a></li>
   <li><a href="#tipos-de-contraste" id="toc-tipos-de-contraste" class="nav-link" data-scroll-target="#tipos-de-contraste">Tipos de contraste</a></li>
   <li><a href="#potencia-estad%C3%ADstica" id="toc-potencia-estadística" class="nav-link" data-scroll-target="#potencia-estad%C3%ADstica">Potencia estadística</a></li>
-  <li><a href="#errores" id="toc-errores" class="nav-link" data-scroll-target="#errores">Errores</a></li>
   </ul>
 </li>
   <li><a href="#aplicaciones-e-interpretaci%C3%B3n" id="toc-aplicaciones-e-interpretación" class="nav-link" data-scroll-target="#aplicaciones-e-interpretaci%C3%B3n">Aplicaciones e Interpretación</a></li>
@@ -319,11 +351,11 @@ window.Quarto = {
 </section><section id="estimación-de-parámetros" class="level2"><h2 class="anchored" data-anchor-id="estimación-de-parámetros">Estimación de parámetros</h2>
 <p>La estimación consiste en utilizar información muestral para inferir el valor de un parámetro poblacional. Existen dos tipos principales:</p>
 <ul>
-<li><p><strong>Estimación puntual</strong>: proporciona un único valor estimado (por ejemplo, <span class="math inline">\(\bar{x}\)</span> como estimador de <span class="math inline">\(\mu\)</span>).</p></li>
+<li><p><strong>Estimación puntual</strong>: proporciona un único valor estimado. Por ejemplo, la media muestral (<span class="math inline">\(\bar{x}\)</span>) como estimador de la media poblacional (<span class="math inline">\(\mu\)</span>).</p></li>
 <li><p><strong>Estimación por intervalo de confianza</strong>: proporciona un rango de valores plausibles para el parámetro, con un nivel de confianza determinado.</p></li>
 </ul>
 <section id="intervalos-de-confianza" class="level3"><h3 class="anchored" data-anchor-id="intervalos-de-confianza">Intervalos de confianza</h3>
-<p>Aunque los intervalos de confianza son procedimientos inferenciales, están estrechamente ligados a la estadística descriptiva. Un <strong>i</strong>ntervalo de confianza indica un rango de valores dentro del cual se espera que se ubique el verdadero valor del parámetro poblacional, con una cierta probabilidad conocida como <em>nivel de confianza</em>.</p>
+<p>Aunque los intervalos de confianza son procedimientos inferenciales, están estrechamente ligados a la estadística descriptiva. Un intervalo de confianza indica un rango de valores dentro del cual se espera que se ubique el verdadero valor del parámetro poblacional, con una cierta probabilidad conocida como <em>nivel de confianza</em>.</p>
 <p>La forma general de un IC es:</p>
 <p><span class="math display">\[ IC = estimador~puntual \pm (coeficiente~de~confiabilidad) * (error~ estandar) \]</span></p>
 <section id="estimador-puntual" class="level4"><h4 class="anchored" data-anchor-id="estimador-puntual">Estimador puntual</h4>
@@ -401,7 +433,14 @@ Z = \frac{\bar{x}-\mu}{\sigma}
 <ul>
 <li><p>Para <strong>variables categóricas</strong> se utiliza el estadístico chi-cuadrado (<span class="math inline">\(\chi^2\)</span>).</p></li>
 <li><p>Para <strong>variables numéricas</strong>, se emplean distribuciones como la normal (<span class="math inline">\(Z\)</span>) o t de Student (<span class="math inline">\(t\)</span>).</p></li>
-</ul></section><section id="nivel-de-significancia" class="level3"><h3 class="anchored" data-anchor-id="nivel-de-significancia">Nivel de significancia</h3>
+</ul></section><section id="errores" class="level3"><h3 class="anchored" data-anchor-id="errores">Errores</h3>
+<p>En el razonamiento de los contrastes de hipótesis existen dos posibles errores:</p>
+<ul>
+<li><p><strong>Error tipo I (</strong><span class="math inline">\(\alpha\)</span><strong>)</strong>: ocurre cuando se <strong>rechaza la hipótesis nula</strong> siendo esta verdadera. Es decir, se concluye erróneamente que existe una diferencia cuando en realidad no la hay. Para minimizar este riesgo, se elige un <span class="math inline">\(\alpha\)</span> pequeño (por ejemplo, 0,01; 0,05 o 0,10).</p></li>
+<li><p><strong>Error tipo II (</strong><span class="math inline">\(\beta\)</span><strong>)</strong>: ocurre cuando <strong>no se rechaza la hipótesis nula siendo esta falsa</strong>, es decir, se falla en detectar una diferencia real. El valor de <span class="math inline">\(\beta\)</span> depende del valor real del parámetro, y suele ser mayor que <span class="math inline">\(\alpha\)</span>; sin embargo, <strong>no se conoce con certeza</strong> una vez realizada la prueba.</p></li>
+</ul>
+<p>Una vez finalizado el análisis, <strong>no es posible saber si se ha cometido alguno de estos errores</strong>, ya que el verdadero estado de la población es desconocido. Sin embargo, si se ha utilizado un <span class="math inline">\(\alpha\)</span> bajo, podemos tener mayor confianza en que, si se rechazó <span class="math inline">\(H_0\)</span>, el error tipo I es poco probable.</p>
+</section><section id="nivel-de-significancia" class="level3"><h3 class="anchored" data-anchor-id="nivel-de-significancia">Nivel de significancia</h3>
 <p>El <strong>nivel de significación</strong> (<span class="math inline">\(\alpha\)</span>) representa la probabilidad de cometer un <strong>error tipo I</strong>, es decir, rechazar <span class="math inline">\(H_0\)</span> cuando en realidad es verdadera. Se define antes del análisis (comúnmente 0,05 o 0,01) y determina el límite entre la región de no rechazo y la región crítica.</p>
 </section><section id="región-crítica" class="level3"><h3 class="anchored" data-anchor-id="región-crítica">Región crítica</h3>
 <p>Se denomina <strong>región crítica</strong> (o región de rechazo) al conjunto de valores del estadístico de prueba que llevan al rechazo de <span class="math inline">\(H_0\)</span>. Esta región se define según el nivel de significación (<span class="math inline">\(\alpha\)</span>), e incluye los valores extremos del estadístico que serían poco probables si <span class="math inline">\(H_0\)</span> fuera cierta. En una representación gráfica, la región crítica se ubica en una o ambas colas de la distribución, dependiendo del tipo de prueba</p>
@@ -470,13 +509,6 @@ H_1: \mu_1 \neq \mu_2
 <p>La potencia estadística es la probabilidad de rechazar la hipótesis nula (<span class="math inline">\(H_0\)</span>) cuando esta es falsa, es decir, de detectar un efecto real. Se calcula como <span class="math inline">\(1 - \beta\)</span>, donde <span class="math inline">\(\beta\)</span> es la probabilidad de cometer un error de tipo II. Aumenta con el <strong>tamaño muestral</strong>, disminuye con la <strong>varianza</strong>, y depende de la <strong>magnitud del efecto</strong> que se desea detectar.</p>
 <p>Mientras que <span class="math inline">\(\alpha\)</span> se fija antes del análisis, <span class="math inline">\(\beta\)</span> varía según el valor real del parámetro. La potencia se considera adecuada cuando alcanza al menos el <strong>80%</strong>, lo que implica un 20% de riesgo de no detectar una diferencia real.</p>
 <p>No es posible reducir simultáneamente <span class="math inline">\(\alpha\)</span> y <span class="math inline">\(\beta\)</span>, por lo que el diseño de una prueba debe buscar un <strong>equilibrio entre ambos errores</strong>. La potencia proporciona un <strong>control adicional</strong> en la toma de decisiones, ya que no basta con obtener un valor <em>p</em> pequeño: también se requiere una potencia suficiente para respaldar la conclusión.</p>
-</section><section id="errores" class="level3"><h3 class="anchored" data-anchor-id="errores">Errores</h3>
-<p>En el razonamiento de los contrastes de hipótesis existen dos posibles errores:</p>
-<ul>
-<li><p><strong>Error tipo I (</strong><span class="math inline">\(\alpha\)</span><strong>)</strong>: ocurre cuando se <strong>rechaza la hipótesis nula</strong> siendo esta verdadera. Es decir, se concluye erróneamente que existe una diferencia cuando en realidad no la hay. Para minimizar este riesgo, se elige un <span class="math inline">\(\alpha\)</span> pequeño (por ejemplo, 0,01; 0,05 o 0,10).</p></li>
-<li><p><strong>Error tipo II (</strong><span class="math inline">\(\beta\)</span><strong>)</strong>: ocurre cuando <strong>no se rechaza la hipótesis nula siendo esta falsa</strong>, es decir, se falla en detectar una diferencia real. El valor de <span class="math inline">\(\beta\)</span> depende del valor real del parámetro, y suele ser mayor que <span class="math inline">\(\alpha\)</span>; sin embargo, <strong>no se conoce con certeza</strong> una vez realizada la prueba.</p></li>
-</ul>
-<p>Una vez finalizado el análisis, <strong>no es posible saber si se ha cometido alguno de estos errores</strong>, ya que el verdadero estado de la población es desconocido. Sin embargo, si se ha utilizado un <span class="math inline">\(\alpha\)</span> bajo, podemos tener mayor confianza en que, si se rechazó <span class="math inline">\(H_0\)</span>, el error tipo I es poco probable.</p>
 <p>La siguiente tabla resume las posibles situaciones en un contraste de hipótesis:</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -777,8 +809,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -889,7 +919,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
@@ -1115,6 +1144,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../unidad_2/mod_bias.html" class="pagination-link" aria-label="Exploración de la heterogeneidad">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Exploración de la heterogeneidad</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../extras/intro_R.html" class="pagination-link" aria-label="Introducción a R y RStudio">
