@@ -27,8 +27,7 @@ website:
         menu: 
           - text: "Unidad 1"
           - text: "Unidad 2"
-            # href: unidad_2/est_epidemio.qmd
-          - text: "Unidad 3: Estudios ecológicos"
+          - text: "Unidad 3"
             
     right:
       - icon: cloud-download
@@ -64,6 +63,11 @@ website:
           
       - section: "Unidad 2"
         icon: file-earmark-bar-graph
+        # contents: 
+        #   - unidad_2/intro.qmd
+        #   - unidad_2/fixed_random.qmd
+        #   - unidad_2/tipos_estimador.qmd
+        #   - unidad_2/mod_bias.qmd
           
       - section: "Unidad 3"
         icon: file-earmark-bar-graph
